@@ -66,7 +66,7 @@ function initAutoUpdater(event, data) {
     }
 
     autoUpdater.requestHeaders = {
-        'User-Agent': 'VI-Software-Launcher/' + pjson.version
+        'User-Agent': 'BuildTage-Launcher/' + pjson.version
     }
     autoUpdater.timeout = 180000 // 3 min timeout
 
@@ -116,7 +116,7 @@ function configureAutoUpdaterForSplash(allowPrerelease = false) {
         }
 
         autoUpdater.requestHeaders = {
-            'User-Agent': 'VI-Software-Launcher/' + pjson.version
+            'User-Agent': 'BuildTage-Launcher/' + pjson.version
         }
         autoUpdater.timeout = 180000 // 3 min timeout
 
@@ -433,10 +433,7 @@ ipcMain.handle('modstore-set-selected-server', (event, id) => {
 ipcMain.handle('modstore-get-server-by-id', async (event, id) => {
     DistroAPI['commonDir'] = ConfigManager.getCommonDirectory()
     DistroAPI['instanceDir'] = ConfigManager.getInstanceDirectory()
-    const selectedAccount = ConfigManager.getSelectedAccount()
-    DistroAPI['authHeaders'] = selectedAccount?.accessToken
-        ? { 'authorization': selectedAccount.accessToken }
-        : { 'authorization': 'public-servers' }
+    DistroAPI['authHeaders'] = require('./app/assets/js/apiconstants').DISTRO_AUTH_HEADERS
     const distro = await DistroAPI.getDistribution()
     return distro.getServerById(id)
 })
@@ -712,14 +709,14 @@ function createMenu() {
 
         // Extend default included application menu to continue support for quit keyboard shortcut
         let applicationSubMenu = {
-            label: 'VI Software Launcher',
+            label: 'BuildTage Launcher',
             submenu: [{
-                label: 'About VI Software Launcher',
+                label: 'About BuildTage Launcher',
                 selector: 'orderFrontStandardAboutPanel:'
             }, {
                 type: 'separator'
             }, {
-                label: 'Quit VI Software Launcher',
+                label: 'Quit BuildTage Launcher',
                 accelerator: 'Command+Q',
                 click: () => {
                     app.quit()
@@ -807,7 +804,7 @@ function createTray() {
 
     let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
     tray.setContextMenu(trayMenu)
-    tray.setToolTip('VI Software Launcher')
+    tray.setToolTip('BuildTage Launcher')
 
     tray.on('click', () => {
         win.isVisible() ? win.hide() : win.show()
@@ -1215,7 +1212,7 @@ if (!gotTheLock) {
                     startAfterPrechecks()
                 })
                 ipcMain.once('canary-close', () => {
-                    ejse.data('websiteURL', 'https://visoftware.dev')
+                    ejse.data('websiteURL', LangLoader.queryEJS('landing.websiteURL'))
                     try { canaryWin.close() } catch (err) { console.error('Error closing canary window', err) }
                     app.quit()
                 })

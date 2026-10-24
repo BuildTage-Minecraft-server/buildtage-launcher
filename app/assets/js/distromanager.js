@@ -24,27 +24,17 @@
 const { DistributionAPI } = require('@visoftware/vis-launcher-core/common')
 
 const ConfigManager = require('./configmanager')
-const { CDN_URL } = require('./apiconstants')
+const { CDN_URL, DISTRO_AUTH_HEADERS } = require('./apiconstants')
 
-const defaultAuthHeaders = {  
-    'authorization': 'public-servers',
-}
-
-let storedAuthHeaders
-try {
-    const stored = localStorage.getItem('authHeaders')
-    storedAuthHeaders = stored ? JSON.parse(stored) : null
-} catch {
-    storedAuthHeaders = null
-}
+const devMode = process.env.LAUNCHER_DEV_DISTRO === '1'
 
 const api = new DistributionAPI(
     ConfigManager.getLauncherDirectory(),
     null, // Injected forcefully by the preloader.
     null, // Injected forcefully by the preloader.
     CDN_URL,
-    false,
-    storedAuthHeaders || defaultAuthHeaders,
+    devMode,
+    DISTRO_AUTH_HEADERS,
     false
 )
 

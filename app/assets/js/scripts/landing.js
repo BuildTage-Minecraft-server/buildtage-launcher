@@ -335,7 +335,7 @@ function updateSelectedAccount(authUser){
             username = authUser.displayName
         }
         if (authUser.uuid != null) {
-            document.getElementById('avatarContainer').style.backgroundImage = `url(https://skins.visoftware.dev/2d/skin/${authUser.uuid}/head?scale=5)`
+            document.getElementById('avatarContainer').style.backgroundImage = `url("${require('./assets/js/apiconstants').DEFAULT_HEAD_URL}")`
         }        
     }
     user_text.innerHTML = username
@@ -451,11 +451,8 @@ const refreshServerStatus = async (fade = false) => {
     
 }
 
-refreshMojangStatuses()
 // Server Status is refreshed in uibinder.js on distributionIndexDone.
 
-// Refresh statuses every hour. The status page itself refreshes every day so...
-let mojangStatusListener = setInterval(() => refreshMojangStatuses(true), 60*60*1000)
 // Set refresh rate to once every 5 minutes.
 let serverStatusListener = setInterval(() => refreshServerStatus(true), 300000)
 
@@ -663,9 +660,7 @@ async function dlAsync(login = true) {
     toggleLaunchArea(true)
     setLaunchPercentage(0, 100)
 
-    const authHeaders = {
-        'authorization': ConfigManager.getSelectedAccount().accessToken,
-    }
+    const authHeaders = require('./assets/js/apiconstants').DISTRO_AUTH_HEADERS
     const fullRepairModule = new FullRepair(
         ConfigManager.getCommonDirectory(),
         ConfigManager.getInstanceDirectory(),

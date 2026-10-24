@@ -105,31 +105,6 @@ loginOptionVISoftware.onclick = (e) => {
     })
 }
 
-loginOptionVISWeb.onclick = (e) => {
-    switchView(getCurrentView(), VIEWS.waiting, 500, 500, () => {
-        AuthManager.addVISWebAccountV3()
-            .then((account) => {
-                loginViewOnSuccess = loginOptionsViewOnLoginSuccess
-                loginViewOnCancel = loginOptionsViewOnLoginCancel
-                switchView(VIEWS.waiting, loginViewOnSuccess)
-            })
-            .catch((err) => {
-                switchView(VIEWS.waiting, VIEWS.loginOptions, 500, 500)
-                setTimeout(() => {
-                    setOverlayContent(
-                        err.title || 'Error',
-                        err.message || 'An unknown error occurred',
-                        'OK'
-                    )
-                    setOverlayHandler(() => {
-                        toggleOverlay(false)
-                    })
-                    toggleOverlay(true)
-                }, 500) // Wait for view transition to complete
-            })
-    })
-}
-
 loginOptionsCancelButton.onclick = (e) => {
     switchView(getCurrentView(), loginOptionsViewOnCancel, 500, 500, () => {
         // Clear login values
@@ -182,7 +157,7 @@ function updateGuestModeUI() {
     
     const avatarContainer = document.getElementById('avatarContainer')
     if (avatarContainer) {
-        avatarContainer.style.backgroundImage = 'url("https://skins.visoftware.dev/2d/skin/VI_Software/head?scale=5")'
+        avatarContainer.style.backgroundImage = `url("${require('./assets/js/apiconstants').DEFAULT_HEAD_URL}")`
         avatarContainer.classList.add('guest-avatar')
     }
     

@@ -19,20 +19,20 @@
 #     Website: https://visoftware.dev
 
 [ejs.app]
-title = "VI Software Launcher"
-title_nightly = "VI Software Launcher Nightly"
-title_canary = "VI Software Launcher Canary"
+title = "BuildTage Launcher"
+title_nightly = "BuildTage Launcher Nightly"
+title_canary = "BuildTage Launcher Canary"
 [ejs.landing]
-websiteURL = "https://visoftware.dev"
-mediaGitHubURL = "https://github.com/VI-Software"
-mediaDiscordURL = "https://visoftware.dev/discord"
-canaryWebsiteURL = "https://visoftware.dev/launcher"
+websiteURL = "https://nekrasovdev.space"
+mediaGitHubURL = "https://github.com/Asesu23/buildtage-launcher"
+mediaDiscordURL = "https://discord.com"
+canaryWebsiteURL = "https://nekrasovdev.space"
 
 [ejs.settings]
-sourceGithubLink = "https://github.com/VI-Software/vis-launcher"
-supportLink = "https://github.com/VI-Software/vis-launcher/issues"
+sourceGithubLink = "https://github.com/Asesu23/buildtage-launcher"
+supportLink = "https://github.com/Asesu23/buildtage-launcher/issues"
 
 [launcher]
-guestModeEnabled = true
-legacyLoginUIEnabled = false
-modStoreEnabled = true
+guestModeEnabled = false
+legacyLoginUIEnabled = true
+modStoreEnabled = false

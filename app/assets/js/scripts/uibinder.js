@@ -27,14 +27,12 @@
 // Requirements
 const path = require('path')
 const app = require('electron')
-const https = require('https')
 const { Type } = require('@visoftware/distribution-types')
 
 const AuthManager = require('./assets/js/authmanager')
 const ConfigManager = require('./assets/js/configmanager')
 const { DistroAPI } = require('./assets/js/distromanager')
 const { error } = require('console')
-const { API_BASE_URL } = require('./assets/js/apiconstants')
 
 let rscShouldLoad = false
 let fatalStartupError = false
@@ -124,92 +122,8 @@ async function showMainUI(data) {
     updateSelectedServer(data.getServerById(ConfigManager.getSelectedServer()))
     refreshServerStatus()
 
-    try {
-        const response = await fetch(API_BASE_URL + '/services/images/all')
-        if (!response.ok) throw new Error('Network response was not ok')
-
-        const data = await response.json()
-        if (!data || !Array.isArray(data.images) || data.images.length === 0) {
-            throw new Error('No images returned from API')
-        }
-
-        const images = data.images
-        const rand = Math.floor(Math.random() * images.length)
-        const chosen = images[rand]
-
-        let bgUrl = null
-        if (chosen && typeof chosen === 'object') {
-            if (chosen.url && typeof chosen.url === 'string' && chosen.url.trim() !== '') {
-                bgUrl = chosen.url
-            } else if (chosen.name && typeof chosen.name === 'string' && chosen.name.trim() !== '') {
-                const base = API_BASE_URL.replace(/\/+$|\/$/g, '')
-                bgUrl = `${base}/backgrounds/${encodeURIComponent(chosen.name)}`
-            }
-        }
-
-        if (!bgUrl) throw new Error('Invalid image data')
-        document.getElementById('frameBar').style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
-
-        try {
-            const cacheKey = 'bgCache'
-            const cacheRaw = localStorage.getItem(cacheKey)
-            const cache = cacheRaw ? JSON.parse(cacheRaw) : {}
-            const entry = cache[bgUrl]
-
-            const TTL = 24 * 60 * 60 * 1000 // 24 hours
-            if (entry && entry.timestamp && (Date.now() - entry.timestamp) < TTL) {
-                await setBackgroundAndWait(entry.dataUrl)
-            } else {
-                const headers = {}
-                if (entry && entry.etag) headers['If-None-Match'] = entry.etag
-                if (entry && entry.lastModified) headers['If-Modified-Since'] = entry.lastModified
-
-                let resp
-                try {
-                    resp = await fetch(bgUrl, { headers, cache: 'no-store' })
-                } catch (err) {
-                    if (entry && entry.dataUrl) await setBackgroundAndWait(entry.dataUrl)
-                    else { await setBackgroundAndWait(bgUrl); showBGSWarning() }
-                    resp = null
-                }
-
-                if (resp) {
-                    if (resp.status === 304 && entry && entry.dataUrl) {
-                        // server says not modified: extend TTL and reuse
-                        entry.timestamp = Date.now()
-                        try { localStorage.setItem(cacheKey, JSON.stringify(cache)) } catch (e) { console.warn('save bg cache failed', e) }
-                        await setBackgroundAndWait(entry.dataUrl)
-                    } else if (resp.ok) {
-                        const blob = await resp.blob()
-                        const dataUrl = await new Promise((res, rej) => {
-                            const reader = new FileReader()
-                            reader.onload = () => res(reader.result)
-                            reader.onerror = rej
-                            reader.readAsDataURL(blob)
-                        })
-                        const newEtag = resp.headers.get('etag') || null
-                        const newLM = resp.headers.get('last-modified') || null
-                        cache[bgUrl] = { dataUrl, etag: newEtag, lastModified: newLM, timestamp: Date.now() }
-                        try { localStorage.setItem(cacheKey, JSON.stringify(cache)) } catch (e) { console.warn('save bg cache failed', e) }
-                        await setBackgroundAndWait(dataUrl)
-                    } else {
-                        if (entry && entry.dataUrl) await setBackgroundAndWait(entry.dataUrl)
-                        else { await setBackgroundAndWait(bgUrl); showBGSWarning() }
-                    }
-                }
-            }
-        } catch (e) {
-            console.error('Background cache error:', e)
-            await setBackgroundAndWait(bgUrl)
-            showBGSWarning()
-        }
-    } catch (error) {
-        // On any error, fallback to offline background
-        console.error('Failed to fetch background image:', error)
-        document.getElementById('frameBar').style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
-        await setBackgroundAndWait('assets/images/backgrounds/offline.jpg')
-        showBGSWarning()
-    }
+    document.getElementById('frameBar').style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
+    await setBackgroundAndWait('assets/images/backgrounds/offline.jpg')
 
     $('#main').show()
 
@@ -256,24 +170,7 @@ async function showMainUI(data) {
 function continueMainUILogic(checkver) {
     const isLoggedIn = Object.keys(ConfigManager.getAuthAccounts()).length > 0
 
-    // Performs various checks to verify the version status
-    if(checkver==true){
-        checkVersionStatus()
-            .then(status => {
-                if(status.maintained==true){
-                    console.log('This version is officially maintained by VI Software')
-                    localStorage.setItem('buildstatus', 'maintained')
-                }else if(status.maintained==false && status.forceupdate==false){
-                    localStorage.setItem('buildstatus', 'notsupported')
-                }else{
-                    localStorage.setItem('buildstatus', 'forceupdate')
-                }
-            })
-            .catch(error => {
-                console.error('Couldn\'t verify the version status:', error)
-                showForceUpdate()
-            })
-    }
+    localStorage.setItem('buildstatus', 'maintained')
     // If this is enabled in a development environment we'll get ratelimited.
     // The relaunch frequency is usually far too high.
     if (!isDev && isLoggedIn) {
@@ -385,50 +282,6 @@ function showAPIError() {
 }
 
 
-// Connects to the API server of the launcher and checks the current version status
-
-function checkVersionStatus() {
-    // Parse the API_BASE_URL
-    const apiUrl = new URL(API_BASE_URL)
-    
-    const options = {
-        hostname: apiUrl.hostname,
-        path: `/services/launcher/v2/version?version=${remote.app.getVersion()}`,
-        family: 4,
-        method: 'GET',
-        headers: {
-            'Host': apiUrl.hostname,
-            'User-Agent': 'VI Software Launcher/' + process.version
-        }
-    }
-    
-    return new Promise((resolve, reject) => {
-        const req = https.request(options, res => {
-            let data = ''
-
-            res.on('data', chunk => {
-                data += chunk
-            })
-
-            res.on('end', () => {
-                try {
-                    const result = JSON.parse(data)
-                    resolve(result)
-                } catch (error) {
-                    console.error('Failed to parse response:', error)
-                    reject(error)
-                }
-            })
-        })
-
-        req.on('error', (error) => {
-            console.error('Request failed:', error)
-            reject(error)
-        })
-
-        req.end()
-    })
-}
 function showBGSWarning() {
     setTimeout(() => {
         $('#loadingContainer').fadeOut(250, () => {

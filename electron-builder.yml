@@ -1,9 +1,9 @@
-appId: 'vi-software-launcher'
-productName: 'VI Software Launcher'
+appId: 'space.nekrasovdev.buildtage-launcher'
+productName: 'BuildTage Launcher'
 # Include architecture in artifact filenames is not here by default, we add them on each platform config if necessary for clarity
 artifactName: '${productName}-setup-${version}.${ext}'
 
-copyright: 'Copyright © 2022-2026 VI Software'
+copyright: 'Copyright © 2026 Asesu23. Based on VIS Launcher, Copyright © 2022-2026 VI Software and contributors'
 
 asar: true
 compression: 'maximum'
@@ -49,10 +49,10 @@ linux:
       arch:
         - 'x64'
         - 'arm64'
-  maintainer: 'VI Software'
-  vendor: 'VI Software'
+  maintainer: 'Asesu23'
+  vendor: 'BuildTage'
   synopsis: 'Modded Minecraft Launcher'
-  description: 'Conéctate a los servidores de VI Software sin preocupaciones, permite al VIS Launcher actualizar, pre configurar tus instalaciones de mods de las experiencias VIS por ti.'
+  description: 'Launcher for the BuildTage servers. It keeps the game and the mod set up to date and signs you in with your game account.'
   artifactName: '${productName}-${version}-${arch}.${ext}'
   category: 'Game'
   compression: 'normal'
@@ -66,6 +66,6 @@ directories:
 
 publish:
   provider: github
-  owner: VI-Software
-  repo: vis-launcher
+  owner: Asesu23
+  repo: buildtage-launcher
   releaseType: release

@@ -25,7 +25,7 @@ usernameEditButton = "Edit"
 settingsTooltip = "Settings"
 serverStatus = "SERVER"
 serverStatusPlaceholder = "Offline"
-visStatus = "VI SOFTWARE STATUS"
+visStatus = "SERVICE STATUS"
 visStatusTooltipTitle = "Services"
 vistatusNETitle = "Non&nbsp;Essential"
 newsButton = "NEWS"
@@ -43,30 +43,30 @@ guestModeSignUpButton = "Sign Up"
 
 [ejs.login]
 loginCancelText = "Cancel"
-loginSubheader = "Logging in with VI Software Yggdrasil"
+loginSubheader = "Sign in with your game account"
 loginEmailError = "* Invalid value"
 loginEmailPlaceholder = "USERNAME"
 loginPasswordError = "* Required"
 loginPasswordPlaceholder = "PASSWORD"
-loginForgotPasswordLink = "https://docs.visoftware.dev/vi-software/vis-yggdrasil-auth/view-my-account-information"
-loginForgotPasswordText = "Check your data"
+loginForgotPasswordLink = "https://auth.nekrasovdev.space/web/user"
+loginForgotPasswordText = "Account settings"
 loginRememberMeText = "Remember me"
 loginButtonText = "LOG IN"
-loginNeedAccountLink = "https://puf.visoftware.dev"
+loginNeedAccountLink = "https://auth.nekrasovdev.space/web/registration"
 loginNeedAccountText = "Need an account?"
-loginPasswordDisclaimer1 = "Your password is sent directly to the VI Software server and is never stored."
-loginPasswordDisclaimer2 = "&copy 2026 VI Software and contributors. All rights reserved."
+loginPasswordDisclaimer1 = "Your password is sent directly to the game account server and is never stored."
+loginPasswordDisclaimer2 = "Based on VIS Launcher by VI Software and contributors, licensed under AGPL-3.0."
 
 [ejs.loginOptions]
-loginOptionsTitle = "Login options"
+loginOptionsTitle = "Sign in"
 loginWithVISWeb = "Log in with VI Software Dashboard"
-loginWithVIS = "Log in with VI Software Yggdrasil (Legacy)"
+loginWithVIS = "Sign in with a game account"
 cancelButton = "Cancel"
 orContinueAs = "or continue as"
 continueAsGuest = "Continue as Guest"
 
 [ejs.overlay]
-serverSelectHeader = "VI Software server list"
+serverSelectHeader = "BuildTage servers"
 serverSelectConfirm = "Select"
 serverSelectCancel = "Cancel"
 serverSearchPlaceholder = "Search servers..."
@@ -102,8 +102,8 @@ navUpdates = "Updates"
 navDone = "Done"
 tabAccountHeaderText = "Account Settings"
 tabAccountHeaderDesc = "Add new accounts or manage existing ones."
-VISAccount = "VI Software"
-addVISAccount = "+ Add VI Software Account"
+VISAccount = "BuildTage"
+addVISAccount = "+ Add BuildTage Account"
 minecraftTabHeaderText = "Game Settings"
 minecraftTabHeaderDesc = "Options related to game launch."
 gameResolutionTitle = "Game resolution"
@@ -196,17 +196,17 @@ exportSettingsButton = "Export Settings"
 importSettingsButton = "Import Settings"
 
 [ejs.waiting]
-waitingText = "Waiting for VI Software..."
+waitingText = "Waiting for the account server..."
 
 [ejs.welcome]
 continueButton = "CONTINUE"
-welcomeHeader = "Welcome to VI Software Launcher"
-welcomeDescription = 'This launcher was developed by the <a href="https://github.com/orgs/VI-Software/people" style="color: purple;">VI Software team</a> to facilitate modpack management in server experiences. By using this launcher, you accept the <a style="color: purple;" href="https://docs.visoftware.dev/vi-software/vis-launcher/privacy-policy">privacy policy</a> and <a href="https://docs.visoftware.dev/vi-software/vis-launcher/terms-of-service" style="color: purple;">terms of service</a> of <a href="https://visoftware.dev" style="color: purple;">VI Software</a>.'
+welcomeHeader = "Welcome to BuildTage Launcher"
+welcomeDescription = 'This launcher was built for the BuildTage servers and is based on <a href="https://github.com/VI-Software/vis-launcher" style="color: purple;">VIS Launcher</a> by VI Software, an open-source project licensed under AGPL-3.0. It keeps the game and its mods up to date and signs you in with your BuildTage account.'
 welcomeDescCTA = "Fun is just around the corner!"
 
 [ejs.app]
 canary_warning_title = "Canary Build Warning - v{version}"
-canary_warning_text = "You're running a canary (pre-release) version of the launcher <strong style='color:#b33838'>which may be unstable and may break or brick your VI Software Launcher installation.</strong> If you are not familiar with performing a clean reinstall, do not proceed: close the application and download a stable release from {websiteURL}."
+canary_warning_text = "You're running a canary (pre-release) version of the launcher <strong style='color:#b33838'>which may be unstable and may break or brick your BuildTage Launcher installation.</strong> If you are not familiar with performing a clean reinstall, do not proceed: close the application and download a stable release from {websiteURL}."
 canary_warning_dontask = "Don't show this warning again"
 
 
@@ -574,4 +574,3 @@ dataProvidedBy = "Data provided by {provider}"
 noCompatibleVersionsFound = "No compatible versions found for {loader} {version}"
 managedByAdmin = "Managed by experience administrator"
 installedBadge = "Installed"
-

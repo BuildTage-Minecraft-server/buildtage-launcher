@@ -20,16 +20,20 @@
     Website: https://visoftware.dev
 */
 
-exports.API_BASE_URL = 'https://api.visoftware.dev'
-exports.MAINWEBSITE_URL = 'https://visoftware.dev'
-exports.WEBLOGIN_URL = 'https://visoftware.dev/launcher-login'
-exports.CDN_URL = 'https://cdn.visoftware.dev/distribution.json'
-exports.AUTH_BASE_URL = 'https://authserver.visoftware.dev'
+exports.API_BASE_URL = 'https://auth.nekrasovdev.space'
+exports.MAINWEBSITE_URL = 'https://nekrasovdev.space'
+exports.CDN_URL = 'https://cdn.nekrasovdev.space/distribution.json'
+exports.AUTH_BASE_URL = 'https://auth.nekrasovdev.space'
+exports.REGISTRATION_URL = 'https://auth.nekrasovdev.space/web/registration'
+exports.ACCOUNT_URL = 'https://auth.nekrasovdev.space/web/user'
 
-exports.OAUTH_AUTHORIZATION_ENDPOINT = 'https://visoftware.dev/oauth2/authorize'
-exports.OAUTH_TOKEN_ENDPOINT = 'https://visoftware.dev/oauth2/token'
-exports.OAUTH_USERINFO_ENDPOINT = 'https://visoftware.dev/oauth2/userinfo'
-exports.OAUTH_CLIENT_ID = 'vis-launcher'
-exports.OAUTH_REDIRECT_URI = 'http://127.0.0.1:43124/callback'
-exports.OAUTH_SCOPE = 'identify minecraft.login'
+exports.YGGDRASIL_AUTH_URLS = [
+    'https://auth.nekrasovdev.space/auth',
+    'https://auth.nekrasovdev.space/authlib-injector/authserver'
+]
 
+exports.DISTRO_AUTH_HEADERS = {
+    'authorization': 'public-servers'
+}
+
+exports.DEFAULT_HEAD_URL = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4IDgiIHNoYXBlLXJlbmRlcmluZz0iY3Jpc3BFZGdlcyI+PHJlY3Qgd2lkdGg9IjgiIGhlaWdodD0iOCIgZmlsbD0iIzViM2QyNiIvPjxyZWN0IHg9IjEiIHk9IjIiIHdpZHRoPSI2IiBoZWlnaHQ9IjUiIGZpbGw9IiNjNjhlNjMiLz48cmVjdCB4PSIxIiB5PSIxIiB3aWR0aD0iNiIgaGVpZ2h0PSIxIiBmaWxsPSIjM2EyNjE2Ii8+PHJlY3QgeD0iMiIgeT0iNCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0iI2ZmZmZmZiIvPjxyZWN0IHg9IjUiIHk9IjQiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNmZmZmZmYiLz48cmVjdCB4PSIyIiB5PSI0IiB3aWR0aD0iMC41IiBoZWlnaHQ9IjEiIGZpbGw9IiMyZjJmOGYiLz48cmVjdCB4PSI1LjUiIHk9IjQiIHdpZHRoPSIwLjUiIGhlaWdodD0iMSIgZmlsbD0iIzJmMmY4ZiIvPjxyZWN0IHg9IjMiIHk9IjYiIHdpZHRoPSIyIiBoZWlnaHQ9IjAuNSIgZmlsbD0iIzdhM2YyYiIvPjwvc3ZnPg=='

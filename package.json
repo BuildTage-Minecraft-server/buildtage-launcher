@@ -1,12 +1,12 @@
 {
-  "name": "vis-launcher",
-  "version": "2.2.2",
-  "productName": "VI Software Launcher",
-  "description": "VI Software Launcher",
-  "author": "VI Software",
+  "name": "buildtage-launcher",
+  "version": "0.1.0",
+  "productName": "BuildTage Launcher",
+  "description": "Minecraft launcher for the BuildTage servers",
+  "author": "Asesu23",
   "license": "AGPL-3.0-or-later",
   "private": true,
-  "homepage": "https://github.com/VI-Software/vis-launcher",
+  "homepage": "https://github.com/Asesu23/buildtage-launcher",
   "main": "index.js",
   "scripts": {
     "start": "electron . --no-sandbox --ozone-platform=x11",
@@ -52,7 +52,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/VI-Software/vis-launcher.git"
+    "url": "git+https://github.com/Asesu23/buildtage-launcher.git"
   },
   "allowScripts": {
     "electron@41.10.7": true,

@@ -35,11 +35,9 @@ const { HeliosDistribution } = require('@visoftware/vis-launcher-core/common')
 
 const logger = LoggerUtil.getLogger('Preloader')
 
-logger.info('VI Software Launcher')
-logger.info('© 2023-2026 VI Software and contributors.')
+logger.info('BuildTage Launcher')
+logger.info('Based on VIS Launcher, © 2023-2026 VI Software and contributors.')
 logger.info('License: AGPL-3.0 https://www.gnu.org/licenses/agpl-3.0.en.html')
-logger.info('GitHub: https://github.com/VI-Software')
-logger.info('Website: https://visoftware.dev')
 
 const { sendSplashProgress, sendSplashMessage, sendSplashDone } = require('./splash-utils')
 const isWaylandNative = process.argv.some(arg => arg.includes('is-wayland-native=true'))
@@ -69,18 +67,7 @@ try{
 DistroAPI['commonDir'] = ConfigManager.getCommonDirectory()
 DistroAPI['instanceDir'] = ConfigManager.getInstanceDirectory()
 
-// Set auth headers based on selected account if logged in
-const selectedAccount = ConfigManager.getSelectedAccount()
-if (selectedAccount != null) {
-    const authHeaders = {
-        'authorization': selectedAccount.accessToken
-    }
-    DistroAPI['authHeaders'] = authHeaders
-    localStorage.setItem('authHeaders', JSON.stringify(authHeaders))
-    logger.info('Using authenticated user for distribution fetch')
-} else {
-    logger.info('No account selected, using public token for distribution fetch')
-}
+DistroAPI['authHeaders'] = require('./apiconstants').DISTRO_AUTH_HEADERS
 
 // Load language packs
 sendSplashProgress(18, 'Loading language packs...')

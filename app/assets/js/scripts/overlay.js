@@ -475,7 +475,7 @@ async function populateAccountListings(){
     let htmlString = ''
     for(let i=0; i<accounts.length; i++){
         htmlString += `<button class="accountListing" uuid="${accounts[i].uuid}" ${i===0 ? 'selected' : ''}>
-            <img src="https://skins.visoftware.dev/2d/skin/${accounts[i].uuid}/head?scale=5">
+            <img src="${require('./assets/js/apiconstants').DEFAULT_HEAD_URL}">
             <div class="accountListingName">${accounts[i].displayName}</div>
         </button>`
     }
