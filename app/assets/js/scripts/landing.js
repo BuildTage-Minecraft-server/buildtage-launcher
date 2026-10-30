@@ -343,7 +343,45 @@ function updateSelectedAccount(authUser){
 updateSelectedAccount(ConfigManager.getSelectedAccount())
 
 // Bind selected server
+function collectModuleTypes(modules, types) {
+    for(const mdl of modules || []) {
+        types.push(mdl.type)
+        collectModuleTypes(mdl.subModules, types)
+    }
+    return types
+}
+
+function updateHeroCard(serv) {
+    const setText = (id, value) => {
+        document.getElementById(id).textContent = value
+    }
+    if(serv == null) {
+        setText('heroName', Lang.queryJS('landing.noSelection'))
+        setText('heroDesc', '')
+        setText('heroVersion', '-')
+        setText('heroMinecraft', '-')
+        setText('heroLoader', '-')
+        setText('heroMods', '-')
+        return
+    }
+    const raw = serv.rawServer
+    const types = collectModuleTypes(raw.modules, [])
+    let loader = '-'
+    if(types.some(type => type === 'ForgeHosted' || type === 'Forge')) {
+        loader = 'Forge'
+    } else if(types.some(type => type === 'Fabric' || type === 'FabricMod')) {
+        loader = 'Fabric'
+    }
+    setText('heroName', raw.name)
+    setText('heroDesc', raw.description || '')
+    setText('heroVersion', raw.version || '-')
+    setText('heroMinecraft', raw.minecraftVersion || '-')
+    setText('heroLoader', loader)
+    setText('heroMods', String(types.filter(type => type === 'ForgeMod' || type === 'FabricMod' || type === 'LiteMod').length))
+}
+
 function updateSelectedServer(serv){
+    updateHeroCard(serv)
     if(getCurrentView() === VIEWS.settings){
         fullSettingsSave()
     }

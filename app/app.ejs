@@ -38,23 +38,13 @@
     <link type="text/css" rel="stylesheet" href="./assets/css/snowflakes.css">
     <style>
         body {
-            background-color: #1a1a2e;
-            background-image: url('assets/images/backgrounds/0.jpg');
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            transition: background-image 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             user-select: none;
             -webkit-user-select: none;
-        }
-        body.loaded {
-            background-image: url('assets/images/backgrounds/<%=bkid%>.jpg');
         }
         #main {
             display: none;
             height: calc(100% - 22px);
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 100%);
+            background: none;
             width: 100%;
             position: absolute;
             z-index: 10;

@@ -87,22 +87,6 @@ function getCurrentView() {
  * @param {string} imageUrl - The URL or data URL of the image
  * @returns {Promise} Resolves when image is loaded
  */
-function setBackgroundAndWait(imageUrl) {
-    return new Promise((resolve) => {
-        const img = new Image()
-        img.onload = () => {
-            document.body.style.backgroundImage = `url('${imageUrl}')`
-            resolve()
-        }
-        img.onerror = () => {
-            // Even on error, set the background and resolve
-            document.body.style.backgroundImage = `url('${imageUrl}')`
-            resolve()
-        }
-        img.src = imageUrl
-    })
-}
-
 async function showMainUI(data) {
     if (!isDev) {
         loggerAutoUpdater.info('Initializing..')
@@ -123,7 +107,6 @@ async function showMainUI(data) {
     refreshServerStatus()
 
     document.getElementById('frameBar').style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
-    await setBackgroundAndWait('assets/images/backgrounds/offline.jpg')
 
     $('#main').show()
 
