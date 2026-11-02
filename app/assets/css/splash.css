@@ -236,59 +236,55 @@ html, body {
 }
 
 #splashRoot {
-  background-color: #06040f;
+  background-color: #0e0d13;
   background-image:
-    linear-gradient(90deg, rgba(56, 225, 255, 0) 0%, rgba(56, 225, 255, 0.5) 14%, rgba(56, 225, 255, 0.5) 86%, rgba(56, 225, 255, 0) 100%),
-    repeating-linear-gradient(to right, rgba(180, 85, 255, 0.06) 0, rgba(180, 85, 255, 0.06) 1px, transparent 1px, transparent 96px),
-    repeating-linear-gradient(to bottom, rgba(180, 85, 255, 0.1) 0, rgba(180, 85, 255, 0.1) 1px, transparent 1px, transparent 48px),
-    radial-gradient(70% 45% at 50% 0%, rgba(180, 70, 255, 0.3), rgba(180, 70, 255, 0) 70%),
-    linear-gradient(to bottom, #2a1145 0%, #190b32 36%, #0b0719 74%, #06040f 100%);
-  background-size: 100% 1px, auto, auto, 100% 100%, 100% 100%;
-  background-position: 0 62%, 0 0, 0 0, 0 0, 0 0;
-  background-repeat: no-repeat, repeat, repeat, no-repeat, no-repeat;
+    radial-gradient(60% 55% at 16% 8%, rgba(124, 99, 255, 0.17), rgba(124, 99, 255, 0) 62%),
+    radial-gradient(55% 50% at 92% 100%, rgba(98, 66, 200, 0.14), rgba(98, 66, 200, 0) 66%),
+    linear-gradient(180deg, #14121c 0%, #0e0d13 100%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 .splashCard {
-  width: 440px;
-  padding: 40px 36px 34px;
-  background: rgba(9, 12, 28, 0.9);
-  border: 1px solid rgba(124, 142, 214, 0.26);
-  border-top: 2px solid #38e1ff;
-  border-radius: 0;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  width: 420px;
+  padding: 38px 34px 32px;
+  background: #1b1a24;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 28px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
 }
 .splashLogoWrap {
-  width: 88px;
-  height: 88px;
+  width: 84px;
+  height: 84px;
   padding: 0;
-  border-radius: 10px;
+  border-radius: 24px;
 }
 #splashLogo {
   width: 100%;
   height: 100%;
-  border-radius: 10px;
-  filter: drop-shadow(0 0 26px rgba(120, 110, 255, 0.55));
+  border-radius: 24px;
+  filter: drop-shadow(0 10px 26px rgba(124, 99, 255, 0.45));
 }
 #splashTitle {
-  font-family: 'Cascadia Mono', 'Cascadia Code', Consolas, 'Lucida Console', monospace;
-  font-size: 16px;
+  font-family: 'Comfortaa', 'Nunito', 'Calibri', 'Candara', 'Segoe UI', system-ui, sans-serif;
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #f1f4ff;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #f4f3f9;
 }
 #splashProgressBar {
   height: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(124, 142, 214, 0.26);
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.09);
+  border: none;
+  border-radius: 8px;
 }
 #splashProgressFill {
-  border-radius: 0;
-  background: linear-gradient(90deg, #38e1ff, #b455ff);
-  box-shadow: 0 0 14px rgba(56, 225, 255, 0.5);
+  border-radius: 8px;
+  background: linear-gradient(90deg, #7c63ff, #a384ff);
+  box-shadow: none;
 }
 #splashProgressText {
-  font-family: 'Cascadia Mono', 'Cascadia Code', Consolas, 'Lucida Console', monospace;
-  font-size: 11px;
-  color: #98a2c4;
+  font-family: 'Nunito', 'Calibri', 'Candara', 'Segoe UI', system-ui, sans-serif;
+  font-size: 12px;
+  color: #a6a4b9;
 }

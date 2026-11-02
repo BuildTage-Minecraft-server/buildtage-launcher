@@ -343,41 +343,16 @@ function updateSelectedAccount(authUser){
 updateSelectedAccount(ConfigManager.getSelectedAccount())
 
 // Bind selected server
-function collectModuleTypes(modules, types) {
-    for(const mdl of modules || []) {
-        types.push(mdl.type)
-        collectModuleTypes(mdl.subModules, types)
-    }
-    return types
-}
-
 function updateHeroCard(serv) {
-    const setText = (id, value) => {
-        document.getElementById(id).textContent = value
-    }
+    const name = document.getElementById('heroName')
+    const desc = document.getElementById('heroDesc')
     if(serv == null) {
-        setText('heroName', Lang.queryJS('landing.noSelection'))
-        setText('heroDesc', '')
-        setText('heroVersion', '-')
-        setText('heroMinecraft', '-')
-        setText('heroLoader', '-')
-        setText('heroMods', '-')
+        name.textContent = Lang.queryJS('landing.noSelection')
+        desc.textContent = ''
         return
     }
-    const raw = serv.rawServer
-    const types = collectModuleTypes(raw.modules, [])
-    let loader = '-'
-    if(types.some(type => type === 'ForgeHosted' || type === 'Forge')) {
-        loader = 'Forge'
-    } else if(types.some(type => type === 'Fabric' || type === 'FabricMod')) {
-        loader = 'Fabric'
-    }
-    setText('heroName', raw.name)
-    setText('heroDesc', raw.description || '')
-    setText('heroVersion', raw.version || '-')
-    setText('heroMinecraft', raw.minecraftVersion || '-')
-    setText('heroLoader', loader)
-    setText('heroMods', String(types.filter(type => type === 'ForgeMod' || type === 'FabricMod' || type === 'LiteMod').length))
+    name.textContent = serv.rawServer.name
+    desc.textContent = serv.rawServer.description || ''
 }
 
 function updateSelectedServer(serv){
@@ -387,14 +362,14 @@ function updateSelectedServer(serv){
     }
     ConfigManager.setSelectedServer(serv != null ? serv.rawServer.id : null)
     ConfigManager.save()
-    server_selection_button.innerHTML = '&#8226; ' + (serv != null ? serv.rawServer.name : Lang.queryJS('landing.noSelection'))
+    server_selection_button.innerHTML = (serv != null ? serv.rawServer.name : Lang.queryJS('landing.noSelection'))
     if(getCurrentView() === VIEWS.settings){
         animateSettingsTabRefresh()
     }
     setLaunchEnabled(serv != null)
 }
 // Real text is set in uibinder.js on distributionIndexDone.
-server_selection_button.innerHTML = '&#8226; ' + Lang.queryJS('landing.selectedServer.loading')
+server_selection_button.innerHTML = Lang.queryJS('landing.selectedServer.loading')
 server_selection_button.onclick = async e => {
     e.target.blur()
     await toggleServerSelection(true)
