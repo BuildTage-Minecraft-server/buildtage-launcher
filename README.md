@@ -48,6 +48,18 @@ You can download the launcher from:
 - [VI Software Website](https://visoftware.dev/launcher) - Latest stable version
 - [GitHub Releases](https://github.com/VI-Software/vis-launcher/releases) - All versions
 
+## Releases
+
+Every release is cut with a single command. The version lives in `package.json` and is bumped automatically (patch by default).
+
+```bash
+npm run release -- --message "fix: handle missing java runtime"
+npm run release -- --message "feat: add server status badge" --minor
+npm run release -- --message "feat!: change settings format" --major
+```
+
+The command commits the pending changes with the given [Conventional Commits](https://www.conventionalcommits.org/) message, bumps the version, tags the commit and pushes it. The tag starts the Release workflow, which builds the installers for Windows, macOS and Linux and publishes them. Add `--dry-run` to preview the plan first. See [docs/RELEASING.md](./docs/RELEASING.md) for details.
+
 ## 📜 User Agreement
 
 By using VI Software Launcher, you agree to:

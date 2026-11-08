@@ -18,6 +18,7 @@
     "dist:linux:arm64": "npm run dist -- --linux --arm64",
     "dist:win:arm64": "npm run dist -- --win --arm64",
     "dist:arm64": "npm run dist -- --arm64",
+    "release": "node scripts/release.js",
     "lint": "eslint --config ./eslint.config.mjs .",
     "generate-licenses": "npx license-checker --json | node scripts/generate-licenses.js"
   },

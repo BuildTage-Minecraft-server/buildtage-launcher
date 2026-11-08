@@ -1,61 +1,61 @@
 name: Build
 
-on: push
+on:
+  push:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
-  release:
+  build:
+    name: Build (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-
-    permissions:
-      contents: write
-
+    defaults:
+      run:
+        shell: bash
     strategy:
+      fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-
+        os:
+          - windows-latest
+          - macos-latest
+          - ubuntu-latest
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v3
+      - name: Check out repository
+        uses: actions/checkout@v6
 
-      - name: Install and setup Node
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version-file: .nvmrc
+          cache: npm
 
-      - name: Create certificate folder
-        run: mkdir -p cert
-        shell: bash
-
-
-      - name: Restore certificate
-        run: echo ${{ secrets.CERTIFICATE_BASE64 }} | base64 --decode > ./cert/certificate.pfx
-        shell: bash
-
-      - name: Install and setup Python
-        uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v6
         with:
-          python-version: 3.x
+          python-version: '3.x'
 
       - name: Install dependencies
         run: npm ci
-        shell: bash
 
-      - name: Set release type for prerelease
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          if [[ "$VERSION" =~ .*(-nightly|-canary).* ]]; then
-            node -e "
-              const fs = require('fs');
-              let content = fs.readFileSync('electron-builder.yml', 'utf8');
-              content = content.replace(/releaseType: release/, 'releaseType: prerelease');
-              fs.writeFileSync('electron-builder.yml', content);
-            "
-          fi
-        shell: bash
+      - name: Build installers
+        run: npm run dist -- --publish never
 
-      - name: Build
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CERTIFICATE_FILE: ${{ github.workspace }}/cert/certificate.pfx
-        run: npm run dist
-        shell: bash
+      - name: Upload installers
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v7
+        with:
+          name: installers-${{ matrix.os }}
+          path: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.AppImage
+          if-no-files-found: error
+          retention-days: 7

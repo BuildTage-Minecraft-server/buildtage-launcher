@@ -1,7 +1,7 @@
 appId: 'space.nekrasovdev.buildtage-launcher'
 productName: 'BuildTage Launcher'
 # Include architecture in artifact filenames is not here by default, we add them on each platform config if necessary for clarity
-artifactName: '${productName}-setup-${version}.${ext}'
+artifactName: '${name}-setup-${version}.${ext}'
 
 copyright: 'Copyright © 2026 Asesu23. Based on VIS Launcher, Copyright © 2022-2026 VI Software and contributors'
 
@@ -39,7 +39,7 @@ mac:
       arch:
         - 'x64'
         - 'arm64'
-  artifactName: '${productName}-${version}-${arch}.${ext}'
+  artifactName: '${name}-${version}-${arch}.${ext}'
   category: 'public.app-category.games'
 
 # Linux Configuration
@@ -53,7 +53,7 @@ linux:
   vendor: 'BuildTage'
   synopsis: 'Modded Minecraft Launcher'
   description: 'Launcher for the BuildTage servers. It keeps the game and the mod set up to date and signs you in with your game account.'
-  artifactName: '${productName}-${version}-${arch}.${ext}'
+  artifactName: '${name}-${version}-${arch}.${ext}'
   category: 'Game'
   compression: 'normal'
   executableArgs:
@@ -65,7 +65,6 @@ directories:
   output: 'dist'
 
 publish:
-  provider: github
-  owner: Asesu23
-  repo: buildtage-launcher
-  releaseType: release
+  provider: generic
+  url: 'https://cdn.nekrasovdev.space/launcher/'
+  useMultipleRangeRequest: false
