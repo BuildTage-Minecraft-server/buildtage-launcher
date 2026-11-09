@@ -33,7 +33,8 @@ const SUPPORTED_LANGUAGES = {
     'en-US': { id: 'en_US', name: 'English (US)' },
     'es-ES': { id: 'es_ES', name: 'Español (España)' },
     'pt_PT': { id: 'pt_PT', name: 'Português (Portugal)' },
-    'ca_ES': { id: 'ca_ES', name: 'Català (Espanya)' }
+    'ca_ES': { id: 'ca_ES', name: 'Català (Espanya)' },
+    'ru_RU': { id: 'ru_RU', name: 'Русский (Россия)' }
 }
 
 exports.loadLanguage = function(id){
@@ -163,7 +164,7 @@ exports.getSupportedLanguages = function() {
 }
 
 exports.setupLanguage = function(systemLocale){
-    let langToUse = 'en_US' // fallback
+    let langToUse = 'ru_RU'
     
     const override = exports.getLanguageOverride()
     if (override) {
@@ -179,7 +180,8 @@ exports.setupLanguage = function(systemLocale){
                 'en': 'en_US',
                 'es': 'es_ES', 
                 'pt': 'pt_PT',
-                'ca': 'ca_ES'
+                'ca': 'ca_ES',
+                'ru': 'ru_RU'
             }
             
             if (SUPPORTED_LANGUAGES[baseLang]) {
@@ -201,7 +203,10 @@ exports.setupLanguage = function(systemLocale){
         langToUse = 'en_US'
     }
     
-    exports.loadLanguage(langToUse)
+    exports.loadLanguage('en_US')
+    if (langToUse !== 'en_US') {
+        exports.loadLanguage(langToUse)
+    }
 
     exports.loadLanguage('settings')
 }
