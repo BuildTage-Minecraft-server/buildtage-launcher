@@ -61,7 +61,6 @@ const launch_progress         = document.getElementById('launch_progress')
 const launch_progress_label   = document.getElementById('launch_progress_label')
 const launch_details_text     = document.getElementById('launch_details_text')
 const server_selection_button = document.getElementById('server_selection_button')
-const modsButton = document.getElementById('modsButton')
 const user_text               = document.getElementById('user_text')
 
 const loggerLanding = LoggerUtil.getLogger('Landing')
@@ -344,31 +343,20 @@ function updateSelectedAccount(authUser){
 updateSelectedAccount(ConfigManager.getSelectedAccount())
 
 // Bind selected server
-function hasOptionalMods(modules) {
-    for(const mdl of modules || []) {
-        if(mdl.required != null && mdl.required.value === false) {
-            return true
-        }
-        if(hasOptionalMods(mdl.subModules)) {
-            return true
-        }
+function updateHeroCard(serv) {
+    const name = document.getElementById('heroName')
+    const desc = document.getElementById('heroDesc')
+    if(serv == null) {
+        name.textContent = Lang.queryJS('landing.noSelection')
+        desc.textContent = ''
+        return
     }
-    return false
-}
-
-function updateModsButton(serv) {
-    modsButton.style.display = serv != null && hasOptionalMods(serv.rawServer.modules) ? '' : 'none'
-}
-
-modsButton.onclick = async e => {
-    await prepareSettings()
-    switchView(getCurrentView(), VIEWS.settings, 500, 500, () => {
-        settingsNavItemListener(document.querySelector('.settingsNavItem[rSc="settingsTabMods"]'), false)
-    })
+    name.textContent = serv.rawServer.name
+    desc.textContent = serv.rawServer.description || ''
 }
 
 function updateSelectedServer(serv){
-    updateModsButton(serv)
+    updateHeroCard(serv)
     if(getCurrentView() === VIEWS.settings){
         fullSettingsSave()
     }

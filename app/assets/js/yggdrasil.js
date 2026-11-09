@@ -36,28 +36,28 @@ const REQUEST_TIMEOUT = 10000
 
 const ERRORS = {
     invalidCredentials: {
-        title: 'Неверные данные',
-        desc: 'Неверный ник или пароль. Проверьте данные и попробуйте ещё раз.'
+        title: 'Invalid credentials',
+        desc: 'The username or password is incorrect. Please check them and try again.'
     },
     noProfile: {
-        title: 'Нет игрового профиля',
-        desc: 'У этого аккаунта нет игрового профиля. Обратитесь к администратору.'
+        title: 'No player profile',
+        desc: 'This account has no player profile. Please contact the server administrator.'
     },
     rateLimited: {
-        title: 'Слишком много попыток',
-        desc: 'Слишком много попыток входа. Подождите минуту и попробуйте снова.'
+        title: 'Too many attempts',
+        desc: 'Too many login attempts were made. Please wait a minute and try again.'
     },
     serverError: {
-        title: 'Ошибка сервера аккаунтов',
-        desc: 'Сервер аккаунтов вернул ошибку. Попробуйте позже.'
+        title: 'Account server error',
+        desc: 'The account server returned an unexpected error. Please try again later.'
     },
     unreachable: {
-        title: 'Нет связи с сервером аккаунтов',
-        desc: 'Не удалось подключиться к серверу аккаунтов. Проверьте интернет и попробуйте снова.'
+        title: 'Account server unreachable',
+        desc: 'Could not connect to the account server. Check your internet connection and try again.'
     },
     unknown: {
-        title: 'Ошибка входа',
-        desc: 'Произошла неизвестная ошибка. Попробуйте ещё раз.'
+        title: 'Unknown error during login',
+        desc: 'An unknown error occurred. Please try again.'
     }
 }
 

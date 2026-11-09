@@ -163,11 +163,31 @@ exports.getSupportedLanguages = function() {
 }
 
 exports.setupLanguage = function(systemLocale){
-    let langToUse = 'ru_RU'
+    let langToUse = 'en_US' // fallback
     
     const override = exports.getLanguageOverride()
     if (override) {
         langToUse = override
+    } else if (systemLocale) {
+        if (SUPPORTED_LANGUAGES[systemLocale]) {
+            langToUse = SUPPORTED_LANGUAGES[systemLocale].id
+        } else {
+            // Try to match just the language part (e.g. "en-GB" -> "en")
+            const baseLang = systemLocale.split(/[-_]/)[0]
+            
+            const baseLangFallbacks = {
+                'en': 'en_US',
+                'es': 'es_ES', 
+                'pt': 'pt_PT',
+                'ca': 'ca_ES'
+            }
+            
+            if (SUPPORTED_LANGUAGES[baseLang]) {
+                langToUse = SUPPORTED_LANGUAGES[baseLang].id
+            } else if (baseLangFallbacks[baseLang]) {
+                langToUse = baseLangFallbacks[baseLang]
+            }
+        }
     }
     
     try {
@@ -181,10 +201,7 @@ exports.setupLanguage = function(systemLocale){
         langToUse = 'en_US'
     }
     
-    exports.loadLanguage('en_US')
-        if (langToUse !== 'en_US') {
-            exports.loadLanguage(langToUse)
-        }
+    exports.loadLanguage(langToUse)
 
     exports.loadLanguage('settings')
 }
