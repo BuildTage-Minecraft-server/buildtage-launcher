@@ -538,18 +538,11 @@ function populateAuthAccounts(){
         const acc = authAccounts[val]
 
         const accHtml = `<div class="settingsAuthAccount" uuid="${acc.uuid}">
-            <div class="settingsAuthAccountLeft">
-                <img class="settingsAuthAccountImage" alt="${acc.displayName}" src="${require('./assets/js/apiconstants').DEFAULT_HEAD_URL}">
-            </div>
             <div class="settingsAuthAccountRight">
                 <div class="settingsAuthAccountDetails">
                     <div class="settingsAuthAccountDetailPane">
                         <div class="settingsAuthAccountDetailTitle">${Lang.queryJS('settings.authAccountPopulate.username')}</div>
                         <div class="settingsAuthAccountDetailValue">${acc.displayName}</div>
-                    </div>
-                    <div class="settingsAuthAccountDetailPane">
-                        <div class="settingsAuthAccountDetailTitle">${Lang.queryJS('settings.authAccountPopulate.uuid')}</div>
-                        <div class="settingsAuthAccountDetailValue">${acc.uuid}</div>
                     </div>
                 </div>
                 <div class="settingsAuthAccountActions">
