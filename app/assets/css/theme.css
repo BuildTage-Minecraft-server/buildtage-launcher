@@ -106,7 +106,14 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #frameButtonDockWin {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 2px;
+    box-sizing: border-box;
+    height: 26px;
+    padding: 2px;
+    top: 4px;
+    background: var(--bt-card);
+    border: 1px solid var(--bt-line);
+    border-radius: 13px;
 }
 
 #frameButtonDockWin > .frameButton:not(:first-child) {
@@ -117,12 +124,12 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 28px;
-    width: 28px;
-    margin-top: 5px;
+    height: 20px;
+    width: 30px;
+    margin-top: 0;
     padding: 0;
-    border-radius: 50%;
-    opacity: 0.55;
+    border-radius: 10px;
+    opacity: 0.6;
     transition: background-color 0.25s ease, opacity 0.25s ease, transform 0.15s ease;
 }
 
