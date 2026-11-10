@@ -265,6 +265,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #user_text {
     position: static;
     right: auto;
+    min-width: 0;
     max-width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
