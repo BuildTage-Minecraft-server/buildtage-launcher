@@ -107,10 +107,15 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 }
 
 #frameBar {
-    height: 30px;
+    z-index: 600;
+    height: 16px;
     background: transparent !important;
     border: none;
     backdrop-filter: none;
+}
+
+#frameMain {
+    height: 14px;
 }
 
 #frameTitleDock,
@@ -121,7 +126,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 #frameButtonDockWin {
     position: absolute;
-    top: 38px;
+    top: 24px;
     right: 24px;
     display: flex;
     align-items: center;
@@ -306,7 +311,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     position: absolute;
     left: 24px;
     right: 24px;
-    bottom: 22px;
+    bottom: 18px;
     z-index: 2;
     display: flex;
     align-items: center;
@@ -495,7 +500,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #image_seal_container {
     position: absolute;
     right: 30px;
-    bottom: 74px;
+    bottom: 70px;
     z-index: 4;
     height: 92px;
     width: 92px;
