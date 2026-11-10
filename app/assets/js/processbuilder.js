@@ -133,7 +133,7 @@ class ProcessBuilder {
         }
 
         if(ConfigManager.getMinimizeOnLaunch()){
-            win.hide()
+            win.minimize()
         }
 
         child.stdout.setEncoding('utf8')
@@ -147,6 +147,9 @@ class ProcessBuilder {
             data.trim().split('\n').forEach(x => console.log(`\x1b[31m[Minecraft]\x1b[0m ${x}`))
         })
         child.on('close', (code, signal) => {
+            if(win.isMinimized()){
+                win.restore()
+            }
             win.show()
             logger.info('Exited with code', code)
             if(code != 0){

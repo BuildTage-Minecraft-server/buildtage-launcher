@@ -25,7 +25,7 @@ const remoteMain = require('@electron/remote/main')
 remoteMain.initialize()
 
 // Requirements
-const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu } = require('electron')
 const autoUpdater = require('electron-updater').autoUpdater
 const ejse = require('ejs-electron')
 const fs = require('fs')
@@ -39,7 +39,6 @@ const { DistroAPI } = require('./app/assets/js/distromanager')
 const ModStoreManager = require('./app/assets/js/modstoremanager')
 const pjson = require('./package.json')
 const { Client: DiscordRPCClient } = require('@visoftware/discord-rpc')
-let isExitingThroughTray = false
 
 let discordClient = null
 let discordActivity = null
@@ -220,9 +219,6 @@ ipcMain.on('distributionIndexDone', (event, res) => {
 ipcMain.on('relaunch-for-x11', () => {
     const { spawn } = require('child_process')
     
-    isExitingThroughTray = true
-    app.isQuitting = true
-
     // AppImage workaround
     // see: https://github.com/electron-userland/electron-builder/issues/1727
     if (app.isPackaged && process.env.APPIMAGE) {
@@ -243,10 +239,6 @@ ipcMain.on('relaunch-for-x11', () => {
 // Handle app restart request
 ipcMain.on('restart-app', () => {
     const { spawn } = require('child_process')
-
-    // Set flag to bypass tray quit prevention
-    isExitingThroughTray = true
-    app.isQuitting = true
 
     // AppImage workaround
     // see: https://github.com/electron-userland/electron-builder/issues/1727
@@ -366,7 +358,6 @@ ipcMain.on('legal-accepted', (event) => {
         if (!win) {
             createWindow()
             createMenu()
-            createTray()
 
             // If the splash is already closed, show main window once it's ready
             if (!splashWin && win) {
@@ -604,15 +595,6 @@ function createWindow() {
 
     win.resizable = true
 
-    win.on('close', (event) => {
-        if (!app.isQuitting && !isExitingThroughTray) {
-            event.preventDefault()
-            win.hide()
-        }
-
-        return false
-    })
-
     win.on('closed', () => {
         win = null
     })
@@ -783,34 +765,6 @@ function getPlatformIcon(filename) {
     return path.join(__dirname, 'app', 'assets', 'images', `${filename}.${ext}`)
 }
 
-function createTray() {
-    tray = new Tray(path.join(__dirname, 'app', 'assets', 'images', 'vis-tray.png'))
-
-    const trayMenuTemplate = [
-        {
-            label: 'Open',
-            click: function () {
-                win.show()
-            }
-        },
-        {
-            label: 'Quit',
-            click: function () {
-                isExitingThroughTray = true
-                app.quit()
-            }
-        }
-    ]
-
-    let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
-    tray.setContextMenu(trayMenu)
-    tray.setToolTip('BuildTage Launcher')
-
-    tray.on('click', () => {
-        win.isVisible() ? win.hide() : win.show()
-    })
-}
-
 const gotTheLock = app.requestSingleInstanceLock()
 
 if (!gotTheLock) {
@@ -858,7 +812,6 @@ if (!gotTheLock) {
             } else {
                 createWindow()
                 createMenu()
-                createTray()
                 // If splash was used previously, ensure the main window is shown
                 try {
                     if (!splashWin && win) {
@@ -1114,7 +1067,7 @@ if (!gotTheLock) {
                                     if (!anyVisible) {
                                         console.warn('No visible window after splash close attempts; creating and showing main window as fallback')
                                         if (!win) {
-                                            try { createWindow(); createMenu(); createTray() } catch (e) { console.error('Fallback failed to create main window', e) }
+                                            try { createWindow(); createMenu() } catch (e) { console.error('Fallback failed to create main window', e) }
                                         }
                                         try { if (win) { win.show(); win.focus() } } catch (e) { console.error('Fallback failed to show main window', e) }
                                     }
@@ -1227,7 +1180,6 @@ if (!gotTheLock) {
             } else {
                 createWindow()
                 createMenu()
-                createTray()
                 try {
                     if (!splashWin && win) {
                         win.once && win.once('ready-to-show', () => {
