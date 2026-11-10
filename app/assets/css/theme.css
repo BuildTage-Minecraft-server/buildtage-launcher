@@ -100,26 +100,61 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 #frameContentWin {
     justify-content: flex-end;
+    padding-right: 24px;
+}
+
+#frameButtonDockWin {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#frameButtonDockWin > .frameButton:not(:first-child) {
+    margin-left: 0;
 }
 
 .frameButton {
-    height: 26px;
-    width: 36px;
-    margin-top: 4px;
-    border-radius: 9px;
-    opacity: 0.7;
-    transition: background-color 0.2s ease, opacity 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    width: 28px;
+    margin-top: 5px;
+    padding: 0;
+    border-radius: 50%;
+    opacity: 0.55;
+    transition: background-color 0.25s ease, opacity 0.25s ease, transform 0.15s ease;
+}
+
+.frameButton svg * {
+    transition: fill 0.25s ease, stroke 0.25s ease;
 }
 
 .frameButton:hover,
 .frameButton:focus {
-    background-color: rgba(255, 255, 255, 0.1);
-    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.08);
+    opacity: 0.95;
+}
+
+.frameButton:active {
+    background-color: rgba(255, 255, 255, 0.12);
+    transform: scale(0.92);
 }
 
 #frameButton_close:hover,
 #frameButton_close:focus {
-    background-color: rgba(255, 90, 100, 0.85);
+    background: rgba(255, 107, 120, 0.2) !important;
+    opacity: 1;
+}
+
+#frameButton_close:active {
+    background: rgba(255, 107, 120, 0.3) !important;
+}
+
+#frameButton_close:hover svg *,
+#frameButton_close:focus svg * {
+    fill: #ff9aa3;
+    stroke: #ff9aa3;
 }
 
 #topRow {
