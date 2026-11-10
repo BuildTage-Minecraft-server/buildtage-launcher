@@ -105,12 +105,11 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 #frameButtonDockWin {
     display: flex;
-    align-items: center;
-    gap: 2px;
+    align-items: stretch;
     box-sizing: border-box;
     height: 26px;
-    padding: 2px;
     top: 4px;
+    overflow: hidden;
     background: var(--bt-card);
     border: 1px solid var(--bt-line);
     border-radius: 13px;
@@ -124,13 +123,13 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 20px;
-    width: 30px;
-    margin-top: 0;
+    height: 100%;
+    width: 36px;
+    margin: 0;
     padding: 0;
-    border-radius: 10px;
+    border-radius: 0;
     opacity: 0.6;
-    transition: background-color 0.25s ease, opacity 0.25s ease, transform 0.15s ease;
+    transition: background-color 0.25s ease, opacity 0.25s ease;
 }
 
 .frameButton svg * {
@@ -145,7 +144,6 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 .frameButton:active {
     background-color: rgba(255, 255, 255, 0.12);
-    transform: scale(0.92);
 }
 
 #frameButton_close:hover,
@@ -265,6 +263,12 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     opacity: 0;
     font-size: 0;
     cursor: pointer;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+#avatarOverlay:active {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 #bottomBar {
@@ -697,4 +701,143 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #settingsAboutCurrentVersion,
 #settingsUpdateVersion {
     display: none;
+}
+
+.settingsNavItem,
+.settingsAddAuthAccount,
+.settingsDropinRemoveButton,
+.settingsAuthAccountSelect,
+#settingsUpdateActionButton,
+#newsErrorRetry,
+#loginOptionCancelButton,
+#serverSelectCancel,
+#accountSelectCancel,
+#loginCancelButton,
+#loginOptionBackButton,
+#newsButton {
+    border-radius: 10px;
+    transition: background-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+}
+
+.settingsNavItem {
+    padding: 6px 20px;
+    margin: 0;
+}
+
+.settingsNavItem:is(:hover, :focus):not([selected]),
+.settingsAddAuthAccount:is(:hover, :focus),
+.settingsDropinRemoveButton:is(:hover, :focus),
+.settingsAuthAccountSelect:is(:hover, :focus),
+#settingsUpdateActionButton:is(:hover, :focus),
+#newsErrorRetry:is(:hover, :focus),
+#loginOptionCancelButton:is(:hover, :focus),
+#serverSelectCancel:is(:hover, :focus),
+#accountSelectCancel:is(:hover, :focus),
+#loginCancelButton:is(:hover, :focus),
+#loginOptionBackButton:is(:hover, :focus),
+#newsButton:is(:hover, :focus) {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.settingsNavItem:active,
+.settingsAddAuthAccount:active,
+.settingsDropinRemoveButton:active,
+.settingsAuthAccountSelect:active,
+#settingsUpdateActionButton:active,
+#newsErrorRetry:active,
+#loginOptionCancelButton:active,
+#serverSelectCancel:active,
+#accountSelectCancel:active,
+#loginCancelButton:active,
+#loginOptionBackButton:active,
+#newsButton:active {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.settingsNavItem:hover,
+.settingsNavItem:focus,
+.settingsNavItem:active,
+.settingsAddAuthAccount:hover,
+.settingsAddAuthAccount:focus,
+.settingsAddAuthAccount:active,
+.settingsDropinRemoveButton:hover,
+.settingsDropinRemoveButton:focus,
+.settingsDropinRemoveButton:active,
+.settingsAuthAccountSelect:hover,
+.settingsAuthAccountSelect:focus,
+.settingsAuthAccountSelect:active,
+#settingsUpdateActionButton:hover,
+#settingsUpdateActionButton:focus,
+#settingsUpdateActionButton:active,
+#newsErrorRetry:hover,
+#newsErrorRetry:focus,
+#newsErrorRetry:active,
+#loginOptionCancelButton:hover,
+#loginOptionCancelButton:focus,
+#loginOptionCancelButton:active,
+#serverSelectCancel:hover,
+#serverSelectCancel:focus,
+#serverSelectCancel:active,
+#accountSelectCancel:hover,
+#accountSelectCancel:focus,
+#accountSelectCancel:active,
+#loginCancelButton:hover,
+#loginCancelButton:focus,
+#loginCancelButton:active,
+#loginOptionBackButton:hover,
+#loginOptionBackButton:focus,
+#loginOptionBackButton:active,
+#newsButton:hover,
+#newsButton:focus,
+#newsButton:active,
+.loginOptionButton:hover,
+.loginOptionButton:focus,
+.loginOptionButton:active,
+.loginOptionGuestButton:hover,
+.loginOptionGuestButton:focus,
+.loginOptionGuestButton:active,
+#settingsNavDone:hover,
+#settingsNavDone:focus,
+#settingsNavDone:active,
+.settingsFileSelButton:hover,
+.settingsFileSelButton:focus,
+.settingsFileSelButton:active,
+#settingsDropinFileSystemButton:hover,
+#settingsDropinFileSystemButton:focus,
+#settingsDropinFileSystemButton:active,
+#settingsOpenModStoreButton:hover,
+#settingsOpenModStoreButton:focus,
+#settingsOpenModStoreButton:active,
+#settingsShaderpackButton:hover,
+#settingsShaderpackButton:focus,
+#settingsShaderpackButton:active,
+.settingsActionButton:hover,
+.settingsActionButton:focus,
+.settingsActionButton:active,
+.settingsActionButton.danger:hover,
+.settingsActionButton.danger:focus,
+.settingsActionButton.danger:active,
+#newsArticleTitle:hover,
+#newsArticleTitle:focus,
+#newsArticleTitle:active,
+.bbCodeSpoilerButton:hover,
+.bbCodeSpoilerButton:focus,
+.bbCodeSpoilerButton:active {
+    text-shadow: none !important;
+}
+
+:is(#loginCancelButton, #loginOptionBackButton, #newsButton):is(:hover, :focus, :active) * {
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+:is(#loginCancelButton, #loginOptionBackButton, #newsButton, #newsNavigateLeft, #newsNavigateRight):is(:hover, :focus, :active) svg {
+    -webkit-filter: none !important;
+}
+
+.settingsSwitchServerButton:is(:hover, :focus, :active),
+.settingsAuthAccountLogOut:is(:hover, :focus, :active),
+#serverSelectConfirm:is(:hover, :focus, :active),
+#accountSelectConfirm:is(:hover, :focus, :active) {
+    box-shadow: none !important;
 }
