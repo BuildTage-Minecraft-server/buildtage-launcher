@@ -119,21 +119,26 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     display: none;
 }
 
-#frameContentWin {
-    justify-content: flex-end;
-    padding-right: 24px;
+#frameButtonDockWin {
+    position: absolute;
+    top: 38px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-sizing: border-box;
+    height: 44px;
+    padding-left: 14px;
 }
 
-#frameButtonDockWin {
-    display: flex;
-    align-items: stretch;
-    box-sizing: border-box;
-    height: 26px;
-    top: 4px;
-    overflow: hidden;
-    background: var(--bt-card);
-    border: 1px solid var(--bt-line);
-    border-radius: 13px;
+#frameButtonDockWin::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 0;
+    width: 1px;
+    background: var(--bt-line-strong);
 }
 
 #frameButtonDockWin > .frameButton:not(:first-child) {
@@ -144,13 +149,18 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    width: 36px;
+    height: 44px;
+    width: 44px;
     margin: 0;
     padding: 0;
-    border-radius: 0;
+    border-radius: 16px;
     opacity: 0.6;
     transition: background-color 0.25s ease, opacity 0.25s ease;
+}
+
+.frameButton svg {
+    height: 12px;
+    width: 12px;
 }
 
 .frameButton svg * {
@@ -187,7 +197,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     position: absolute;
     top: 8px;
     left: 24px;
-    right: 24px;
+    right: 142px;
     z-index: 2;
     display: flex;
     align-items: center;
