@@ -98,6 +98,10 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     display: none;
 }
 
+#frameContentWin {
+    justify-content: flex-end;
+}
+
 .frameButton {
     height: 26px;
     width: 36px;
