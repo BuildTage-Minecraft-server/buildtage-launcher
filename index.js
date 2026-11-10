@@ -826,23 +826,7 @@ if (!gotTheLock) {
     })
 
     app.whenReady().then(async () => {
-        let locale = ''
-        try {
-            // Get the user's preferred system languages (returns array of BCP 47 language tags)
-            const systemLanguages = app.getPreferredSystemLanguages()
-
-            // Use the first preferred language, or fall back to getLocale() if empty
-            locale = systemLanguages && systemLanguages.length > 0 ? systemLanguages[0] : app.getLocale()
-
-            if (locale) {
-                locale = locale.replace(/_/g, '-')
-            }
-        } catch (error) {
-            console.error('Error detecting system locale:', error)
-            locale = 'en-US'
-        }
-
-        LangLoader.setupLanguage(locale)
+        LangLoader.setupLanguage()
 
         function startAfterPrechecks() {
 
