@@ -121,10 +121,6 @@ requiredMods = "Candidatos Obligatorios"
 requiredDesc = "Estos candidatos son los impuestos como obligatorios por su administradora de experiencia. Siempre estarán incluidos cuando inicie el juego."
 optionalMods = "Candidatos Opcionales"
 optionalDesc = "Estos candidatos vienen incluidos con la experiencia diseñada por su administradora, algunos de estos mismos pueden venir activados de manera predeterminada, está bajo su elección el activarlos o desactivarlos."
-dropinMods = "Candidatos Drop-in"
-dropinModsDesc = "¡Personalice la experiencia a su antojo! Añada candidatos que su administradora no incluya con la experiencia aquí."
-addMods = "Añadir candidatos"
-dropinRefreshNote = "(F5 para Actualizar)"
 modStoreTitle = "Tienda de Mods"
 modStoreDesc = "Explora e instala mods desde la tienda en línea"
 modStoreButton = "Abrir Tienda de Mods"
@@ -133,9 +129,6 @@ modStoreWarningMessage = "<strong style='color: #ff9800;'>Aviso Importante:</str
 modStoreWarningAccept = "Entiendo, Continuar"
 modStoreWarningCancel = "Cancelar"
 modStoreWarningDontShow = "No volver a advertirme sobre esto"
-shaderpacks = "Paquetes de Shaders"
-shaderpackDesc = "Habilita o deshabilita shaders. Ten en cuenta que los shaders solo se ejecutarán sin problemas en configuraciones potentes. Puedes añadir paquetes personalizados aquí."
-selectShaderpack = "Seleccionar Paquete de Shaders"
 tabJavaHeaderText = "Configuración de Java"
 tabJavaHeaderDesc = "Gestiona la configuración avanzada de Java."
 memoryTitle = "Memoria"
@@ -362,11 +355,7 @@ selectAccount = "Seleccionar Cuenta"
 selectedAccount = "Cuenta Seleccionada ✓"
 logout = "Cerrar Sesión"
 
-[js.settings.dropinMods]
-removeButton = "Eliminar"
-deleteFailedTitle = "Error al eliminar<br>mod drop-in {fullName}"
-deleteFailedMessage = "Asegúrate de que el archivo no esté en uso y vuelve a intentarlo."
-failedToggleTitle = "Error al aaternar<br>Uno o más mods drop-in"
+[js.settings.common]
 okButton = "Aceptar"
 
 [js.settings.configManagement]

@@ -25,7 +25,6 @@ const os     = require('os')
 const semver = require('semver')
 const fs     = require('fs-extra')
 
-const DropinModUtil  = require('./assets/js/dropinmodutil')
 const LangLoader = require('./assets/js/langloader')
 
 const settingsState = {
@@ -388,8 +387,6 @@ function fullSettingsSave() {
     saveSettingsValues()
     saveModConfiguration()
     ConfigManager.save()
-    saveDropinModConfiguration()
-    saveShaderpackSettings()
 }
 
 /* Closes the settings view and saves all data. */
@@ -716,114 +713,18 @@ function saveModConfiguration(){
 function _saveModConfiguration(modConf){
     for(let m of Object.entries(modConf)){
         const tSwitch = settingsModsContainer.querySelectorAll(`[formod='${m[0]}']`)
-        if(!tSwitch[0].hasAttribute('dropin')){
-            if(typeof m[1] === 'boolean'){
-                modConf[m[0]] = tSwitch[0].checked
-            } else {
-                if(m[1] != null){
-                    if(tSwitch.length > 0){
-                        modConf[m[0]].value = tSwitch[0].checked
-                    }
-                    modConf[m[0]].mods = _saveModConfiguration(modConf[m[0]].mods)
+        if(typeof m[1] === 'boolean'){
+            modConf[m[0]] = tSwitch[0].checked
+        } else {
+            if(m[1] != null){
+                if(tSwitch.length > 0){
+                    modConf[m[0]].value = tSwitch[0].checked
                 }
+                modConf[m[0]].mods = _saveModConfiguration(modConf[m[0]].mods)
             }
         }
     }
     return modConf
-}
-
-// Drop-in mod elements.
-
-let CACHE_SETTINGS_MODS_DIR
-let CACHE_DROPIN_MODS
-
-/**
- * Resolve any located drop-in mods for this server and
- * populate the results onto the UI.
- */
-async function resolveDropinModsForUI(){
-    const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
-    CACHE_SETTINGS_MODS_DIR = path.join(ConfigManager.getInstanceDirectory(), serv.rawServer.id, 'mods')
-    CACHE_DROPIN_MODS = DropinModUtil.scanForDropinMods(CACHE_SETTINGS_MODS_DIR, serv.rawServer.minecraftVersion)
-
-    let dropinMods = ''
-
-    for(dropin of CACHE_DROPIN_MODS){
-        dropinMods += `<div id="${dropin.fullName}" class="settingsBaseMod settingsDropinMod" ${!dropin.disabled ? 'enabled' : ''}>
-                    <div class="settingsModContent">
-                        <div class="settingsModMainWrapper">
-                            <div class="settingsModStatus"></div>
-                            <div class="settingsModDetails">
-                                <span class="settingsModName">${dropin.name}</span>
-                                <div class="settingsDropinRemoveWrapper">
-                                    <button class="settingsDropinRemoveButton" remmod="${dropin.fullName}">${Lang.queryJS('settings.dropinMods.removeButton')}</button>
-                                </div>
-                            </div>
-                        </div>
-                        <label class="toggleSwitch">
-                            <input type="checkbox" formod="${dropin.fullName}" dropin ${!dropin.disabled ? 'checked' : ''}>
-                            <span class="toggleSwitchSlider"></span>
-                        </label>
-                    </div>
-                </div>`
-    }
-
-    document.getElementById('settingsDropinModsContent').innerHTML = dropinMods
-}
-
-/**
- * Bind the remove button for each loaded drop-in mod.
- */
-function bindDropinModsRemoveButton(){
-    const sEls = settingsModsContainer.querySelectorAll('[remmod]')
-    Array.from(sEls).map((v, index, arr) => {
-        v.onclick = async () => {
-            const fullName = v.getAttribute('remmod')
-            const res = await DropinModUtil.deleteDropinMod(CACHE_SETTINGS_MODS_DIR, fullName)
-            if(res){
-                document.getElementById(fullName).remove()
-            } else {
-                setOverlayContent(
-                    Lang.queryJS('settings.dropinMods.deleteFailedTitle', { fullName }),
-                    Lang.queryJS('settings.dropinMods.deleteFailedMessage'),
-                    Lang.queryJS('settings.dropinMods.okButton')
-                )
-                setOverlayHandler(null)
-                toggleOverlay(true)
-            }
-        }
-    })
-}
-
-/**
- * Bind functionality to the file system button for the selected
- * server configuration.
- */
-function bindDropinModFileSystemButton(){
-    const fsBtn = document.getElementById('settingsDropinFileSystemButton')
-    fsBtn.onclick = () => {
-        DropinModUtil.validateDir(CACHE_SETTINGS_MODS_DIR)
-        shell.openPath(CACHE_SETTINGS_MODS_DIR)
-    }
-    fsBtn.ondragenter = e => {
-        e.dataTransfer.dropEffect = 'move'
-        fsBtn.setAttribute('drag', '')
-        e.preventDefault()
-    }
-    fsBtn.ondragover = e => {
-        e.preventDefault()
-    }
-    fsBtn.ondragleave = e => {
-        fsBtn.removeAttribute('drag')
-    }
-
-    fsBtn.ondrop = async e => {
-        fsBtn.removeAttribute('drag')
-        e.preventDefault()
-
-        DropinModUtil.addDropinMods(e.dataTransfer.files, CACHE_SETTINGS_MODS_DIR)
-        await reloadDropinMods()
-    }
 }
 
 /**
@@ -889,132 +790,6 @@ function bindModStoreButton(){
     }
 }
 
-/**
- * Save drop-in mod states. Enabling and disabling is just a matter
- * of adding/removing the .disabled extension.
- */
-function saveDropinModConfiguration(){
-    for(dropin of CACHE_DROPIN_MODS){
-        const dropinUI = document.getElementById(dropin.fullName)
-        if(dropinUI != null){
-            const dropinUIEnabled = dropinUI.hasAttribute('enabled')
-            if(DropinModUtil.isDropinModEnabled(dropin.fullName) != dropinUIEnabled){
-                DropinModUtil.toggleDropinMod(CACHE_SETTINGS_MODS_DIR, dropin.fullName, dropinUIEnabled).catch(err => {
-                    if(!isOverlayVisible()){
-                        setOverlayContent(
-                            Lang.queryJS('settings.dropinMods.failedToggleTitle'),
-                            err.message,
-                            Lang.queryJS('settings.dropinMods.okButton')
-                        )
-                        setOverlayHandler(null)
-                        toggleOverlay(true)
-                    }
-                })
-            }
-        }
-    }
-}
-
-// Refresh the drop-in mods when F5 is pressed.
-// Only active on the mods tab.
-document.addEventListener('keydown', async (e) => {
-    if(getCurrentView() === VIEWS.settings && selectedSettingsTab === 'settingsTabMods'){
-        if(e.key === 'F5'){
-            await reloadDropinMods()
-            saveShaderpackSettings()
-            await resolveShaderpacksForUI()
-        }
-    }
-})
-
-async function reloadDropinMods(){
-    await resolveDropinModsForUI()
-    bindDropinModsRemoveButton()
-    bindDropinModFileSystemButton()
-    bindModStoreButton()
-    bindModsToggleSwitch()
-}
-
-// Shaderpack
-
-let CACHE_SETTINGS_INSTANCE_DIR
-let CACHE_SHADERPACKS
-let CACHE_SELECTED_SHADERPACK
-
-/**
- * Load shaderpack information.
- */
-async function resolveShaderpacksForUI(){
-    const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
-    CACHE_SETTINGS_INSTANCE_DIR = path.join(ConfigManager.getInstanceDirectory(), serv.rawServer.id)
-    CACHE_SHADERPACKS = DropinModUtil.scanForShaderpacks(CACHE_SETTINGS_INSTANCE_DIR)
-    CACHE_SELECTED_SHADERPACK = DropinModUtil.getEnabledShaderpack(CACHE_SETTINGS_INSTANCE_DIR)
-
-    setShadersOptions(CACHE_SHADERPACKS, CACHE_SELECTED_SHADERPACK)
-}
-
-function setShadersOptions(arr, selected){
-    const cont = document.getElementById('settingsShadersOptions')
-    cont.innerHTML = ''
-    for(let opt of arr) {
-        const d = document.createElement('DIV')
-        d.innerHTML = opt.name
-        d.setAttribute('value', opt.fullName)
-        if(opt.fullName === selected) {
-            d.setAttribute('selected', '')
-            document.getElementById('settingsShadersSelected').innerHTML = opt.name
-        }
-        d.addEventListener('click', function(e) {
-            this.parentNode.previousElementSibling.innerHTML = this.innerHTML
-            for(let sib of this.parentNode.children){
-                sib.removeAttribute('selected')
-            }
-            this.setAttribute('selected', '')
-            closeSettingsSelect()
-        })
-        cont.appendChild(d)
-    }
-}
-
-function saveShaderpackSettings(){
-    let sel = 'OFF'
-    for(let opt of document.getElementById('settingsShadersOptions').childNodes){
-        if(opt.hasAttribute('selected')){
-            sel = opt.getAttribute('value')
-        }
-    }
-    DropinModUtil.setEnabledShaderpack(CACHE_SETTINGS_INSTANCE_DIR, sel)
-}
-
-function bindShaderpackButton() {
-    const spBtn = document.getElementById('settingsShaderpackButton')
-    spBtn.onclick = () => {
-        const p = path.join(CACHE_SETTINGS_INSTANCE_DIR, 'shaderpacks')
-        DropinModUtil.validateDir(p)
-        shell.openPath(p)
-    }
-    spBtn.ondragenter = e => {
-        e.dataTransfer.dropEffect = 'move'
-        spBtn.setAttribute('drag', '')
-        e.preventDefault()
-    }
-    spBtn.ondragover = e => {
-        e.preventDefault()
-    }
-    spBtn.ondragleave = e => {
-        spBtn.removeAttribute('drag')
-    }
-
-    spBtn.ondrop = async e => {
-        spBtn.removeAttribute('drag')
-        e.preventDefault()
-
-        DropinModUtil.addShaderpacks(e.dataTransfer.files, CACHE_SETTINGS_INSTANCE_DIR)
-        saveShaderpackSettings()
-        await resolveShaderpacksForUI()
-    }
-}
-
 // Server status bar functions.
 
 /**
@@ -1064,7 +839,6 @@ Array.from(document.getElementsByClassName('settingsSwitchServerButton')).forEac
 function saveAllModConfigurations(){
     saveModConfiguration()
     ConfigManager.save()
-    saveDropinModConfiguration()
 }
 
 /**
@@ -1083,12 +857,7 @@ function animateSettingsTabRefresh(){
  */
 async function prepareModsTab(first){
     await resolveModsForUI()
-    await resolveDropinModsForUI()
-    await resolveShaderpacksForUI()
-    bindDropinModsRemoveButton()
-    bindDropinModFileSystemButton()
     bindModStoreButton()
-    bindShaderpackButton()
     bindModsToggleSwitch()
     await loadSelectedServerOnModsTab()
 }
@@ -1654,7 +1423,7 @@ async function exportLauncherSettings() {
             setOverlayContent(
                 Lang.queryJS('settings.configManagement.exportSuccess'),
                 Lang.queryJS('settings.configManagement.exportSaved', { path: result.filePath }),
-                Lang.queryJS('settings.dropinMods.okButton')
+                Lang.queryJS('settings.common.okButton')
             )
             
             setOverlayHandler(() => {
@@ -1668,7 +1437,7 @@ async function exportLauncherSettings() {
         setOverlayContent(
             Lang.queryJS('settings.configManagement.importError'),
             error.message,
-            Lang.queryJS('settings.dropinMods.okButton')
+            Lang.queryJS('settings.common.okButton')
         )
         setOverlayHandler(() => {
             toggleOverlay(false)
@@ -1716,7 +1485,7 @@ async function importLauncherSettings() {
                 setOverlayContent(
                     Lang.queryJS('settings.configManagement.importSuccess'),
                     Lang.queryJS('settings.configManagement.importSuccess'),
-                    Lang.queryJS('settings.dropinMods.okButton')
+                    Lang.queryJS('settings.common.okButton')
                 )
                 
                 setOverlayHandler(() => {
@@ -1730,7 +1499,7 @@ async function importLauncherSettings() {
             setOverlayContent(
                 Lang.queryJS('settings.configManagement.importError'),
                 Lang.queryJS('settings.configManagement.importInvalidFile'),
-                Lang.queryJS('settings.dropinMods.okButton')
+                Lang.queryJS('settings.common.okButton')
             )
             setOverlayHandler(() => {
                 toggleOverlay(false)
@@ -2059,8 +1828,6 @@ function saveAllSettings() {
     }
     
     ConfigManager.save()
-    saveDropinModConfiguration()
-    saveShaderpackSettings()
 }
 
 // Replace the fullSettingsSave call in the settingsNavDone click handler

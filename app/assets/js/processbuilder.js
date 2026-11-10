@@ -96,6 +96,7 @@ class ProcessBuilder {
      */
     build(){
         fs.ensureDirSync(this.gameDir)
+        this.purgeThirdPartyContent()
         const tempNativePath = path.join(os.tmpdir(), ConfigManager.getTempNativeFolder(), crypto.pseudoRandomBytes(16).toString('hex'))
         process.throwDeprecation = true
         this.setupLiteLoader()
@@ -208,6 +209,61 @@ class ProcessBuilder {
      */
     static isModEnabled(modCfg, required = null){
         return modCfg != null ? ((typeof modCfg === 'boolean' && modCfg) || (typeof modCfg === 'object' && (typeof modCfg.value !== 'undefined' ? modCfg.value : true))) : required != null ? required.def : true
+    }
+
+    /**
+     * Remove everything from the mods and shaderpacks folders of the instance
+     * which is not declared by the distribution.
+     */
+    purgeThirdPartyContent(){
+        const normalize = p => {
+            const resolved = path.resolve(p)
+            return process.platform === 'win32' ? resolved.toLowerCase() : resolved
+        }
+
+        const allowed = new Set()
+        const collect = mdls => {
+            for(const mdl of mdls){
+                allowed.add(normalize(mdl.getPath()))
+                if(mdl.subModules != null && mdl.subModules.length > 0){
+                    collect(mdl.subModules)
+                }
+            }
+        }
+        collect(this.server.modules)
+
+        const containsAllowed = dir => {
+            const prefix = dir + path.sep
+            for(const entry of allowed){
+                if(entry.startsWith(prefix)){
+                    return true
+                }
+            }
+            return false
+        }
+
+        const purge = dir => {
+            for(const name of fs.readdirSync(dir)){
+                const full = path.join(dir, name)
+                const key = normalize(full)
+                if(allowed.has(key)){
+                    continue
+                }
+                if(fs.lstatSync(full).isDirectory() && containsAllowed(key)){
+                    purge(full)
+                    continue
+                }
+                fs.removeSync(full)
+                logger.info('Removed third-party file:', full)
+            }
+        }
+
+        for(const dirName of ['mods', 'shaderpacks']){
+            const dir = path.join(this.gameDir, dirName)
+            if(fs.existsSync(dir)){
+                purge(dir)
+            }
+        }
     }
 
     /**

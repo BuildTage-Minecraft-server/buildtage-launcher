@@ -2106,15 +2106,13 @@ input:checked + .toggleSwitchSlider:before {
 
 /* Mod elements sub-containers. */
 #settingsReqModsContainer,
-#settingsOptModsContainer,
-#settingsDropinModsContainer {
+#settingsOptModsContainer {
     padding-bottom: 25px;
 }
 
 /* Main content containers for mod elements. */
 #settingsReqModsContent,
-#settingsOptModsContent,
-#settingsDropinModsContent {
+#settingsOptModsContent {
     font-size: 12px;
     background: rgba(0, 0, 0, 0.25);
     border-radius: 3px;
@@ -2122,8 +2120,7 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 /* Mod elements. */
-.settingsMod,
-.settingsDropinMod {
+.settingsMod {
     padding: 10px;
 }
 .settingsSubMod {
@@ -2201,58 +2198,10 @@ input:checked + .toggleSwitchSlider:before {
     margin-top: 10px;
 }
 
-/* Button to open the mods folder for drop-in mods. */
-#settingsDropinFileSystemButton {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(126, 126, 126, 0.57);
-    border-radius: 3px;
-    height: 50px;
-    width: 100%;
-    text-align: left;
-    padding: 0px 50px;
-    cursor: pointer;
-    outline: none;
-    transition: 0.25s ease;
-    margin-bottom: 10px;
-}
-#settingsDropinFileSystemButton:hover,
-#settingsDropinFileSystemButton:focus,
-#settingsDropinFileSystemButton[drag] {
-    background: rgba(54, 54, 54, 0.25);
-    text-shadow: 0px 0px 20px white;
-}
-/* Refresh instructions on the file system button. */
-#settingsDropinRefreshNote {
-    font-size: 10px;
-    pointer-events: none;
-}
-
 #settingsDropinrequiredDesc {
     font-size: 10px;
     pointer-events: none;
 }
-/* Button to remove drop-in mods. */
-.settingsDropinRemoveButton {
-    background: none;
-    border: none;
-    font-size: 10px;
-    text-align: left;
-    padding: 0px;
-    color: #c32625;
-    font-weight: bold;
-    cursor: pointer;
-    outline: none;
-    transition: 0.25s ease;
-}
-.settingsDropinRemoveButton:hover,
-.settingsDropinRemoveButton:focus {
-    text-shadow: 0px 0px 20px #c32625, 0px 0px 20px #c32625, 0px 0px 20px #c32625;
-}
-.settingsDropinRemoveButton:active {
-    color: #9b1f1f;
-    text-shadow: 0px 0px 20px #9b1f1f, 0px 0px 20px #9b1f1f, 0px 0px 20px #9b1f1f;
-}
-
 /* Button to open mod store. */
 #settingsOpenModStoreButton {
     background: rgba(103, 58, 183, 0.25);
@@ -2278,39 +2227,6 @@ input:checked + .toggleSwitchSlider:before {
 }
 #settingsOpenModStoreButton:active {
     background: rgba(103, 58, 183, 0.65);
-}
-
-/* Shaderpack settings description. */
-#settingsShaderpackDesc {
-    font-size: 10px;
-    margin: 10px 0px;
-    color: lightgrey;
-    font-weight: bold;
-    width: 89%;
-}
-
-/* Wrapper container. */
-#settingsShaderpackWrapper {
-    display: flex;
-}
-
-/* Button to add shaderpacks. */
-#settingsShaderpackButton {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(126, 126, 126, 0.57);
-    border-radius: 3px;
-    cursor: pointer;
-    outline: none;
-    transition: 0.25s ease;
-    font-size: 14px;
-    padding: 6px 11px;
-    margin-right: 5px;
-}
-#settingsShaderpackButton:hover,
-#settingsShaderpackButton:focus,
-#settingsShaderpackButton[drag] {
-    background: rgba(54, 54, 54, 0.25);
-    text-shadow: 0px 0px 20px white;
 }
 
 /* Main select container. */
@@ -5498,5 +5414,3 @@ progress::-webkit-progress-value {
     color: var (--color-text);
     text-decoration: underline;
 }
-
-

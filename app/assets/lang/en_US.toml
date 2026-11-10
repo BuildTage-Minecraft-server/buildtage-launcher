@@ -127,10 +127,6 @@ requiredMods = "Required Mods"
 requiredDesc = "These mods are mandatory as set by your experience administrator. They will always be included when you launch the game."
 optionalMods = "Optional Mods"
 optionalDesc = "These mods are included with the experience designed by your administrator, some of which may be enabled by default. It's your choice to enable or disable them."
-dropinMods = "Drop-in Mods"
-dropinModsDesc = "Customize the experience to your liking! Add mods that your administrator doesn't include with the experience here."
-addMods = "Add mods"
-dropinRefreshNote = "(F5 to Refresh)"
 modStoreTitle = "Mod Store"
 modStoreDesc = "Browse and install mods from the online store"
 modStoreButton = "Open Mod Store"
@@ -139,9 +135,6 @@ modStoreWarningMessage = "<strong style='color: #ff9800;'>Important Notice:</str
 modStoreWarningAccept = "I Understand, Continue"
 modStoreWarningCancel = "Cancel"
 modStoreWarningDontShow = "Don't warn me about this anymore"
-shaderpacks = "Shader Packs"
-shaderpackDesc = "Enable or disable shaders. Note that shaders will only run smoothly on powerful configurations. You can add custom packs here."
-selectShaderpack = "Select Shader Pack"
 tabJavaHeaderText = "Java Settings"
 tabJavaHeaderDesc = "Manage advanced Java settings."
 memoryTitle = "Memory"
@@ -366,11 +359,7 @@ selectAccount = "Select Account"
 selectedAccount = "Account Selected ✓"
 logout = "Log Out"
 
-[js.settings.dropinMods]
-removeButton = "Remove"
-deleteFailedTitle = "Failed to delete<br>drop-in mod {fullName}"
-deleteFailedMessage = "Make sure the file is not in use and try again."
-failedToggleTitle = "Failed to toggle<br>One or more drop-in mods"
+[js.settings.common]
 okButton = "OK"
 
 [js.settings.configManagement]

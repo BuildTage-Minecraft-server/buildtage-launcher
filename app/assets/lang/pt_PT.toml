@@ -121,10 +121,6 @@ requiredMods = "Mods Obrigatórios"
 requiredDesc = "Estes mods são obrigatórios conforme definido pelo administrador da experiência. Eles serão sempre incluídos ao lançar o jogo."
 optionalMods = "Mods Opcionais"
 optionalDesc = "Estes mods estão incluídos na experiência desenhada pelo seu administrador, alguns dos quais podem estar ativados por padrão. É sua escolha ativá-los ou desativá-los."
-dropinMods = "Mods Drop-in"
-dropinModsDesc = "Personalize a experiência ao seu gosto! Adicione mods que o seu administrador não incluiu na experiência aqui."
-addMods = "Adicionar mods"
-dropinRefreshNote = "(F5 para Atualizar)"
 modStoreTitle = "Loja de Mods"
 modStoreDesc = "Explore e instale mods da loja online"
 modStoreButton = "Abrir Loja de Mods"
@@ -133,9 +129,6 @@ modStoreWarningMessage = "<strong style='color: #ff9800;'>Aviso Importante:</str
 modStoreWarningAccept = "Eu Compreendo, Continuar"
 modStoreWarningCancel = "Cancelar"
 modStoreWarningDontShow = "Não me avisar sobre isso novamente"
-shaderpacks = "Pacotes de Shaders"
-shaderpackDesc = "Ativar ou desativar shaders. Note que os shaders só funcionarão suavemente em configurações poderosas. Pode adicionar pacotes personalizados aqui."
-selectShaderpack = "Selecionar Pacote de Shaders"
 tabJavaHeaderText = "Definições de Java"
 tabJavaHeaderDesc = "Gerir definições avançadas de Java."
 memoryTitle = "Memória"
@@ -360,11 +353,7 @@ selectAccount = "Selecionar Conta"
 selectedAccount = "Conta Selecionada ✓"
 logout = "Terminar Sessão"
 
-[js.settings.dropinMods]
-removeButton = "Remover"
-deleteFailedTitle = "Falha ao eliminar<br>o mod adicional {fullName}"
-deleteFailedMessage = "Certifique-se de que o ficheiro não está em uso e tente novamente."
-failedToggleTitle = "Falha ao alternar<br>Um ou mais mods adicionais"
+[js.settings.common]
 okButton = "OK"
 
 [js.settings.configManagement]
