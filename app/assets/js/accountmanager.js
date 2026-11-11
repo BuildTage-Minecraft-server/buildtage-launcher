@@ -1,8 +1,9 @@
 const http = require('http')
 const https = require('https')
-const { AUTH_BASE_URL } = require('./apiconstants')
+const { AUTH_BASE_URL, DRASL_ADMIN_TOKEN } = require('./apiconstants')
 
-const API_URL = `${AUTH_BASE_URL}/drasl/api/v1/user`
+const AUTH_SERVER = `${AUTH_BASE_URL}/authlib-injector/authserver`
+const API_USERS = `${AUTH_BASE_URL}/drasl/api/v1/users`
 const REQUEST_TIMEOUT = 15000
 
 class AccountError extends Error {
@@ -14,20 +15,17 @@ class AccountError extends Error {
 
 exports.AccountError = AccountError
 
-function patch(accessToken, payload) {
+function send(method, url, headers, payload) {
     return new Promise((resolve, reject) => {
-        const body = Buffer.from(JSON.stringify(payload))
-        const parsed = new URL(API_URL)
+        const body = payload == null ? null : Buffer.from(JSON.stringify(payload))
+        const parsed = new URL(url)
         const client = parsed.protocol === 'http:' ? http : https
-        const req = client.request(parsed, {
-            method: 'PATCH',
-            timeout: REQUEST_TIMEOUT,
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                'Content-Length': body.length
-            }
-        }, res => {
+        const options = { method, timeout: REQUEST_TIMEOUT, headers: { ...headers } }
+        if(body != null) {
+            options.headers['Content-Type'] = 'application/json'
+            options.headers['Content-Length'] = body.length
+        }
+        const req = client.request(parsed, options, res => {
             const chunks = []
             res.on('data', chunk => chunks.push(chunk))
             res.on('end', () => resolve({ status: res.statusCode, body: Buffer.concat(chunks).toString('utf8') }))
@@ -35,42 +33,95 @@ function patch(accessToken, payload) {
         })
         req.on('timeout', () => req.destroy(new Error('Request timed out')))
         req.on('error', reject)
-        req.write(body)
+        if(body != null) {
+            req.write(body)
+        }
         req.end()
     })
 }
 
+async function attempt(method, url, headers, payload) {
+    try {
+        return await send(method, url, headers, payload)
+    } catch(err) {
+        throw new AccountError('network', err.message)
+    }
+}
+
 function serverMessage(body) {
     try {
-        const parsed = JSON.parse(body)
-        return parsed.message || parsed.error || ''
+        return JSON.parse(body).message || ''
     } catch {
         return ''
     }
 }
 
-exports.updateAccount = async function(accessToken, changes) {
+async function verifyPassword(username, password) {
+    const res = await attempt('POST', `${AUTH_SERVER}/authenticate`, {}, {
+        agent: { name: 'Minecraft', version: 1 },
+        username,
+        password,
+        requestUser: false
+    })
+    if(res.status === 401 || res.status === 403) {
+        throw new AccountError('wrongPassword')
+    }
+    if(res.status === 429) {
+        throw new AccountError('rateLimited')
+    }
+    if(res.status < 200 || res.status >= 300) {
+        throw new AccountError('network', `HTTP ${res.status}`)
+    }
+    try {
+        const session = JSON.parse(res.body)
+        await attempt('POST', `${AUTH_SERVER}/invalidate`, {}, { accessToken: session.accessToken, clientToken: session.clientToken })
+    } catch {
+        return
+    }
+}
+
+async function findUserUuid(headers, username) {
+    const res = await attempt('GET', API_USERS, headers)
+    if(res.status < 200 || res.status >= 300) {
+        throw new AccountError('unavailable')
+    }
+    const needle = username.toLowerCase()
+    const user = JSON.parse(res.body).find(entry => typeof entry.username === 'string' && entry.username.toLowerCase() === needle)
+    if(user == null || typeof user.uuid !== 'string') {
+        throw new AccountError('unavailable')
+    }
+    return user.uuid
+}
+
+function classifyFailure(status, message) {
+    const text = message.toLowerCase()
+    if(status === 409 || /taken|already|exists|in use/.test(text)) {
+        return 'nameTaken'
+    }
+    if(status === 404 || status >= 500 || status === 401 || status === 403) {
+        return 'unavailable'
+    }
+    return 'rejected'
+}
+
+exports.updateAccount = async function(username, password, changes) {
+    if(!DRASL_ADMIN_TOKEN) {
+        throw new AccountError('unavailable')
+    }
+    await verifyPassword(username, password)
+    const headers = { 'Authorization': `Bearer ${DRASL_ADMIN_TOKEN}` }
+    const uuid = await findUserUuid(headers, username)
     const payload = {}
     if(changes.playerName) {
         payload.playerName = changes.playerName
     }
-    if(changes.password) {
-        payload.password = changes.password
+    if(changes.newPassword) {
+        payload.password = changes.newPassword
     }
-    let res
-    try {
-        res = await patch(accessToken, payload)
-    } catch(err) {
-        throw new AccountError('network', err.message)
-    }
+    const res = await attempt('PATCH', `${API_USERS}/${uuid}`, headers, payload)
     if(res.status >= 200 && res.status < 300) {
         return
     }
-    if(res.status === 401 || res.status === 403) {
-        throw new AccountError('unauthorized')
-    }
-    if(res.status === 404 || res.status === 405) {
-        throw new AccountError('unavailable')
-    }
-    throw new AccountError('rejected', serverMessage(res.body))
+    const message = serverMessage(res.body)
+    throw new AccountError(classifyFailure(res.status, message), message)
 }

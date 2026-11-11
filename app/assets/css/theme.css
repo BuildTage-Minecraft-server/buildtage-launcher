@@ -2159,14 +2159,14 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 #settingsAccountForm {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
 }
 
 #settingsAccountName,
+#settingsAccountNewPassword,
 #settingsAccountPassword {
-    flex: 1 1 140px;
     min-width: 0;
     height: 34px;
 }

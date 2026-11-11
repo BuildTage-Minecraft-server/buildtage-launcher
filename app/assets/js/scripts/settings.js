@@ -641,21 +641,27 @@ function setAccountStatus(message, isError) {
 async function saveAccountChanges() {
     const account = ConfigManager.getSelectedAccount()
     const nameInput = document.getElementById('settingsAccountName')
+    const newPasswordInput = document.getElementById('settingsAccountNewPassword')
     const passwordInput = document.getElementById('settingsAccountPassword')
     const saveButton = document.getElementById('settingsAccountSave')
     const playerName = nameInput.value.trim()
+    const newPassword = newPasswordInput.value
     const password = passwordInput.value
     if(account == null || saveButton.disabled) {
         return
     }
-    if(!playerName && !password) {
+    if(!playerName && !newPassword) {
         setAccountStatus(Lang.queryJS('settings.account.nothing'), true)
+        return
+    }
+    if(!password) {
+        setAccountStatus(Lang.queryJS('settings.account.needPassword'), true)
         return
     }
     saveButton.disabled = true
     setAccountStatus('', false)
     try {
-        await AccountManager.updateAccount(account.accessToken, { playerName, password })
+        await AccountManager.updateAccount(account.username, password, { playerName, newPassword })
         if(playerName) {
             const stored = ConfigManager.getAuthAccount(account.uuid)
             stored.displayName = playerName
@@ -666,6 +672,7 @@ async function saveAccountChanges() {
             updateSelectedAccount(ConfigManager.getSelectedAccount())
         }
         nameInput.value = ''
+        newPasswordInput.value = ''
         passwordInput.value = ''
         setAccountStatus(Lang.queryJS('settings.account.saved'), false)
     } catch(err) {

@@ -7,3 +7,4 @@
 ./cert
 ./cert/*
 gpg.log
+/.env

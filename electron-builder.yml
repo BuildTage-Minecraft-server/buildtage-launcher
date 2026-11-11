@@ -9,6 +9,8 @@ asar: true
 compression: 'maximum'
 
 files:
+  - '**/*'
+  - '.env'
   - '!{dist,.gitignore,.vscode,docs,dev-app-update.yml,.nvmrc,eslint.config.mjs,scripts}'
 
 extraResources:

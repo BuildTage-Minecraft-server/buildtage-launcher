@@ -87,7 +87,8 @@
                         <div class="settingsFieldDesc"><%- lang('settings.accountDataDesc') %></div>
                         <div id="settingsAccountForm">
                             <input type="text" id="settingsAccountName" autocomplete="off" spellcheck="false" placeholder="<%- lang('settings.accountNamePlaceholder') %>">
-                            <input type="password" id="settingsAccountPassword" autocomplete="new-password" placeholder="<%- lang('settings.accountPasswordPlaceholder') %>">
+                            <input type="password" id="settingsAccountNewPassword" autocomplete="new-password" placeholder="<%- lang('settings.accountPasswordPlaceholder') %>">
+                            <input type="password" id="settingsAccountPassword" autocomplete="current-password" placeholder="<%- lang('settings.accountCurrentPlaceholder') %>">
                             <button id="settingsAccountSave" class="settingsActionButton"><%- lang('settings.accountSave') %></button>
                         </div>
                         <div id="settingsAccountStatus"></div>
