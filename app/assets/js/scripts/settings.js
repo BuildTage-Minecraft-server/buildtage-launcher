@@ -29,7 +29,7 @@ const LangLoader = require('./assets/js/langloader')
 const SkinSource = require('./assets/js/skinhead')
 const SkinViewer = require('./assets/js/skinviewer')
 const SkinManager = require('./assets/js/skinmanager')
-const { ACCOUNT_URL } = require('./assets/js/apiconstants')
+const AccountManager = require('./assets/js/accountmanager')
 
 const settingsState = {
     invalid: new Set()
@@ -632,6 +632,51 @@ async function applySkinChange(action, successKey) {
     }
 }
 
+function setAccountStatus(message, isError) {
+    const status = document.getElementById('settingsAccountStatus')
+    status.textContent = message
+    status.classList.toggle('error', Boolean(isError))
+}
+
+async function saveAccountChanges() {
+    const account = ConfigManager.getSelectedAccount()
+    const nameInput = document.getElementById('settingsAccountName')
+    const passwordInput = document.getElementById('settingsAccountPassword')
+    const saveButton = document.getElementById('settingsAccountSave')
+    const playerName = nameInput.value.trim()
+    const password = passwordInput.value
+    if(account == null || saveButton.disabled) {
+        return
+    }
+    if(!playerName && !password) {
+        setAccountStatus(Lang.queryJS('settings.account.nothing'), true)
+        return
+    }
+    saveButton.disabled = true
+    setAccountStatus('', false)
+    try {
+        await AccountManager.updateAccount(account.accessToken, { playerName, password })
+        if(playerName) {
+            const stored = ConfigManager.getAuthAccount(account.uuid)
+            stored.displayName = playerName
+            ConfigManager.save()
+            populateAuthAccounts()
+            bindAuthAccountSelect()
+            bindAuthAccountLogOut()
+            updateSelectedAccount(ConfigManager.getSelectedAccount())
+        }
+        nameInput.value = ''
+        passwordInput.value = ''
+        setAccountStatus(Lang.queryJS('settings.account.saved'), false)
+    } catch(err) {
+        const code = err instanceof AccountManager.AccountError ? err.code : 'network'
+        const detail = code === 'rejected' && err.message && err.message !== 'rejected' ? ` ${err.message}` : ''
+        setAccountStatus(Lang.queryJS(`settings.account.${code}`) + detail, true)
+    } finally {
+        saveButton.disabled = false
+    }
+}
+
 function prepareSkinPanel() {
     if(!skinPanelBound) {
         skinPanelBound = true
@@ -649,11 +694,10 @@ function prepareSkinPanel() {
         document.getElementById('settingsSkinReset').onclick = () => {
             applySkinChange(account => SkinManager.resetSkin(account.accessToken), 'removed')
         }
-        document.getElementById('settingsAccountData').onclick = () => {
-            shell.openExternal(ACCOUNT_URL)
-        }
+        document.getElementById('settingsAccountSave').onclick = saveAccountChanges
     }
     setSkinStatus('', false)
+    setAccountStatus('', false)
     refreshSkinPanel()
 }
 

@@ -2140,3 +2140,49 @@ input:checked + .toggleSwitchSlider:before {
     gap: 26px;
     padding-top: 4px;
 }
+
+#settingsContainer input[type=password] {
+    padding: 9px 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--bt-line);
+    border-radius: 10px;
+    color: var(--bt-text);
+    font-family: var(--bt-font);
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+#settingsContainer input[type=password]:focus {
+    outline: none;
+    border-color: var(--bt-accent);
+    box-shadow: var(--glow-primary);
+}
+
+#settingsAccountForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#settingsAccountName,
+#settingsAccountPassword {
+    flex: 1 1 140px;
+    min-width: 0;
+    height: 34px;
+}
+
+#settingsAccountSave {
+    height: 34px;
+}
+
+#settingsAccountStatus {
+    min-height: 16px;
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--bt-good);
+}
+
+#settingsAccountStatus.error {
+    color: #e5484d;
+}

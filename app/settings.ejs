@@ -85,9 +85,12 @@
                     <div class="settingsSkinSection">
                         <div class="settingsFieldTitle"><%- lang('settings.accountDataTitle') %></div>
                         <div class="settingsFieldDesc"><%- lang('settings.accountDataDesc') %></div>
-                        <div class="settingsSkinActions">
-                            <button id="settingsAccountData" class="settingsActionButton"><%- lang('settings.accountDataButton') %></button>
+                        <div id="settingsAccountForm">
+                            <input type="text" id="settingsAccountName" autocomplete="off" spellcheck="false" placeholder="<%- lang('settings.accountNamePlaceholder') %>">
+                            <input type="password" id="settingsAccountPassword" autocomplete="new-password" placeholder="<%- lang('settings.accountPasswordPlaceholder') %>">
+                            <button id="settingsAccountSave" class="settingsActionButton"><%- lang('settings.accountSave') %></button>
                         </div>
+                        <div id="settingsAccountStatus"></div>
                     </div>
                 </div>
             </div>

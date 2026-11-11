@@ -55,8 +55,10 @@ skinEmpty = "Скин не установлен"
 skinUpload = "Загрузить скин"
 skinReset = "Сбросить скин"
 accountDataTitle = "Данные аккаунта"
-accountDataDesc = "Имя, пароль и почта меняются на сайте аккаунта."
-accountDataButton = "Открыть страницу аккаунта"
+accountDataDesc = "Смените имя игрока или пароль."
+accountNamePlaceholder = "Новое имя игрока"
+accountPasswordPlaceholder = "Новый пароль"
+accountSave = "Сохранить"
 tabAccountHeaderDesc = "Добавляйте новые аккаунты или управляйте существующими."
 VISAccount = "BuildTage"
 addVISAccount = "+ Добавить аккаунт BuildTage"
@@ -253,6 +255,14 @@ badSize = "Размер скина должен быть 64x64 или 64x32 пи
 unauthorized = "Сессия истекла. Войдите в аккаунт заново и повторите."
 unavailable = "Сервер не поддерживает смену скина из лаунчера. Используйте страницу аккаунта."
 rejected = "Сервер отклонил скин."
+network = "Не удалось связаться с сервером."
+
+[js.settings.account]
+saved = "Данные аккаунта обновлены."
+nothing = "Сначала введите новое имя или пароль."
+unauthorized = "Сессия истекла. Войдите в аккаунт заново и повторите."
+unavailable = "Сервер не позволяет менять данные аккаунта из лаунчера."
+rejected = "Сервер отклонил изменение."
 network = "Не удалось связаться с сервером."
 
 [js.settings.common]
