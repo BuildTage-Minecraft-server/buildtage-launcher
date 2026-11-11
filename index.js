@@ -606,6 +606,8 @@ function createSplashWindow() {
         width: 640,
         height: 420,
         frame: false,
+        transparent: true,
+        hasShadow: false,
         resizable: false,
         alwaysOnTop: true,
         modal: false,

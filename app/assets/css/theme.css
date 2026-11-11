@@ -1847,3 +1847,38 @@ input:checked + .toggleSwitchSlider:before {
 .toggleSwitch[reqmod] {
     display: none;
 }
+
+#settingsReqModsContainer:has(> #settingsReqModsContent:empty),
+#settingsOptModsContainer:has(> #settingsOptModsContent:empty) {
+    display: none;
+}
+
+#settingsOptModsContainer .settingsDropinrequiredDesc {
+    display: none;
+}
+
+#settingsTabMods:not([style*="none"]) {
+    padding-top: 44px;
+    padding-bottom: 20px;
+}
+
+#settingsTabMods .settingsTabHeader {
+    margin-bottom: 10px;
+}
+
+#settingsTabMods .settingsSelServContainer {
+    margin-bottom: 10px;
+}
+
+#settingsReqModsContainer {
+    flex: 3 1 0;
+}
+
+#settingsOptModsContainer {
+    flex: 2 1 0;
+}
+
+#settingsReqModsContainer:only-child,
+#settingsOptModsContainer:only-child {
+    flex: 1 1 0;
+}
