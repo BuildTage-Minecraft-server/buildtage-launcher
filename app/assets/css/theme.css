@@ -1981,3 +1981,27 @@ input:checked + .toggleSwitchSlider:before {
 #settingsStorageManagementContainer {
     border-top: 1px solid var(--bt-line);
 }
+
+.settingsAuthAccountRight {
+    align-items: center;
+}
+
+.settingsAuthAccountDetails {
+    padding: 18px 20px;
+}
+
+.settingsAuthAccountActions {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
+}
+
+.settingsAuthAccountSelect {
+    padding: 0;
+}
+
+.settingsAuthAccountLogOut {
+    padding: 6px 14px;
+}
