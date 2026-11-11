@@ -2095,38 +2095,6 @@ input:checked + .toggleSwitchSlider:before {
     margin-bottom: 12px;
 }
 
-#settingsSkinModel {
-    display: inline-flex;
-    gap: 2px;
-    padding: 3px;
-    margin-bottom: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-}
-
-.settingsSkinModelButton {
-    padding: 6px 12px;
-    background: none;
-    border: none;
-    border-radius: 8px;
-    outline: none;
-    cursor: pointer;
-    font-family: var(--bt-font);
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--bt-text-dim);
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.settingsSkinModelButton:hover {
-    color: var(--bt-text);
-}
-
-.settingsSkinModelButton.selected {
-    background: rgba(139, 92, 246, 0.28);
-    color: var(--bt-text);
-}
-
 .settingsSkinActions {
     display: flex;
     flex-wrap: wrap;

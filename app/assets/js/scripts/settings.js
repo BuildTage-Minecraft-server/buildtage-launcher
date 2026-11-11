@@ -566,7 +566,6 @@ function prepareAccountsTab() {
 }
 
 let skinViewer = null
-let skinSlim = false
 let skinBusy = false
 let skinPanelBound = false
 
@@ -574,13 +573,6 @@ function setSkinStatus(message, isError) {
     const status = document.getElementById('settingsSkinStatus')
     status.textContent = message
     status.classList.toggle('error', Boolean(isError))
-}
-
-function setSkinModel(slim) {
-    skinSlim = slim
-    for(const button of document.getElementsByClassName('settingsSkinModelButton')) {
-        button.classList.toggle('selected', (button.dataset.model === 'slim') === slim)
-    }
 }
 
 function setSkinBusy(busy) {
@@ -613,7 +605,6 @@ async function refreshSkinPanel() {
     try {
         await skinViewer.show(skin.dataUrl, skin.slim)
         empty.hidden = true
-        setSkinModel(skin.slim)
     } catch {
         skinViewer.clear()
         empty.hidden = false
@@ -644,9 +635,6 @@ async function applySkinChange(action, successKey) {
 function prepareSkinPanel() {
     if(!skinPanelBound) {
         skinPanelBound = true
-        for(const button of document.getElementsByClassName('settingsSkinModelButton')) {
-            button.onclick = () => setSkinModel(button.dataset.model === 'slim')
-        }
         document.getElementById('settingsSkinUpload').onclick = async () => {
             const res = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
                 title: Lang.queryJS('settings.skin.selectTitle'),
@@ -656,7 +644,7 @@ function prepareSkinPanel() {
             if(res.canceled) {
                 return
             }
-            await applySkinChange(account => SkinManager.uploadSkin(account.accessToken, res.filePaths[0], skinSlim), 'uploaded')
+            await applySkinChange(account => SkinManager.uploadSkin(account.accessToken, res.filePaths[0]), 'uploaded')
         }
         document.getElementById('settingsSkinReset').onclick = () => {
             applySkinChange(account => SkinManager.resetSkin(account.accessToken), 'removed')

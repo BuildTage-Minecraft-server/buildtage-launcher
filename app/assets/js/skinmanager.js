@@ -90,8 +90,45 @@ async function callServices(send) {
     throw lastError
 }
 
-exports.uploadSkin = async function(accessToken, filePath, slim) {
+function isTransparent(ctx, unit, x, y, w, h) {
+    const data = ctx.getImageData(x * unit, y * unit, w * unit, h * unit).data
+    for(let i = 3; i < data.length; i += 4) {
+        if(data[i] !== 0) {
+            return false
+        }
+    }
+    return true
+}
+
+function detectSlim(png) {
+    return new Promise(resolve => {
+        const image = new Image()
+        image.onload = () => {
+            if(image.height !== image.width) {
+                resolve(false)
+                return
+            }
+            const unit = image.width / 64
+            const canvas = document.createElement('canvas')
+            canvas.width = image.width
+            canvas.height = image.height
+            const ctx = canvas.getContext('2d', { willReadFrequently: true })
+            ctx.drawImage(image, 0, 0)
+            resolve(
+                isTransparent(ctx, unit, 50, 16, 2, 4) &&
+                isTransparent(ctx, unit, 54, 20, 2, 12) &&
+                isTransparent(ctx, unit, 42, 48, 2, 4) &&
+                isTransparent(ctx, unit, 46, 52, 2, 12)
+            )
+        }
+        image.onerror = () => resolve(false)
+        image.src = `data:image/png;base64,${png.toString('base64')}`
+    })
+}
+
+exports.uploadSkin = async function(accessToken, filePath) {
     const png = readSkinFile(filePath)
+    const slim = await detectSlim(png)
     const form = multipart({ variant: slim ? 'slim' : 'classic' }, png)
     await callServices(url => request('POST', url, {
         'Authorization': `Bearer ${accessToken}`,
