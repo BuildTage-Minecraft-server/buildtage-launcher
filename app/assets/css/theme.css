@@ -1934,3 +1934,50 @@ input:checked + .toggleSwitchSlider:before {
 .settingsFileSelVal {
     padding-left: 4px !important;
 }
+
+.settingsTab {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, transparent 30px, #000 56px);
+    mask-image: linear-gradient(to bottom, transparent 0, transparent 30px, #000 56px);
+}
+
+.settingsFileSelActions {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.settingsFileSelVal {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+}
+
+.settingsFileSelButton {
+    flex: 0 0 auto;
+}
+
+#settingsStorageManagementContainer {
+    margin: 0;
+    padding: 18px 0;
+}
+
+#settingsConfigurationManagementContainer {
+    margin-top: 0 !important;
+    padding: 18px 0;
+}
+
+#settingsConfigurationManagementContainer .settingsFieldDesc,
+#settingsStorageManagementContainer .settingsFieldDesc {
+    margin-bottom: 14px !important;
+}
+
+.settingsFileSelDesc {
+    margin-bottom: 18px;
+}
+
+.settingsFileSelContainer {
+    border-bottom: none;
+}
+
+#settingsStorageManagementContainer {
+    border-top: 1px solid var(--bt-line);
+}
