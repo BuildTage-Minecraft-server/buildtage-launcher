@@ -1882,3 +1882,55 @@ input:checked + .toggleSwitchSlider:before {
 #settingsOptModsContainer:only-child {
     flex: 1 1 0;
 }
+
+#settingsTabMods .settingsTabHeaderDesc,
+#settingsReqModsContainer .settingsModsHeader small {
+    display: none;
+}
+
+#settingsTabMods:not([style*="none"]) {
+    padding-top: 56px;
+    padding-bottom: 28px;
+}
+
+#settingsTabMods .settingsTabHeader {
+    margin-bottom: 18px;
+}
+
+#settingsReqModsContainer .settingsModsHeader {
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+}
+
+.settingsAuthAccountDetails {
+    margin-left: 0;
+    padding: 16px 18px;
+}
+
+.settingsAuthAccountActions {
+    padding: 16px 18px;
+}
+
+#settingsAboutButtons {
+    padding: 0 12px 14px;
+}
+
+.settingsChangelogActions {
+    padding: 0 12px;
+    margin: 0 0 12px;
+}
+
+.settingsChangelogButton {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+.settingsChangelogText {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--bt-text-dim);
+}
+
+.settingsFileSelVal {
+    padding-left: 4px !important;
+}
