@@ -883,3 +883,791 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #accountSelectConfirm:is(:hover, :focus, :active) {
     box-shadow: none !important;
 }
+
+#settingsContainer {
+    background: transparent;
+}
+
+#settingsContainerLeft {
+    width: 250px;
+    flex: 0 0 250px;
+    padding: 56px 20px 28px 40px;
+}
+
+#settingsNavContainer {
+    height: 100%;
+}
+
+#settingsNavHeader {
+    height: auto;
+    justify-content: flex-start;
+    margin-bottom: 28px;
+    padding-left: 14px;
+}
+
+#settingsNavHeaderText {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--bt-text);
+}
+
+#settingsNavItemsContainer {
+    flex: 1;
+    height: auto;
+    min-height: 0;
+    justify-content: stretch;
+}
+
+#settingsNavItemsContent {
+    width: 100%;
+}
+
+.settingsNavItem {
+    position: relative;
+    width: 100%;
+    margin: 0 0 2px;
+    padding: 9px 14px;
+    font-size: 14px;
+    color: var(--bt-text-dim);
+    text-shadow: none;
+}
+
+.settingsNavItem:hover,
+.settingsNavItem:focus {
+    color: var(--bt-text);
+    text-shadow: none;
+}
+
+.settingsNavItem[selected] {
+    color: var(--bt-text);
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+.settingsNavItem[selected]::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    bottom: 9px;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--bt-accent);
+}
+
+.settingsNavSpacer {
+    height: 14px;
+}
+
+#settingsNavContentBottom {
+    position: static;
+    margin-top: auto;
+}
+
+.settingsNavDivider {
+    width: 100%;
+    margin: 0 0 14px;
+    background: var(--bt-line);
+}
+
+#settingsNavDone {
+    width: 100%;
+    margin: 0;
+    padding: 10px 14px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--bt-accent) !important;
+    border-radius: 10px;
+}
+
+#settingsNavDone:hover,
+#settingsNavDone:focus {
+    background: var(--bt-accent-hover) !important;
+}
+
+#settingsNavDone:active {
+    background: var(--bt-accent-pressed) !important;
+    color: #fff;
+}
+
+#settingsContainerRight {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+}
+
+.settingsTab {
+    padding: 56px 40px 0 8px;
+    box-sizing: border-box;
+}
+
+.settingsTab::-webkit-scrollbar {
+    width: 6px;
+}
+
+.settingsTab::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.settingsTab::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 3px;
+}
+
+.settingsTab::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+.settingsTab > *:first-child {
+    margin-top: 0;
+}
+
+.settingsTab > *:last-child {
+    margin-bottom: 40px;
+}
+
+.settingsTabHeader {
+    margin-bottom: 22px;
+}
+
+.settingsTabHeaderText {
+    font-family: var(--bt-font);
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.settingsTabHeaderDesc {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--bt-text-dim);
+}
+
+.settingsFieldContainer,
+.settingsFileSelContainer,
+.settingsAuthAccountTypeContainer,
+#settingsGameResolutionContainer,
+#settingsMemoryContainer,
+#settingsModsContainer,
+#settingsJVMOptsContainer,
+#settingsStorageManagementContainer,
+.settingsSelServContainer,
+#settingsAboutCurrentContainer,
+.settingsChangelogContainer,
+#settingsUpdateStatusContainer {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.settingsFieldContainer {
+    gap: 24px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--bt-line);
+}
+
+.settingsFieldLeft {
+    flex: 1;
+    min-width: 0;
+}
+
+.settingsFieldRight {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.settingsFieldTitle {
+    font-family: var(--bt-font);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--bt-text);
+}
+
+.settingsFieldDesc {
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--bt-text-dim);
+}
+
+.settingsDivider {
+    width: 100%;
+    background: var(--bt-line);
+}
+
+.settingsAuthAccountTypeHeader {
+    padding: 0 0 10px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--bt-line);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.settingsAuthAccount,
+.settingsSelServContainer,
+#settingsReqModsContent,
+#settingsOptModsContent,
+#settingsAboutCurrentContainer,
+.settingsChangelogContainer,
+#settingsUpdateStatusContainer,
+#settingsStorageInfo {
+    background: var(--bt-card);
+    border: 1px solid var(--bt-line);
+    border-radius: 14px;
+}
+
+.settingsSelServContainer {
+    margin: 0 0 22px;
+}
+
+.settingsAuthAccount {
+    overflow: hidden;
+}
+
+.settingsAuthAccountDetails {
+    margin-left: 6px;
+    padding: 14px 0;
+}
+
+.settingsAuthAccountDetails > *:not(:last-child) {
+    margin-bottom: 12px;
+}
+
+.settingsAuthAccountDetailTitle,
+.settingsMemoryStatusTitle {
+    font-family: var(--bt-font);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--bt-text-dim);
+}
+
+.settingsAuthAccountDetailValue {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.settingsAuthAccountActions {
+    padding: 14px 16px;
+}
+
+.settingsAuthAccountSelect {
+    font-family: var(--bt-font);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--bt-text);
+    padding: 5px 10px;
+}
+
+.settingsAuthAccountSelect[selected] {
+    color: var(--bt-good);
+}
+
+.settingsAuthAccountLogOut {
+    padding: 5px 12px;
+    font-family: var(--bt-font);
+    border-radius: 8px;
+}
+
+.settingsAuthAccountLogOut:hover,
+.settingsAuthAccountLogOut:focus {
+    box-shadow: none;
+}
+
+.settingsSelServContent {
+    padding: 16px 18px;
+}
+
+.settingsServerCard {
+    gap: 16px;
+}
+
+.settingsServerIcon {
+    border-radius: 10px;
+}
+
+.settingsServerName {
+    font-family: var(--bt-font);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.settingsServerDesc {
+    font-size: 12px;
+    color: var(--bt-text-dim);
+}
+
+.settingsServerBadge {
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-family: var(--bt-font);
+    font-weight: 600;
+}
+
+.settingsSwitchServerContainer {
+    padding: 16px;
+}
+
+.settingsSwitchServerButton {
+    padding: 6px 12px;
+    border: 1px solid var(--bt-line-strong);
+    border-radius: 8px;
+    font-family: var(--bt-font);
+    color: var(--bt-text);
+}
+
+.settingsSwitchServerButton:hover,
+.settingsSwitchServerButton:focus {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.settingsModsHeader {
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--bt-line);
+}
+
+#settingsReqModsContent,
+#settingsOptModsContent {
+    overflow: hidden;
+}
+
+.settingsMod {
+    padding: 11px 16px;
+}
+
+.settingsBaseMod + .settingsBaseMod {
+    border-top: 1px solid var(--bt-line);
+}
+
+.settingsModStatus {
+    width: 8px;
+    height: 8px;
+    margin-right: 14px;
+    background-color: #e5484d;
+}
+
+.settingsBaseMod[enabled] > .settingsModContent > .settingsModMainWrapper > .settingsModStatus {
+    background-color: var(--bt-good);
+}
+
+.settingsModVersion {
+    font-size: 11px;
+    color: var(--bt-text-dim);
+}
+
+.settingsSubMod {
+    border-left-color: var(--bt-line-strong);
+}
+
+#settingsContainer input[type=number],
+#settingsContainer input[type=text] {
+    padding: 9px 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--bt-line);
+    border-radius: 10px;
+    color: var(--bt-text);
+    font-family: var(--bt-font);
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+#settingsContainer input[type=number]:focus,
+#settingsContainer input[type=text]:focus {
+    border-color: var(--bt-accent);
+    box-shadow: var(--glow-primary);
+}
+
+#settingsGameResolutionContainer {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--bt-line);
+}
+
+#settingsGameResolutionContent {
+    padding-top: 12px;
+}
+
+#settingsGameWidth,
+#settingsGameHeight {
+    width: 84px;
+    padding: 9px 12px;
+    text-align: center;
+}
+
+.toggleSwitch {
+    width: 42px;
+    height: 24px;
+}
+
+.toggleSwitchSlider {
+    background-color: rgba(255, 255, 255, 0.16);
+    border: none;
+}
+
+.toggleSwitchSlider:before {
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+input:checked + .toggleSwitchSlider {
+    background-color: var(--bt-accent);
+    border: none;
+}
+
+input:checked + .toggleSwitchSlider:before {
+    transform: translateX(18px);
+}
+
+.rangeSlider {
+    height: 4px;
+    margin: 18px 0;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.rangeSliderBar {
+    height: 4px;
+    background: var(--bt-accent);
+    border-radius: 2px 0 0 2px;
+}
+
+.rangeSliderTrack {
+    top: -6px;
+    height: 16px;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+#settingsMemoryContainer {
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--bt-line);
+}
+
+#settingsMemoryTitle,
+#settingsMemoryContainer .settingsFieldTitle {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--bt-line);
+}
+
+#settingsMemoryContentRight {
+    margin-right: 0;
+    padding-left: 24px;
+}
+
+#settingsMemoryStatus > .settingsMemoryStatusContainer:not(:last-child) {
+    margin-bottom: 22px;
+}
+
+.settingsMemoryHeader {
+    font-weight: 600;
+}
+
+.settingsMemoryLabel {
+    font-weight: 600;
+}
+
+.settingsMemoryStatusValue {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--bt-text);
+}
+
+#settingsMemoryDesc,
+#settingsJVMOptsDesc,
+.settingsFileSelDesc {
+    width: 100%;
+    margin: 14px 0;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bt-text-dim);
+}
+
+.settingsFileSelContainer {
+    margin: 0;
+    padding: 18px 0 4px;
+    border-bottom: 1px solid var(--bt-line);
+}
+
+.settingsFileSelTitle {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#settingsJavaExecDetails {
+    margin-bottom: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--bt-text-dim);
+}
+
+.settingsFileSelActions,
+#settingsJVMOptsContent {
+    width: 100%;
+    align-items: stretch;
+    overflow: hidden;
+    border: 1px solid var(--bt-line);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.settingsFileSelActions input[type=text],
+#settingsJVMOptsContent input[type=text] {
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.settingsFileSelIcon {
+    padding: 0 12px;
+    background: transparent;
+    border-radius: 0;
+}
+
+.settingsFileSelButton {
+    padding: 0 16px;
+    border-left: 1px solid var(--bt-line);
+    border-radius: 0;
+    font-family: var(--bt-font);
+    font-weight: 600;
+    color: var(--bt-text);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.settingsFileSelButton:hover,
+.settingsFileSelButton:focus {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.settingsFileSelButton:active {
+    color: var(--bt-text);
+}
+
+#settingsJVMOptsTitle,
+#settingsDataDirTitle {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#settingsStorageInfo {
+    padding: 8px 16px;
+}
+
+.settingsStorageLabel {
+    font-size: 13px;
+    color: var(--bt-text-dim);
+}
+
+.settingsStorageValue {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--bt-text);
+}
+
+.settingsStorageDivider {
+    background: var(--bt-line);
+}
+
+.settingsActionButton,
+#settingsOpenModStoreButton {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-family: var(--bt-font);
+    font-size: 12px;
+    font-weight: 600;
+    text-shadow: none !important;
+    box-shadow: none;
+    background: rgba(139, 92, 246, 0.16);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    color: var(--bt-text);
+}
+
+.settingsActionButton:hover,
+#settingsOpenModStoreButton:hover,
+#settingsOpenModStoreButton:focus {
+    background: rgba(139, 92, 246, 0.28);
+    border-color: rgba(139, 92, 246, 0.6);
+}
+
+.settingsActionButton:active,
+#settingsOpenModStoreButton:active {
+    background: rgba(139, 92, 246, 0.38);
+}
+
+.settingsActionButton.danger {
+    background: rgba(229, 72, 77, 0.14);
+    border-color: rgba(229, 72, 77, 0.4);
+}
+
+.settingsActionButton.danger:hover {
+    background: rgba(229, 72, 77, 0.26);
+    border-color: rgba(229, 72, 77, 0.6);
+}
+
+#settingsOpenModStoreButton {
+    height: 46px;
+    font-size: 14px;
+}
+
+.settingsSelectContainer {
+    width: 200px;
+}
+
+.settingsSelectSelected {
+    padding: 9px 36px 9px 14px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--bt-line);
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--bt-text);
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.settingsSelectSelected:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.settingsSelectSelected:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    width: 6px;
+    height: 6px;
+    border: 0;
+    border-right: 2px solid var(--bt-text-dim);
+    border-bottom: 2px solid var(--bt-text-dim);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+}
+
+.settingsSelectSelected.select-arrow-active {
+    border-radius: 10px;
+    border-color: var(--bt-accent);
+}
+
+.settingsSelectSelected.select-arrow-active:after {
+    top: 50%;
+    border: 0;
+    border-right: 2px solid var(--bt-text-dim);
+    border-bottom: 2px solid var(--bt-text-dim);
+    transform: translateY(-20%) rotate(225deg);
+}
+
+.settingsSelectOptions {
+    margin-top: 6px;
+    padding: 4px;
+    box-sizing: border-box;
+    background-color: var(--bt-card-2);
+    border: 1px solid var(--bt-line-strong);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.settingsSelectOptions div {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    font-size: 13px;
+    color: var(--bt-text);
+}
+
+.settingsSelectOptions div:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.settingsSelectOptions div[selected] {
+    background-color: rgba(139, 92, 246, 0.22) !important;
+}
+
+#settingsAboutCurrentContent,
+#settingsUpdateStatusContent,
+.settingsChangelogContent {
+    padding: 18px 20px;
+}
+
+#settingsAboutCurrentHeadline,
+#settingsUpdateStatusHeadline,
+.settingsChangelogHeadline {
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--bt-line);
+}
+
+#settingsAboutLogo {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 10px;
+}
+
+#settingsAboutTitle {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#settingsUpdateTitle {
+    padding-left: 0;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+#settingsUpdateActionContainer {
+    padding-top: 12px;
+}
+
+#settingsUpdateActionButton {
+    padding: 8px 14px;
+    margin-left: -14px;
+    font-size: 14px;
+    font-weight: 600;
+    text-shadow: none;
+}
+
+#settingsAboutButtons {
+    padding: 0 20px 14px;
+    gap: 4px;
+}
+
+.settingsAboutButton {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--bt-text-dim);
+}
+
+.settingsAboutButton:hover,
+.settingsAboutButton:focus {
+    color: var(--bt-text);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.settingsChangelogLabel {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--bt-text-dim);
+}
+
+.settingsChangelogTitle {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.settingsChangelogText {
+    line-height: 1.55;
+}
