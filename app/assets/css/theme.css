@@ -282,19 +282,19 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 30px;
-    width: 30px;
+    height: 32px;
+    width: 32px;
     background: rgba(255, 255, 255, 0.08) !important;
     background-image: none !important;
     border: none;
-    border-radius: 10px;
+    border-radius: 6px;
     box-shadow: none;
     color: var(--bt-text-dim);
     overflow: hidden;
 }
 
 #avatarContainer.has-head {
-    background: center / cover no-repeat var(--head-image) !important;
+    background: center / 100% 100% no-repeat var(--head-image) !important;
     image-rendering: pixelated;
 }
 

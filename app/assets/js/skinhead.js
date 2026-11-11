@@ -8,7 +8,7 @@ const SESSION_ROOTS = [
 ]
 const REQUEST_TIMEOUT = 8000
 const MAX_REDIRECTS = 3
-const AVATAR_SIZE = 64
+const AVATAR_SIZE = 32
 
 const cache = new Map()
 
