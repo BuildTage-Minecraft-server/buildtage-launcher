@@ -2112,3 +2112,31 @@ input:checked + .toggleSwitchSlider:before {
 #settingsSkinStatus.error {
     color: #e5484d;
 }
+
+.settingsCurrentAccounts {
+    margin-bottom: 0;
+}
+
+.settingsAuthAccountDetails {
+    flex: 1;
+    width: auto;
+}
+
+.settingsAuthAccountActions {
+    margin-left: auto;
+}
+
+#settingsSkinPanel {
+    margin-top: 16px;
+}
+
+#settingsSkinViewer {
+    flex: 0 0 190px;
+    height: 250px;
+}
+
+#settingsSkinInfo {
+    justify-content: flex-start;
+    gap: 26px;
+    padding-top: 4px;
+}

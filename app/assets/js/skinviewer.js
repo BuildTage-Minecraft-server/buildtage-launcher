@@ -1,4 +1,4 @@
-const SCALE = 6
+const SCALE = 5
 const PERSPECTIVE = 900
 const IDLE_SPEED = 0.6
 const MAX_PITCH = 60
