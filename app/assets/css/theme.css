@@ -290,6 +290,16 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     border-radius: 10px;
     box-shadow: none;
     color: var(--bt-text-dim);
+    overflow: hidden;
+}
+
+#avatarContainer.has-head {
+    background: center / cover no-repeat var(--head-image) !important;
+    image-rendering: pixelated;
+}
+
+#avatarContainer.has-head .topIcon {
+    display: none;
 }
 
 #avatarOverlay {

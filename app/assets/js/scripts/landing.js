@@ -51,6 +51,7 @@ const {
 
 // Internal Requirements
 const DiscordWrapper          = require('./assets/js/discordwrapper')
+const SkinHead                = require('./assets/js/skinhead')
 const ProcessBuilder          = require('./assets/js/processbuilder')
 const { features } = require('process')
 
@@ -330,14 +331,24 @@ function initGuestModeState() {
 }
 // Bind selected account
 function updateSelectedAccount(authUser){
+    document.getElementById('avatarContainer').classList.remove('has-head')
     let username = Lang.queryJS('landing.selectedAccount.noAccountSelected')
     if(authUser != null){
         if(authUser.displayName != null){
             username = authUser.displayName
         }
         if (authUser.uuid != null) {
-            document.getElementById('avatarContainer').style.backgroundImage = `url("${require('./assets/js/apiconstants').DEFAULT_HEAD_URL}")`
-        }        
+            const uuid = authUser.uuid
+            SkinHead.getHeadDataUrl(uuid).then(head => {
+                const current = ConfigManager.getSelectedAccount()
+                if(head == null || current == null || current.uuid !== uuid) {
+                    return
+                }
+                const avatar = document.getElementById('avatarContainer')
+                avatar.style.setProperty('--head-image', `url("${head}")`)
+                avatar.classList.add('has-head')
+            })
+        }
     }
     user_text.innerHTML = username
 }
