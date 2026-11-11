@@ -26,6 +26,10 @@ const semver = require('semver')
 const fs     = require('fs-extra')
 
 const LangLoader = require('./assets/js/langloader')
+const SkinSource = require('./assets/js/skinhead')
+const SkinViewer = require('./assets/js/skinviewer')
+const SkinManager = require('./assets/js/skinmanager')
+const { ACCOUNT_URL } = require('./assets/js/apiconstants')
 
 const settingsState = {
     invalid: new Set()
@@ -419,6 +423,7 @@ function bindAuthAccountSelect(){
             val.setAttribute('selected', '')
             val.innerHTML = Lang.queryJS('settings.authAccountSelect.selectedButton')
             await setSelectedAccount(val.closest('.settingsAuthAccount').getAttribute('uuid'))
+            refreshSkinPanel()
         }
     })
 }
@@ -473,6 +478,7 @@ function processLogOut(val, isLastAccount){
             refreshAuthAccountSelected(selAcc.uuid)
             updateSelectedAccount(selAcc)
             validateSelectedAccount()
+            refreshSkinPanel()
         }
         if(isLastAccount) {
             loginOptionsCancelEnabled(false)
@@ -556,6 +562,111 @@ function prepareAccountsTab() {
     populateAuthAccounts()
     bindAuthAccountSelect()
     bindAuthAccountLogOut()
+    prepareSkinPanel()
+}
+
+let skinViewer = null
+let skinSlim = false
+let skinBusy = false
+let skinPanelBound = false
+
+function setSkinStatus(message, isError) {
+    const status = document.getElementById('settingsSkinStatus')
+    status.textContent = message
+    status.classList.toggle('error', Boolean(isError))
+}
+
+function setSkinModel(slim) {
+    skinSlim = slim
+    for(const button of document.getElementsByClassName('settingsSkinModelButton')) {
+        button.classList.toggle('selected', (button.dataset.model === 'slim') === slim)
+    }
+}
+
+function setSkinBusy(busy) {
+    skinBusy = busy
+    document.getElementById('settingsSkinPanel').classList.toggle('busy', busy)
+}
+
+async function refreshSkinPanel() {
+    const viewer = document.getElementById('settingsSkinViewer')
+    const empty = document.getElementById('settingsSkinEmpty')
+    if(skinViewer == null) {
+        skinViewer = SkinViewer.create(viewer)
+    }
+    const account = ConfigManager.getSelectedAccount()
+    if(account == null) {
+        skinViewer.clear()
+        empty.hidden = false
+        return
+    }
+    const skin = await SkinSource.getSkin(account.uuid)
+    const current = ConfigManager.getSelectedAccount()
+    if(current == null || current.uuid !== account.uuid) {
+        return
+    }
+    if(skin == null) {
+        skinViewer.clear()
+        empty.hidden = false
+        return
+    }
+    try {
+        await skinViewer.show(skin.dataUrl, skin.slim)
+        empty.hidden = true
+        setSkinModel(skin.slim)
+    } catch {
+        skinViewer.clear()
+        empty.hidden = false
+    }
+}
+
+async function applySkinChange(action, successKey) {
+    const account = ConfigManager.getSelectedAccount()
+    if(account == null || skinBusy) {
+        return
+    }
+    setSkinBusy(true)
+    setSkinStatus('', false)
+    try {
+        await action(account)
+        SkinSource.invalidate(account.uuid)
+        setSkinStatus(Lang.queryJS(`settings.skin.${successKey}`), false)
+        await refreshSkinPanel()
+        updateSelectedAccount(ConfigManager.getSelectedAccount())
+    } catch(err) {
+        const code = err instanceof SkinManager.SkinError ? err.code : 'network'
+        setSkinStatus(Lang.queryJS(`settings.skin.${code}`), true)
+    } finally {
+        setSkinBusy(false)
+    }
+}
+
+function prepareSkinPanel() {
+    if(!skinPanelBound) {
+        skinPanelBound = true
+        for(const button of document.getElementsByClassName('settingsSkinModelButton')) {
+            button.onclick = () => setSkinModel(button.dataset.model === 'slim')
+        }
+        document.getElementById('settingsSkinUpload').onclick = async () => {
+            const res = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
+                title: Lang.queryJS('settings.skin.selectTitle'),
+                properties: ['openFile'],
+                filters: [{ name: Lang.queryJS('settings.skin.pngFilter'), extensions: ['png'] }]
+            })
+            if(res.canceled) {
+                return
+            }
+            await applySkinChange(account => SkinManager.uploadSkin(account.accessToken, res.filePaths[0], skinSlim), 'uploaded')
+        }
+        document.getElementById('settingsSkinReset').onclick = () => {
+            applySkinChange(account => SkinManager.resetSkin(account.accessToken), 'removed')
+        }
+        document.getElementById('settingsAccountData').onclick = () => {
+            shell.openExternal(ACCOUNT_URL)
+        }
+    }
+    setSkinStatus('', false)
+    refreshSkinPanel()
 }
 
 /**

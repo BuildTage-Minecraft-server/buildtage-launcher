@@ -2005,3 +2005,142 @@ input:checked + .toggleSwitchSlider:before {
 .settingsAuthAccountLogOut {
     padding: 6px 14px;
 }
+
+#settingsSkinPanel {
+    display: flex;
+    gap: 24px;
+    margin-top: 18px;
+    align-items: stretch;
+    transition: opacity 0.2s ease;
+}
+
+#settingsSkinPanel.busy {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+#settingsSkinViewer {
+    position: relative;
+    flex: 0 0 210px;
+    height: 290px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    background:
+        radial-gradient(70% 55% at 50% 38%, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0) 70%),
+        var(--bt-card);
+    border: 1px solid var(--bt-line);
+    border-radius: 14px;
+}
+
+#settingsSkinViewer.dragging {
+    cursor: grabbing;
+}
+
+#settingsSkinEmpty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--bt-text-dim);
+    pointer-events: none;
+}
+
+#settingsSkinEmpty[hidden] {
+    display: none;
+}
+
+.skinStage {
+    position: relative;
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
+}
+
+.skinPlayer,
+.skinCube {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
+}
+
+.skinFace {
+    position: absolute;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    backface-visibility: hidden;
+}
+
+#settingsSkinInfo {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.settingsSkinSection .settingsFieldDesc {
+    margin-bottom: 12px;
+}
+
+#settingsSkinModel {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.settingsSkinModelButton {
+    padding: 6px 12px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    font-family: var(--bt-font);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--bt-text-dim);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.settingsSkinModelButton:hover {
+    color: var(--bt-text);
+}
+
+.settingsSkinModelButton.selected {
+    background: rgba(139, 92, 246, 0.28);
+    color: var(--bt-text);
+}
+
+.settingsSkinActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#settingsSkinStatus {
+    min-height: 16px;
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--bt-good);
+}
+
+#settingsSkinStatus.error {
+    color: #e5484d;
+}

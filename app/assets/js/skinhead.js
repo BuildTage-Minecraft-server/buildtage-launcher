@@ -8,7 +8,7 @@ const SESSION_ROOTS = [
 ]
 const REQUEST_TIMEOUT = 8000
 const MAX_REDIRECTS = 3
-const AVATAR_SIZE = 32
+const AVATAR_SIZE = 64
 
 const cache = new Map()
 
@@ -37,7 +37,7 @@ function download(url, redirects = 0) {
     })
 }
 
-async function findSkinUrl(uuid) {
+async function findSkin(uuid) {
     for(const root of SESSION_ROOTS) {
         try {
             const body = await download(`${root}/session/minecraft/profile/${uuid}`)
@@ -49,7 +49,7 @@ async function findSkinUrl(uuid) {
             const payload = JSON.parse(Buffer.from(property.value, 'base64').toString('utf8'))
             const skin = payload.textures && payload.textures.SKIN
             if(skin && skin.url) {
-                return skin.url
+                return { url: skin.url, slim: skin.metadata != null && skin.metadata.model === 'slim' }
             }
         } catch {
             continue
@@ -78,27 +78,45 @@ function drawHead(skinDataUrl) {
     })
 }
 
-async function loadHead(uuid) {
-    const skinUrl = await findSkinUrl(uuid)
-    if(skinUrl == null) {
+async function loadSkin(uuid) {
+    const found = await findSkin(uuid)
+    if(found == null) {
         return null
     }
-    const skin = await download(skinUrl)
-    return await drawHead(`data:image/png;base64,${skin.toString('base64')}`)
+    const png = await download(found.url)
+    return { dataUrl: `data:image/png;base64,${png.toString('base64')}`, slim: found.slim }
+}
+
+function remember(store, uuid, task) {
+    if(!store.has(uuid)) {
+        const pending = task(uuid).then(value => {
+            if(value == null) {
+                store.delete(uuid)
+            }
+            return value
+        }).catch(() => {
+            store.delete(uuid)
+            return null
+        })
+        store.set(uuid, pending)
+    }
+    return store.get(uuid)
+}
+
+const skins = new Map()
+
+exports.getSkin = function(uuid) {
+    return remember(skins, uuid, loadSkin)
 }
 
 exports.getHeadDataUrl = function(uuid) {
-    if(!cache.has(uuid)) {
-        const pending = loadHead(uuid).then(head => {
-            if(head == null) {
-                cache.delete(uuid)
-            }
-            return head
-        }).catch(() => {
-            cache.delete(uuid)
-            return null
-        })
-        cache.set(uuid, pending)
-    }
-    return cache.get(uuid)
+    return remember(cache, uuid, async id => {
+        const skin = await exports.getSkin(id)
+        return skin == null ? null : await drawHead(skin.dataUrl)
+    })
+}
+
+exports.invalidate = function(uuid) {
+    skins.delete(uuid)
+    cache.delete(uuid)
 }

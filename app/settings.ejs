@@ -68,6 +68,33 @@
                     <!-- VI Software auth accounts populated here. -->
                 </div>
             </div>
+            <div id="settingsSkinPanel">
+                <div id="settingsSkinViewer">
+                    <div id="settingsSkinEmpty"><%- lang('settings.skinEmpty') %></div>
+                </div>
+                <div id="settingsSkinInfo">
+                    <div class="settingsSkinSection">
+                        <div class="settingsFieldTitle"><%- lang('settings.skinTitle') %></div>
+                        <div class="settingsFieldDesc"><%- lang('settings.skinDesc') %></div>
+                        <div id="settingsSkinModel">
+                            <button class="settingsSkinModelButton" data-model="classic"><%- lang('settings.skinModelClassic') %></button>
+                            <button class="settingsSkinModelButton" data-model="slim"><%- lang('settings.skinModelSlim') %></button>
+                        </div>
+                        <div class="settingsSkinActions">
+                            <button id="settingsSkinUpload" class="settingsActionButton"><%- lang('settings.skinUpload') %></button>
+                            <button id="settingsSkinReset" class="settingsActionButton danger"><%- lang('settings.skinReset') %></button>
+                        </div>
+                        <div id="settingsSkinStatus"></div>
+                    </div>
+                    <div class="settingsSkinSection">
+                        <div class="settingsFieldTitle"><%- lang('settings.accountDataTitle') %></div>
+                        <div class="settingsFieldDesc"><%- lang('settings.accountDataDesc') %></div>
+                        <div class="settingsSkinActions">
+                            <button id="settingsAccountData" class="settingsActionButton"><%- lang('settings.accountDataButton') %></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="settingsTabMinecraft" class="settingsTab" style="display: none;">
             <div class="settingsTabHeader">
