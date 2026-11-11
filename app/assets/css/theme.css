@@ -1671,3 +1671,179 @@ input:checked + .toggleSwitchSlider:before {
 .settingsChangelogText {
     line-height: 1.55;
 }
+
+#settingsTabMods:not([style*="none"]) {
+    display: flex !important;
+    flex-direction: column;
+    overflow: hidden;
+    padding-bottom: 24px;
+}
+
+#settingsTabMods > * {
+    flex: 0 0 auto;
+}
+
+#settingsTabMods .settingsTabHeader {
+    margin-bottom: 14px;
+}
+
+#settingsTabMods .settingsSelServContainer {
+    margin-bottom: 14px;
+}
+
+#settingsTabMods .settingsSelServContent {
+    padding: 10px 14px;
+}
+
+#settingsTabMods .settingsServerCard {
+    gap: 12px;
+}
+
+#settingsTabMods .settingsServerIcon {
+    width: 40px;
+    height: 40px;
+}
+
+#settingsTabMods .settingsServerName {
+    font-size: 15px;
+}
+
+#settingsTabMods .settingsServerVersions {
+    margin-top: 0;
+}
+
+#settingsTabMods .settingsServerBadge {
+    padding: 2px 8px;
+    font-size: 10px;
+}
+
+#settingsTabMods .settingsSwitchServerContainer {
+    padding: 10px 14px;
+}
+
+#settingsTabMods #settingsModsContainer {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#settingsModStoreContainer {
+    flex: 0 0 auto;
+    margin-bottom: 14px !important;
+}
+
+#settingsModStoreContainer .settingsModsHeader {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 8px;
+}
+
+#settingsModStoreContainer .settingsModsHeader small {
+    display: none;
+}
+
+#settingsOpenModStoreButton {
+    height: 38px;
+    margin-bottom: 0;
+}
+
+#settingsReqModsContainer,
+#settingsOptModsContainer {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0;
+}
+
+#settingsReqModsContainer:not([style*="none"]) + #settingsOptModsContainer:not([style*="none"]) {
+    margin-top: 12px;
+}
+
+#settingsReqModsContainer .settingsModsHeader,
+#settingsOptModsContainer .settingsModsHeader {
+    flex: 0 0 auto;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+#settingsReqModsContainer .settingsModsHeader small,
+#settingsOptModsContainer .settingsModsHeader small,
+#settingsReqModsContainer .settingsModsHeader span,
+#settingsOptModsContainer .settingsModsHeader span {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--bt-text-dim);
+}
+
+#settingsReqModsContent,
+#settingsOptModsContent {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+#settingsReqModsContent::-webkit-scrollbar,
+#settingsOptModsContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+#settingsReqModsContent::-webkit-scrollbar-track,
+#settingsOptModsContent::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#settingsReqModsContent::-webkit-scrollbar-thumb,
+#settingsOptModsContent::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 3px;
+}
+
+.settingsMod {
+    padding: 6px 14px;
+}
+
+.settingsSubMod {
+    padding: 6px 0 6px 12px;
+    margin-left: 16px;
+}
+
+.settingsSubModContainer {
+    margin-top: 4px;
+}
+
+.settingsModStatus {
+    margin-right: 12px;
+}
+
+.settingsModDetails {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.settingsModVersion {
+    font-size: 10px;
+}
+
+.settingsModContent .toggleSwitch {
+    width: 34px;
+    height: 20px;
+}
+
+.settingsModContent .toggleSwitchSlider:before {
+    width: 14px;
+    height: 14px;
+}
+
+.settingsModContent input:checked + .toggleSwitchSlider:before {
+    transform: translateX(14px);
+}
+
+.toggleSwitch[reqmod] {
+    display: none;
+}
