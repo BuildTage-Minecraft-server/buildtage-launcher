@@ -344,7 +344,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    margin-right: 128px;
+    margin-right: 94px;
 }
 
 #launch_details_left {
