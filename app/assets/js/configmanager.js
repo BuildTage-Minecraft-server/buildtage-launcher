@@ -97,9 +97,19 @@ function resolveSelectedRAM(ram) {
     if(ram?.recommended != null) {
         return `${ram.recommended}M`
     } else {
-        // Legacy behavior
         const mem = os.totalmem()
-        return mem >= (8*1073741824) ? '4G' : (mem >= (6*1073741824) ? '3G' : '2G')
+        const gb = 1073741824
+        let size = 2
+        if(mem >= 24*gb) {
+            size = 8
+        } else if(mem >= 16*gb) {
+            size = 6
+        } else if(mem >= 8*gb) {
+            size = 4
+        } else if(mem >= 6*gb) {
+            size = 3
+        }
+        return `${Math.max(2, Math.min(size, exports.getAbsoluteMaxRAM()))}G`
     }
 }
 
