@@ -399,14 +399,6 @@ settingsNavDone.onclick = () => {
  * Account Management Tab
  */
 
-// Bind the add mojang account button.
-document.getElementById('settingsAddMojangAccount').onclick = (e) => {
-    loginOptionsViewOnLoginSuccess = VIEWS.settings
-    loginOptionsViewOnLoginCancel = VIEWS.settings
-    loginOptionsViewOnCancel = VIEWS.settings
-    showLoginOptions(true)
-}
-
 /**
  * Bind functionality for the account selection buttons. If another account
  * is selected, the UI of the previously selected account will be updated.
