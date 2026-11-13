@@ -163,7 +163,7 @@ function configureAutoUpdaterForSplash(allowPrerelease = false) {
             if (!isDev) {
                 // Install immediately and restart automatically
                 setTimeout(() => {
-                    try { autoUpdater.quitAndInstall() } catch (err) { console.error('Failed to quit and install update', err) }
+                    try { autoUpdater.quitAndInstall(true, true) } catch (err) { console.error('Failed to quit and install update', err) }
                 }, 1000)
             }
         })
@@ -203,7 +203,7 @@ ipcMain.on('autoUpdateAction', (event, arg, data) => {
             }
             break
         case 'installUpdateNow':
-            autoUpdater.quitAndInstall()
+            autoUpdater.quitAndInstall(true, true)
             break
         default:
             console.log('Unknown argument', arg)
@@ -998,7 +998,7 @@ if (!gotTheLock) {
                         } catch { void 0 }
                         // In production, quit and install immediately to apply the update.
                         try {
-                            autoUpdater.quitAndInstall()
+                            autoUpdater.quitAndInstall(true, true)
                             return
                         } catch (err) {
                             console.error('Failed to quit and install update', err)
