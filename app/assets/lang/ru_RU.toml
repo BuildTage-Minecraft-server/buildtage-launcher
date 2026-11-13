@@ -9,6 +9,15 @@ launchButton = "ИГРАТЬ"
 launchButtonPlaceholder = "Загрузка..."
 launchDetails = "Загрузка..."
 modsButton = "Моды"
+leaderboardTitle = "Таблица лидеров"
+leaderboardPeriodAll = "Всё время"
+leaderboardPeriodWeek = "Неделя"
+leaderboardPeriodMonth = "Месяц"
+leaderboardSortKills = "Убийства"
+leaderboardSortKd = "K/D"
+leaderboardSortWinrate = "Победы %"
+leaderboardColPlayer = "Игрок"
+leaderboardRetryButton = "Повторить"
 
 [ejs.login]
 loginCancelText = "Отмена"
@@ -189,6 +198,17 @@ loading = "Загрузка..."
 server = "Онлайн"
 offline = "Выкл"
 players = "Онлайн"
+
+[js.landing.leaderboard]
+loading = "Загрузка..."
+empty = "Пока нет статистики. Сыграйте матч!"
+error = "Таблица лидеров недоступна"
+allTime = "Общий рейтинг"
+endsInWeek = "До конца недели: {time}"
+endsInMonth = "До конца месяца: {time}"
+days = "д"
+minKills = "от {count} убийств"
+minMatches = "от {count} матчей"
 
 [js.landing.systemScan]
 checking = "Проверка системы..."

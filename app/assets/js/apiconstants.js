@@ -48,6 +48,8 @@ exports.AUTH_BASE_URL = 'https://auth.nekrasovdev.space'
 exports.REGISTRATION_URL = 'https://auth.nekrasovdev.space/web/registration'
 exports.ACCOUNT_URL = 'https://auth.nekrasovdev.space/web/user'
 exports.DRASL_ADMIN_TOKEN = readEnv('DRASL_ADMIN_TOKEN')
+exports.LEADERBOARD_API_URL = ''
+exports.LEADERBOARD_API_PORT = 8765
 
 exports.YGGDRASIL_AUTH_URLS = [
     'https://auth.nekrasovdev.space/auth',

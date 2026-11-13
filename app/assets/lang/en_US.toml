@@ -46,6 +46,15 @@ newsErrorNoneSpan = "No news"
 guestModeBannerText = "You're browsing as a Guest"
 guestModeLoginButton = "Log In"
 guestModeSignUpButton = "Sign Up"
+leaderboardTitle = "Leaderboard"
+leaderboardPeriodAll = "All time"
+leaderboardPeriodWeek = "Weekly"
+leaderboardPeriodMonth = "Monthly"
+leaderboardSortKills = "Kills"
+leaderboardSortKd = "K/D"
+leaderboardSortWinrate = "Win %"
+leaderboardColPlayer = "Player"
+leaderboardRetryButton = "Try again"
 
 [ejs.login]
 loginCancelText = "Cancel"
@@ -289,6 +298,17 @@ loading = "Loading..."
 server = "SERVER"
 offline = "Offline"
 players = "PLAYERS"
+
+[js.landing.leaderboard]
+loading = "Loading..."
+empty = "No stats yet. Play a match!"
+error = "Leaderboard is unavailable"
+allTime = "Overall ranking"
+endsInWeek = "Week ends in {time}"
+endsInMonth = "Month ends in {time}"
+days = "d"
+minKills = "min. {count} kills"
+minMatches = "min. {count} matches"
 
 [js.landing.systemScan]
 checking = "Checking system information.."

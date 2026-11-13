@@ -33,6 +33,7 @@
 - 🎮 Support for all servers inside the platform
   - Switch between server configurations easily 
   - View total players connected on selected server
+- 🏆 Live leaderboard on the main screen (all time, weekly and monthly rankings)
 - 🔄 Automatic launcher updates
 - 📊 VI Software services status monitoring
 

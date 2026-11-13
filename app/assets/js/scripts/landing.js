@@ -398,6 +398,217 @@ server_selection_button.onclick = async e => {
     await toggleServerSelection(true)
 }
 
+const { LEADERBOARD_API_URL, LEADERBOARD_API_PORT } = require('./assets/js/apiconstants')
+
+const LEADERBOARD_ROWS = 10
+const LEADERBOARD_POLL_MS = 30000
+const LEADERBOARD_RETRY_MS = 5000
+const LEADERBOARD_TIMEOUT_MS = 5000
+
+const leaderboardPanel = document.getElementById('leaderboardPanel')
+const leaderboardRows = document.getElementById('leaderboardRows')
+const leaderboardTable = document.getElementById('leaderboardTable')
+const leaderboardSeason = document.getElementById('leaderboardSeason')
+const leaderboardStateText = document.getElementById('leaderboardStateText')
+const leaderboardRetry = document.getElementById('leaderboardRetry')
+
+const leaderboardCache = new Map()
+let leaderboardPeriod = 'all'
+let leaderboardSort = 'kills'
+let leaderboardRequestId = 0
+let leaderboardFailures = 0
+let leaderboardRetryTimer = null
+let leaderboardSeasonState = null
+
+function setLeaderboardState(state) {
+    leaderboardPanel.setAttribute('data-state', state)
+    if(state !== 'ready') {
+        leaderboardStateText.textContent = Lang.queryJS(`landing.leaderboard.${state}`)
+        leaderboardSeason.textContent = ''
+        leaderboardSeasonState = null
+    }
+}
+
+async function resolveLeaderboardEndpoint() {
+    if(LEADERBOARD_API_URL) {
+        return LEADERBOARD_API_URL
+    }
+    const distro = await DistroAPI.getDistribution()
+    const serv = distro.getServerById(ConfigManager.getSelectedServer())
+    if(serv == null) {
+        throw new Error('No server selected')
+    }
+    return `http://${serv.hostname}:${LEADERBOARD_API_PORT}/api/v1/leaderboard`
+}
+
+async function fetchLeaderboard(period, sort) {
+    const base = await resolveLeaderboardEndpoint()
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), LEADERBOARD_TIMEOUT_MS)
+    try {
+        const res = await fetch(`${base}?period=${period}&sort=${sort}&limit=${LEADERBOARD_ROWS}`, { signal: controller.signal })
+        if(!res.ok) {
+            throw new Error(`HTTP ${res.status}`)
+        }
+        return await res.json()
+    } finally {
+        clearTimeout(timer)
+    }
+}
+
+function createLeaderboardCell(className, text) {
+    const cell = document.createElement('span')
+    cell.className = className
+    cell.textContent = text
+    return cell
+}
+
+function createLeaderboardRow(entry, self) {
+    const row = document.createElement('div')
+    row.className = 'leaderboardRow'
+    if(entry.rank <= 3) {
+        row.classList.add(`place${entry.rank}`)
+    }
+    const name = String(entry.name)
+    if(self !== '' && name.toLowerCase() === self) {
+        row.classList.add('self')
+    }
+    const nameCell = createLeaderboardCell('lbName', name)
+    nameCell.title = name
+    row.append(
+        createLeaderboardCell('lbRank', entry.rank),
+        nameCell,
+        createLeaderboardCell('lbKills', entry.kills),
+        createLeaderboardCell('lbDeaths', entry.deaths),
+        createLeaderboardCell('lbKd', Number(entry.kd).toFixed(2)),
+        createLeaderboardCell('lbWr', `${Math.round(Number(entry.winRate) * 100)}%`)
+    )
+    return row
+}
+
+function formatLeaderboardTime(ms) {
+    const total = Math.max(0, Math.floor(ms / 1000))
+    const days = Math.floor(total / 86400)
+    const hms = [Math.floor(total % 86400 / 3600), Math.floor(total % 3600 / 60), total % 60]
+        .map(n => String(n).padStart(2, '0'))
+        .join(':')
+    return days > 0 ? `${days}${Lang.queryJS('landing.leaderboard.days')} ${hms}` : hms
+}
+
+function updateLeaderboardSeason() {
+    if(leaderboardSeasonState == null) {
+        return
+    }
+    const { period, sort, minKills, minMatches, endAtMs } = leaderboardSeasonState
+    const time = formatLeaderboardTime(endAtMs - Date.now())
+    const ends = Lang.queryJS(period === 'week' ? 'landing.leaderboard.endsInWeek' : 'landing.leaderboard.endsInMonth', { time })
+    const cond = sort === 'winrate'
+        ? Lang.queryJS('landing.leaderboard.minMatches', { count: minMatches })
+        : Lang.queryJS('landing.leaderboard.minKills', { count: minKills })
+    leaderboardSeason.textContent = `${ends} \u00B7 ${cond}`
+}
+
+function renderLeaderboard(entry, keepScroll) {
+    const { data, receivedAt } = entry
+    const entries = Array.isArray(data.entries) ? data.entries : []
+    const scroll = keepScroll ? leaderboardRows.scrollTop : 0
+    const account = ConfigManager.getSelectedAccount()
+    const self = account != null && account.displayName != null ? account.displayName.toLowerCase() : ''
+
+    leaderboardRows.replaceChildren(...entries.map(e => createLeaderboardRow(e, self)))
+    leaderboardRows.scrollTop = scroll
+    leaderboardTable.setAttribute('data-sort', data.sort)
+
+    if(entries.length === 0) {
+        setLeaderboardState('empty')
+        return
+    }
+    leaderboardPanel.setAttribute('data-state', 'ready')
+    if(data.season != null) {
+        leaderboardSeasonState = {
+            period: data.period,
+            sort: data.sort,
+            minKills: data.season.minKills,
+            minMatches: data.season.minMatches,
+            endAtMs: receivedAt + data.season.secondsLeft * 1000
+        }
+        updateLeaderboardSeason()
+    } else {
+        leaderboardSeasonState = null
+        leaderboardSeason.textContent = Lang.queryJS('landing.leaderboard.allTime')
+    }
+}
+
+async function refreshLeaderboard(showCached) {
+    const period = leaderboardPeriod
+    const sort = leaderboardSort
+    const key = `${period}:${sort}`
+    const requestId = ++leaderboardRequestId
+    const cached = leaderboardCache.get(key)
+
+    if(showCached) {
+        if(cached != null) {
+            renderLeaderboard(cached, false)
+        } else {
+            setLeaderboardState('loading')
+        }
+    }
+
+    try {
+        const entry = { data: await fetchLeaderboard(period, sort), receivedAt: Date.now() }
+        leaderboardCache.set(key, entry)
+        leaderboardFailures = 0
+        if(requestId === leaderboardRequestId) {
+            renderLeaderboard(entry, !showCached)
+        }
+    } catch(err) {
+        loggerLanding.warn('Unable to load the leaderboard.')
+        loggerLanding.debug(err)
+        leaderboardFailures++
+        if(requestId === leaderboardRequestId && leaderboardCache.get(key) == null) {
+            setLeaderboardState('error')
+        }
+        if(leaderboardFailures === 1) {
+            clearTimeout(leaderboardRetryTimer)
+            leaderboardRetryTimer = setTimeout(() => refreshLeaderboard(false), LEADERBOARD_RETRY_MS)
+        }
+    }
+}
+
+function isLeaderboardVisible() {
+    return !document.hidden && getCurrentView() === VIEWS.landing
+}
+
+document.querySelectorAll('#leaderboardPanel .lbTab').forEach(button => {
+    button.onclick = () => {
+        const { group, value } = button.dataset
+        if(group === 'period') {
+            leaderboardPeriod = value
+        } else {
+            leaderboardSort = value
+        }
+        document.querySelectorAll(`#leaderboardPanel .lbTab[data-group="${group}"]`).forEach(other => {
+            other.classList.toggle('active', other === button)
+            other.setAttribute('aria-selected', String(other === button))
+        })
+        button.blur()
+        refreshLeaderboard(true)
+    }
+})
+
+leaderboardRetry.onclick = () => {
+    leaderboardFailures = 0
+    refreshLeaderboard(true)
+}
+
+setInterval(() => {
+    if(isLeaderboardVisible()) {
+        refreshLeaderboard(false)
+    }
+}, LEADERBOARD_POLL_MS)
+setInterval(updateLeaderboardSeason, 1000)
+refreshLeaderboard(true)
+
 // Update Mojang Status Color
 const refreshMojangStatuses = async function(){
     loggerLanding.info('Refreshing Mojang Statuses..')

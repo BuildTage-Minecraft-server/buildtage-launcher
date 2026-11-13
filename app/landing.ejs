@@ -44,6 +44,39 @@
             </div>
         </div>
     </div>
+    <div id="leaderboardLayer">
+        <section id="leaderboardPanel" data-state="loading">
+            <div id="leaderboardHeader">
+                <span id="leaderboardTitle"><%- lang('landing.leaderboardTitle') %></span>
+                <span id="leaderboardSeason"></span>
+            </div>
+            <div class="lbTabs" role="tablist">
+                <button class="lbTab active" role="tab" aria-selected="true" data-group="period" data-value="all"><%- lang('landing.leaderboardPeriodAll') %></button>
+                <button class="lbTab" role="tab" aria-selected="false" data-group="period" data-value="week"><%- lang('landing.leaderboardPeriodWeek') %></button>
+                <button class="lbTab" role="tab" aria-selected="false" data-group="period" data-value="month"><%- lang('landing.leaderboardPeriodMonth') %></button>
+            </div>
+            <div class="lbTabs" role="tablist">
+                <button class="lbTab active" role="tab" aria-selected="true" data-group="sort" data-value="kills"><%- lang('landing.leaderboardSortKills') %></button>
+                <button class="lbTab" role="tab" aria-selected="false" data-group="sort" data-value="kd"><%- lang('landing.leaderboardSortKd') %></button>
+                <button class="lbTab" role="tab" aria-selected="false" data-group="sort" data-value="winrate"><%- lang('landing.leaderboardSortWinrate') %></button>
+            </div>
+            <div id="leaderboardTable" data-sort="kills">
+                <div class="leaderboardRow lbHead">
+                    <span class="lbRank">#</span>
+                    <span class="lbName"><%- lang('landing.leaderboardColPlayer') %></span>
+                    <span class="lbKills">K</span>
+                    <span class="lbDeaths">D</span>
+                    <span class="lbKd">K/D</span>
+                    <span class="lbWr">WR%</span>
+                </div>
+                <div id="leaderboardRows"></div>
+            </div>
+            <div id="leaderboardState">
+                <span id="leaderboardStateText"></span>
+                <button id="leaderboardRetry"><%- lang('landing.leaderboardRetryButton') %></button>
+            </div>
+        </section>
+    </div>
     <div id="bottomBar">
         <div id="launch_content">
             <button id="server_selection_button" class="bot_label" tabindex="-1"><%- lang('landing.launchButtonPlaceholder') %></button>
