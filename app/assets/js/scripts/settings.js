@@ -1095,46 +1095,46 @@ function calculateRangeSliderMeta(v){
 function bindRangeSlider(){
     Array.from(document.getElementsByClassName('rangeSlider')).map((v) => {
 
-        // Reference the track (thumb).
         const track = v.getElementsByClassName('rangeSliderTrack')[0]
-
-        // Set the initial slider value.
-        const value = v.getAttribute('value')
         const sliderMeta = calculateRangeSliderMeta(v)
 
+        track.style.transform = 'translateX(-50%)'
+        v.style.touchAction = 'none'
+
+        const value = Math.min(sliderMeta.max, Math.max(sliderMeta.min, Number(v.getAttribute('value'))))
         updateRangedSlider(v, value, ((value-sliderMeta.min)/sliderMeta.step)*sliderMeta.inc)
 
-        // The magic happens when we click on the track.
-        track.onmousedown = (e) => {
-
-            // Stop moving the track on mouse up.
-            document.onmouseup = (e) => {
-                document.onmousemove = null
-                document.onmouseup = null
+        const moveTo = (clientX) => {
+            if(!(sliderMeta.ticks > 0)){
+                return
             }
-
-            // Move slider according to the mouse position.
-            document.onmousemove = (e) => {
-
-                // Distance from the beginning of the bar in pixels.
-                const diff = e.pageX - v.offsetLeft - track.offsetWidth/2
-                
-                // Don't move the track off the bar.
-                if(diff >= 0 && diff <= v.offsetWidth-track.offsetWidth/2){
-
-                    // Convert the difference to a percentage.
-                    const perc = (diff/v.offsetWidth)*100
-                    // Calculate the percentage of the closest notch.
-                    const notch = Number(perc/sliderMeta.inc).toFixed(0)*sliderMeta.inc
-
-                    // If we're close to that notch, stick to it.
-                    if(Math.abs(perc-notch) < sliderMeta.inc/2){
-                        updateRangedSlider(v, sliderMeta.min+(sliderMeta.step*(notch/sliderMeta.inc)), notch)
-                    }
-                }
+            const left = v.getBoundingClientRect().left + v.clientLeft
+            const ratio = Math.min(1, Math.max(0, (clientX-left)/v.clientWidth))
+            const tick = Math.round(ratio*sliderMeta.ticks)
+            const next = Number((sliderMeta.min+sliderMeta.step*tick).toFixed(4))
+            if(next !== Number(v.getAttribute('value'))){
+                updateRangedSlider(v, next, tick*sliderMeta.inc)
             }
         }
-    }) 
+
+        v.onpointerdown = (e) => {
+            e.preventDefault()
+            v.setPointerCapture(e.pointerId)
+            moveTo(e.clientX)
+        }
+
+        v.onpointermove = (e) => {
+            if(v.hasPointerCapture(e.pointerId)){
+                moveTo(e.clientX)
+            }
+        }
+
+        v.onpointerup = v.onpointercancel = (e) => {
+            if(v.hasPointerCapture(e.pointerId)){
+                v.releasePointerCapture(e.pointerId)
+            }
+        }
+    })
 }
 
 /**
