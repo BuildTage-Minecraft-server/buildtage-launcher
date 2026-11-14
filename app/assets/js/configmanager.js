@@ -885,18 +885,16 @@ exports.setAllowPrerelease = function(allowPrerelease){
  * @returns {boolean} True if accepted, false otherwise.
  */
 /**
- * Check whether the user previously accepted the legal notices for the
- * current application version. We store the version string when the user
- * accepts; only a match to the current application version returns true.
+ * Check whether the user has accepted the legal notices at least once.
+ * The accepted version is still stored, but a version change does not
+ * require accepting the notices again.
  *
  * @param {boolean} def Optional. If true, return the default config value.
- * @returns {boolean} True if accepted for current version, false otherwise.
+ * @returns {boolean} True if accepted, false otherwise.
  */
 exports.getLegalAccepted = function(def = false){
     if(def) return DEFAULT_CONFIG.settings.launcher.legalAcceptedVersion != null || DEFAULT_CONFIG.settings.launcher.legalAccepted || false
-    const v = config.settings.launcher.legalAcceptedVersion
-    if(!v) return !!config.settings.launcher.legalAccepted
-    return v === pjson.version
+    return !!config.settings.launcher.legalAcceptedVersion || !!config.settings.launcher.legalAccepted
 }
 
 /**
