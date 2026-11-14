@@ -258,3 +258,20 @@ button:not(:disabled):hover::after {
         transition: none !important;
     }
 }
+
+@keyframes btPress {
+    0% { transform: scale(1); filter: brightness(1); }
+    18% { transform: scale(0.95); filter: brightness(1.5); }
+    45% { transform: scale(1.06); filter: brightness(1.9); }
+    70% { transform: scale(0.99); filter: brightness(1.2); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+button:not(:disabled):active {
+    transform: scale(0.95);
+    filter: brightness(1.4);
+}
+
+button.btClick {
+    animation: btPress 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
