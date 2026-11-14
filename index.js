@@ -537,6 +537,7 @@ ipcMain.handle('modstore-remove-mod', async (event, modSlug, serverId, filesToRe
 // Disable hardware acceleration.
 // https://electronjs.org/docs/tutorial/offscreen-rendering
 app.disableHardwareAcceleration()
+app.commandLine.appendSwitch('disable-features', 'CalculateNativeWinOcclusion')
 
 
 // Keep a global reference of the window object, if you don't, the window will
