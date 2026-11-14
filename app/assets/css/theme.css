@@ -3434,3 +3434,19 @@ input:checked + .toggleSwitchSlider {
         transition: none !important;
     }
 }
+
+#launch_button,
+#welcomeButton,
+#loginButton,
+#overlayAcknowledge,
+#loginOptionVISoftware,
+.button-primary,
+#serverSelectConfirm,
+#accountSelectConfirm,
+#settingsNavDone,
+#settingsAccountSave,
+.settingsNavItem,
+.lbTab {
+    position: relative;
+    overflow: hidden;
+}
