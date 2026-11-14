@@ -165,3 +165,96 @@ body::before {
         linear-gradient(180deg, rgba(204, 85, 85, 0.34), rgba(204, 85, 85, 0.1)),
         linear-gradient(180deg, rgba(14, 16, 24, 0.77), rgba(8, 10, 16, 0.77));
 }
+
+    to { transform: translateY(110vh); }
+}
+
+@keyframes btRise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes btShine {
+    0% { transform: translateX(-120%) skewX(-30deg); opacity: 0; }
+    15% { opacity: 1; }
+    100% { transform: translateX(260%) skewX(-30deg); opacity: 0; }
+}
+
+@keyframes btGlow {
+    0%, 100% { filter: drop-shadow(0 0 0 rgba(240, 180, 41, 0)); }
+    50% { filter: drop-shadow(0 0 6px rgba(240, 180, 41, 0.55)); }
+}
+
+@keyframes btFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+.dialog,
+.wrap,
+.splashCard,
+#modStoreContainer {
+    animation: btRise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.splashLogoWrap {
+    animation: btFloat 2.6s ease-in-out infinite, btGlow 2.6s ease-in-out infinite;
+}
+
+#splashProgressFill {
+    position: relative;
+    overflow: hidden;
+}
+
+#splashProgressFill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 40%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0));
+    opacity: 0;
+    animation: btShine 1.4s ease-in-out infinite backwards;
+}
+
+.modStoreCard {
+    animation: btRise 0.4s ease both;
+}
+
+.modStoreCard:nth-child(2) { animation-delay: 0.05s; }
+.modStoreCard:nth-child(3) { animation-delay: 0.1s; }
+.modStoreCard:nth-child(4) { animation-delay: 0.15s; }
+.modStoreCard:nth-child(5) { animation-delay: 0.2s; }
+.modStoreCard:nth-child(n+6) { animation-delay: 0.25s; }
+
+.btn-shine,
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+button:not(:disabled)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 28%;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+}
+
+button:not(:disabled):hover::after {
+    animation: btShine 0.7s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

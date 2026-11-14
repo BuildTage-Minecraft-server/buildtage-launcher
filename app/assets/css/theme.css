@@ -2992,8 +2992,7 @@ input:checked + .toggleSwitchSlider {
     letter-spacing: 0.12em;
     margin-bottom: 10px;
     padding-bottom: 12px;
-    background: linear-gradient(180deg, rgba(240, 180, 41, 0), rgba(240, 180, 41, 0.1)) bottom / 60% 100% no-repeat;
-    background-position: center bottom;
+    background: radial-gradient(ellipse 50% 90% at 50% 100%, rgba(240, 180, 41, 0.16), rgba(240, 180, 41, 0) 100%);
 }
 
 #leaderboardTitle::after {
@@ -3165,4 +3164,273 @@ input:checked + .toggleSwitchSlider {
 .waitingSpinner:before,
 .waitingSpinner:after {
     border-radius: 0;
+}
+
+/* ---- motion ---- */
+
+    to { transform: translateY(110vh); }
+}
+
+@keyframes btRise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes btFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes btShine {
+    0% { transform: translateX(-120%) skewX(-30deg); opacity: 0; }
+    15% { opacity: 1; }
+    100% { transform: translateX(260%) skewX(-30deg); opacity: 0; }
+}
+
+@keyframes btBreath {
+    0%, 100% { box-shadow: inset 4px 0 0 var(--bt-green), inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(85, 170, 85, 0.7), 0 4px 6px -3px rgba(85, 170, 85, 0.2); }
+    50% { box-shadow: inset 4px 0 0 #77cc77, inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(119, 204, 119, 0.95), 0 5px 12px -3px rgba(85, 170, 85, 0.65); }
+}
+
+@keyframes btGlow {
+    0%, 100% { filter: drop-shadow(0 0 0 rgba(240, 180, 41, 0)); }
+    50% { filter: drop-shadow(0 0 6px rgba(240, 180, 41, 0.55)); }
+}
+
+@keyframes btBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+}
+
+@keyframes btFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+#leaderboardPanel,
+#bottomBar,
+#loginForm,
+#overlayContent {
+    animation: btRise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+#bottomBar {
+    animation-delay: 0.12s;
+}
+
+#topRow {
+    animation: btFade 0.6s ease both;
+}
+
+.podiumCard {
+    animation: btRise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.podiumCard.place2 { animation-delay: 0.12s; }
+.podiumCard.place3 { animation-delay: 0.22s; }
+
+.podiumCard.place1 {
+    animation: btRise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both, podiumGlow 3.2s ease-in-out 0.5s infinite;
+}
+
+.podiumCard.place1::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 30%;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
+    animation: btShine 3.6s ease-in-out 1s infinite backwards;
+}
+
+.podiumCard.place1 .podiumValue {
+    animation: btFloat 2.4s ease-in-out infinite;
+}
+
+#leaderboardRows .leaderboardRow {
+    animation: btRise 0.35s ease both;
+}
+
+#leaderboardRows .leaderboardRow:nth-child(1) { animation-delay: 0.30s; }
+#leaderboardRows .leaderboardRow:nth-child(2) { animation-delay: 0.36s; }
+#leaderboardRows .leaderboardRow:nth-child(3) { animation-delay: 0.42s; }
+#leaderboardRows .leaderboardRow:nth-child(4) { animation-delay: 0.48s; }
+#leaderboardRows .leaderboardRow:nth-child(5) { animation-delay: 0.54s; }
+#leaderboardRows .leaderboardRow:nth-child(n+6) { animation-delay: 0.6s; }
+
+#leaderboardRows .leaderboardRow.self {
+    animation: btRise 0.35s ease both, btBlink 2.6s ease-in-out 1s infinite;
+}
+
+#settingsMediaButton,
+#user_content,
+#modsButton,
+#server_status_wrapper,
+.lbTab,
+#leaderboardRetry,
+.settingsActionButton,
+#settingsOpenModStoreButton,
+.settingsSwitchServerButton,
+.settingsFileSelButton,
+.loginOptionButton,
+.loginOptionGuestButton,
+.serverSearchGlobalButton,
+.button-secondary,
+.button-utility,
+.settingsNavItem,
+#launch_button,
+#welcomeButton,
+#loginButton,
+#overlayAcknowledge,
+#loginOptionVISoftware,
+.button-primary,
+#serverSelectConfirm,
+#accountSelectConfirm,
+#settingsNavDone,
+#settingsAccountSave {
+    overflow: hidden;
+}
+
+#settingsMediaButton::after,
+#user_content::after,
+#modsButton::after,
+#server_status_wrapper::after,
+.lbTab::after,
+#leaderboardRetry::after,
+.settingsActionButton::after,
+#settingsOpenModStoreButton::after,
+.settingsSwitchServerButton::after,
+.settingsFileSelButton::after,
+.loginOptionButton::after,
+.loginOptionGuestButton::after,
+.serverSearchGlobalButton::after,
+.button-secondary::after,
+.button-utility::after,
+.settingsNavItem::after,
+#launch_button::after,
+#welcomeButton::after,
+#loginButton::after,
+#overlayAcknowledge::after,
+#loginOptionVISoftware::after,
+.button-primary::after,
+#serverSelectConfirm::after,
+#accountSelectConfirm::after,
+#settingsNavDone::after,
+#settingsAccountSave::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 28%;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+}
+
+#settingsMediaButton:hover::after,
+#user_content:hover::after,
+#modsButton:hover::after,
+#server_status_wrapper:hover::after,
+.lbTab:hover::after,
+#leaderboardRetry:hover::after,
+.settingsActionButton:hover::after,
+#settingsOpenModStoreButton:hover::after,
+.settingsSwitchServerButton:hover::after,
+.settingsFileSelButton:hover::after,
+.loginOptionButton:hover::after,
+.loginOptionGuestButton:hover::after,
+.serverSearchGlobalButton:hover::after,
+.button-secondary:hover::after,
+.button-utility:hover::after,
+.settingsNavItem:hover::after,
+#launch_button:hover::after,
+#welcomeButton:hover::after,
+#loginButton:hover::after,
+#overlayAcknowledge:hover::after,
+#loginOptionVISoftware:hover::after,
+.button-primary:hover::after,
+#serverSelectConfirm:hover::after,
+#accountSelectConfirm:hover::after,
+#settingsNavDone:hover::after,
+#settingsAccountSave:hover::after {
+    animation: btShine 0.7s ease-out;
+}
+
+#launch_button:not(:disabled):not([disabled]) {
+    animation: btBreath 2.4s ease-in-out infinite;
+}
+
+.settingsNavItem {
+    transition: transform 0.15s ease, background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.settingsNavItem:hover {
+    transform: translateX(3px);
+}
+
+.settingsTab {
+    animation: btRise 0.3s ease both;
+}
+
+.settingsAuthAccount,
+.settingsSelServContainer,
+.settingsActionButton {
+    animation: btFade 0.4s ease both;
+}
+
+.loginField,
+#settingsContainer input[type=number],
+#settingsContainer input[type=text],
+#settingsContainer input[type=password] {
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.toggleSwitchSlider,
+.toggleSwitchSlider::before {
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+#landingContainer,
+#settingsContainer,
+#loginContainer,
+#welcomeContainer,
+#overlayContainer {
+    animation: btFade 0.35s ease both;
+}
+
+#welcomeContainer img,
+#loginForm img,
+#loginForm svg:first-child {
+    animation: btFloat 3.2s ease-in-out infinite;
+}
+
+#image_seal_container {
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+#image_seal_container:hover {
+    transform: scale(1.08) rotate(-3deg);
+    filter: drop-shadow(0 0 8px rgba(240, 180, 41, 0.6));
+}
+
+#server_status_wrapper .statusDot,
+#player_count {
+    animation: btBlink 2.8s ease-in-out infinite;
+}
+
+.cube {
+    animation: spin 8s infinite linear, btGlow 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
 }
