@@ -63,7 +63,7 @@ let currentView
  * @param {*} onNextFade Optional. Callback function to execute when the next view
  * fades in.
  */
-function switchView(current, next, currentFadeTime = 500, nextFadeTime = 500, onCurrentFade = () => { }, onNextFade = () => { }) {
+function switchView(current, next, currentFadeTime = 150, nextFadeTime = 150, onCurrentFade = () => { }, onNextFade = () => { }) {
     currentView = next
     $(`${current}`).fadeOut(currentFadeTime, async () => {
         await onCurrentFade()

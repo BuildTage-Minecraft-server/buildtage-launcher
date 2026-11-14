@@ -266,7 +266,7 @@ document.getElementById('settingsMediaButton').onclick = async e => {
 // Bind avatar overlay button.
 document.getElementById('avatarOverlay').onclick = async e => {
     await prepareSettings()
-    switchView(getCurrentView(), VIEWS.settings, 500, 500, () => {
+    switchView(getCurrentView(), VIEWS.settings, 150, 150, () => {
         settingsNavItemListener(document.getElementById('settingsNavAccount'), false)
     })
 }
@@ -373,7 +373,7 @@ function updateModsButton(serv) {
 
 modsButton.onclick = async e => {
     await prepareSettings()
-    switchView(getCurrentView(), VIEWS.settings, 500, 500, () => {
+    switchView(getCurrentView(), VIEWS.settings, 150, 150, () => {
         settingsNavItemListener(document.querySelector('.settingsNavItem[rSc="settingsTabMods"]'), false)
     })
 }
