@@ -407,6 +407,7 @@ const LEADERBOARD_TIMEOUT_MS = 5000
 
 const leaderboardPanel = document.getElementById('leaderboardPanel')
 const leaderboardRows = document.getElementById('leaderboardRows')
+const leaderboardPodium = document.getElementById('leaderboardPodium')
 const leaderboardTable = document.getElementById('leaderboardTable')
 const leaderboardSeason = document.getElementById('leaderboardSeason')
 const leaderboardStateText = document.getElementById('leaderboardStateText')
@@ -486,6 +487,41 @@ function createLeaderboardRow(entry, self) {
     return row
 }
 
+function leaderboardValue(entry, sort) {
+    if(sort === 'kd') {
+        return Number(entry.kd).toFixed(2)
+    }
+    if(sort === 'winrate') {
+        return `${Math.round(Number(entry.winRate) * 100)}%`
+    }
+    return String(entry.kills)
+}
+
+function createPodiumCard(entry, place, sort, self) {
+    const card = document.createElement('div')
+    card.className = `podiumCard place${place}`
+    const badge = createLeaderboardCell('podiumBadge', place)
+    if(entry == null) {
+        card.classList.add('empty')
+        card.append(badge, createLeaderboardCell('podiumEmpty', '-'))
+        return card
+    }
+    const name = String(entry.name)
+    if(self !== '' && name.toLowerCase() === self) {
+        card.classList.add('self')
+    }
+    const nameCell = createLeaderboardCell('podiumName', name)
+    nameCell.title = name
+    const tab = document.querySelector(`.lbTab[data-group="sort"][data-value="${sort}"]`)
+    card.append(
+        badge,
+        nameCell,
+        createLeaderboardCell('podiumValue', leaderboardValue(entry, sort)),
+        createLeaderboardCell('podiumCaption', tab != null ? tab.textContent : '')
+    )
+    return card
+}
+
 function formatLeaderboardTime(ms) {
     const total = Math.max(0, Math.floor(ms / 1000))
     const days = Math.floor(total / 86400)
@@ -515,7 +551,9 @@ function renderLeaderboard(entry, keepScroll) {
     const account = ConfigManager.getSelectedAccount()
     const self = account != null && account.displayName != null ? account.displayName.toLowerCase() : ''
 
-    leaderboardRows.replaceChildren(...entries.map(e => createLeaderboardRow(e, self)))
+    leaderboardPodium.replaceChildren(...[2, 1, 3].map(place => createPodiumCard(entries[place - 1], place, data.sort, self)))
+    leaderboardPodium.classList.toggle('hidden', entries.length === 0)
+    leaderboardRows.replaceChildren(...entries.slice(3).map(e => createLeaderboardRow(e, self)))
     leaderboardRows.scrollTop = scroll
     leaderboardTable.setAttribute('data-sort', data.sort)
 

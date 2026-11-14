@@ -350,3 +350,78 @@ body {
 #splashProgressText {
   min-height: 16px;
 }
+
+html,
+body {
+  background-color: #08090f !important;
+}
+
+#splashRoot {
+  border-radius: 0;
+  clip-path: none;
+  background: transparent;
+}
+
+#splashRoot::after {
+  display: none;
+}
+
+.splashCard {
+  width: 400px;
+  gap: 18px;
+}
+
+.splashLogoWrap {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#splashLogo {
+  border-radius: 0;
+}
+
+#splashTitle {
+  position: relative;
+  padding-bottom: 14px;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+#splashTitle::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(240, 180, 41, 0), var(--bt-gold) 30%, var(--bt-gold) 70%, rgba(240, 180, 41, 0));
+}
+
+#splashProgressBar {
+  height: 14px;
+  padding: 2px;
+  box-sizing: border-box;
+  border-radius: 0;
+  background: rgba(4, 5, 10, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#splashProgressFill {
+  border-radius: 0;
+  background: linear-gradient(180deg, #77cc77, var(--bt-green));
+  box-shadow: 0 0 10px rgba(85, 170, 85, 0.5);
+}
+
+#splashProgressText {
+  min-height: 16px;
+  font-size: 16px;
+  color: var(--bt-text-dim);
+}
+
+#splashTitle {
+  width: 100%;
+  text-align: center;
+}

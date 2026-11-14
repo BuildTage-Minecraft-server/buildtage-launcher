@@ -2719,3 +2719,450 @@ input:checked + .toggleSwitchSlider:before {
 .settingsMemoryLabel {
     font-size: 16px;
 }
+
+/* ---- flat mod-style layer ---- */
+
+:root {
+    --bt-line-soft: rgba(255, 255, 255, 0.19);
+    --bt-hair: rgba(255, 255, 255, 0.44);
+    --bt-neutral: #808080;
+    --bt-green: #55aa55;
+    --bt-danger: #cc5555;
+    --bt-body: linear-gradient(180deg, rgba(14, 16, 24, 0.77), rgba(8, 10, 16, 0.77));
+}
+
+body {
+    background-image:
+        radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1.4px),
+        linear-gradient(180deg, rgba(240, 180, 41, 0.15) 0%, rgba(240, 180, 41, 0) 40%),
+        linear-gradient(180deg, #171a25 0%, #08090f 100%) !important;
+    background-size: 20px 20px, 100% 100%, 100% 100% !important;
+    background-position: 12px 12px, 0 0, 0 0 !important;
+    background-repeat: repeat, no-repeat, no-repeat !important;
+}
+
+body::before {
+    inset: 10px;
+    box-shadow: none;
+    background:
+        linear-gradient(rgba(240, 180, 41, 0.56), rgba(240, 180, 41, 0.56)) top left / 44px 2px no-repeat,
+        linear-gradient(rgba(240, 180, 41, 0.56), rgba(240, 180, 41, 0.56)) top left / 2px 44px no-repeat,
+        linear-gradient(rgba(240, 180, 41, 0.56), rgba(240, 180, 41, 0.56)) top right / 44px 2px no-repeat,
+        linear-gradient(rgba(240, 180, 41, 0.56), rgba(240, 180, 41, 0.56)) top right / 2px 44px no-repeat,
+        linear-gradient(rgba(240, 180, 41, 0.56), rgba(240, 180, 41, 0.56)) bottom left / 44px 2px no-repeat,
+        linear-gradient(rgba(240, 180, 41, 0.56), rgba(240, 180, 41, 0.56)) bottom left / 2px 44px no-repeat,
+        linear-gradient(rgba(240, 180, 41, 0.56), rgba(240, 180, 41, 0.56)) bottom right / 44px 2px no-repeat,
+        linear-gradient(rgba(240, 180, 41, 0.56), rgba(240, 180, 41, 0.56)) bottom right / 2px 44px no-repeat,
+        linear-gradient(90deg, transparent 44px, rgba(240, 180, 41, 0.19) 44px, rgba(240, 180, 41, 0.19) calc(100% - 44px), transparent calc(100% - 44px)) top / 100% 2px no-repeat,
+        linear-gradient(90deg, transparent 44px, rgba(240, 180, 41, 0.19) 44px, rgba(240, 180, 41, 0.19) calc(100% - 44px), transparent calc(100% - 44px)) bottom / 100% 2px no-repeat;
+}
+
+#leaderboardPanel,
+#leaderboardTable,
+#bottomBar,
+#loginForm,
+#overlayContent,
+.settingsAuthAccount,
+.settingsSelServContainer,
+#settingsSkinViewer,
+#settingsAboutCurrentContainer,
+.settingsChangelogContainer,
+#settingsUpdateStatusContainer,
+#settingsStorageInfo,
+#settingsReqModsContent,
+#settingsOptModsContent {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.19) 0, rgba(255, 255, 255, 0) 52px) top / 100% 52px no-repeat,
+        linear-gradient(180deg, rgba(12, 14, 22, 0.77), rgba(7, 8, 16, 0.82));
+    border: 1px solid var(--bt-line-soft);
+    border-radius: 0;
+    box-shadow: inset 0 2px 0 -1px var(--bt-hair), 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#leaderboardPanel::before,
+#leaderboardTable::before,
+#bottomBar::before,
+#loginForm::before,
+#overlayContent::before,
+.settingsAuthAccount::before,
+.settingsSelServContainer::before,
+#settingsSkinViewer::before,
+#settingsAboutCurrentContainer::before,
+.settingsChangelogContainer::before,
+#settingsUpdateStatusContainer::before,
+#settingsStorageInfo::before {
+    inset: -2px;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) top left / 12px 1px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) top left / 1px 12px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) top right / 12px 1px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) top right / 1px 12px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) bottom left / 12px 1px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) bottom left / 1px 12px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) bottom right / 12px 1px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) bottom right / 1px 12px no-repeat;
+}
+
+#leaderboardTable,
+#settingsReqModsContent,
+#settingsOptModsContent {
+    background: rgba(4, 5, 10, 0.55);
+    box-shadow: none;
+}
+
+#leaderboardTable::before {
+    display: none;
+}
+
+#settingsMediaButton,
+#user_content,
+#modsButton,
+#server_status_wrapper,
+.lbTab,
+#leaderboardRetry,
+.settingsActionButton,
+#settingsOpenModStoreButton,
+.settingsSwitchServerButton,
+.settingsFileSelButton,
+.loginOptionButton,
+.loginOptionGuestButton,
+.serverSearchGlobalButton,
+.button-secondary,
+.button-utility,
+.settingsNavItem {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0;
+    background:
+        linear-gradient(180deg, rgba(128, 128, 128, 0.3), rgba(128, 128, 128, 0.1)),
+        linear-gradient(180deg, rgba(14, 16, 24, 0.77), rgba(8, 10, 16, 0.77));
+    box-shadow:
+        inset 4px 0 0 var(--bt-neutral),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        inset 0 -1px 0 rgba(128, 128, 128, 0.5);
+    color: #dcdcdc;
+    transition: background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
+}
+
+#settingsMediaButton:hover,
+#user_content:hover,
+#modsButton:hover,
+#server_status_wrapper:hover,
+.lbTab:hover,
+#leaderboardRetry:hover,
+.settingsActionButton:hover,
+#settingsOpenModStoreButton:hover,
+.settingsSwitchServerButton:hover,
+.settingsFileSelButton:hover,
+.loginOptionButton:hover,
+.loginOptionGuestButton:hover,
+.serverSearchGlobalButton:hover,
+.button-secondary:hover,
+.button-utility:hover,
+.settingsNavItem:hover {
+    border-color: rgba(255, 255, 255, 0.55);
+    background:
+        linear-gradient(180deg, rgba(128, 128, 128, 0.46), rgba(128, 128, 128, 0.22)),
+        linear-gradient(180deg, rgba(14, 16, 24, 0.77), rgba(8, 10, 16, 0.77));
+    box-shadow:
+        inset 4px 0 0 #b4b4b4,
+        inset 0 1px 0 rgba(255, 255, 255, 0.55),
+        inset 0 -1px 0 rgba(180, 180, 180, 0.8),
+        0 4px 6px -3px rgba(128, 128, 128, 0.5);
+    color: #fff;
+}
+
+#launch_button,
+#welcomeButton,
+#loginButton,
+#overlayAcknowledge,
+#loginOptionVISoftware,
+.button-primary,
+#serverSelectConfirm,
+#accountSelectConfirm,
+#settingsNavDone,
+#settingsAccountSave,
+.lbTab.active,
+.lbTab.active:hover,
+.lbTab.active:focus,
+.settingsNavItem[selected] {
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 0;
+    background:
+        linear-gradient(180deg, rgba(85, 170, 85, 0.42), rgba(85, 170, 85, 0.14)),
+        linear-gradient(180deg, rgba(14, 16, 24, 0.77), rgba(8, 10, 16, 0.77));
+    box-shadow:
+        inset 4px 0 0 var(--bt-green),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        inset 0 -1px 0 rgba(85, 170, 85, 0.7),
+        0 4px 6px -3px rgba(85, 170, 85, 0.35);
+    color: #fff;
+}
+
+#launch_button:hover,
+#welcomeButton:hover,
+#loginButton:hover,
+#overlayAcknowledge:hover,
+#loginOptionVISoftware:hover,
+.button-primary:hover,
+#serverSelectConfirm:hover,
+#accountSelectConfirm:hover,
+#settingsNavDone:hover,
+#settingsAccountSave:hover,
+.settingsNavItem[selected]:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    background:
+        linear-gradient(180deg, rgba(85, 170, 85, 0.6), rgba(85, 170, 85, 0.26)),
+        linear-gradient(180deg, rgba(14, 16, 24, 0.77), rgba(8, 10, 16, 0.77));
+    box-shadow:
+        inset 5px 0 0 #77cc77,
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -1px 0 rgba(119, 204, 119, 0.9),
+        0 5px 8px -3px rgba(85, 170, 85, 0.6);
+}
+
+#launch_button:disabled,
+#launch_button[disabled] {
+    background: linear-gradient(180deg, rgba(14, 16, 24, 0.77), rgba(8, 10, 16, 0.77));
+    box-shadow: inset 2px 0 0 #404040;
+    color: #909090;
+}
+
+#loginForm .loginField,
+.loginField,
+.serverSearchBox,
+.resourceSearchBox,
+#settingsContainer input[type=number],
+#settingsContainer input[type=text],
+#settingsContainer input[type=password] {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0;
+    background: linear-gradient(180deg, rgba(4, 5, 10, 0.85), rgba(10, 12, 18, 0.85));
+    box-shadow: inset 2px 0 0 rgba(255, 255, 255, 0.25);
+    color: #fff;
+    transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.loginField:focus-within,
+.serverSearchBox:focus-within,
+.resourceSearchBox:focus-within,
+#settingsContainer input[type=number]:focus,
+#settingsContainer input[type=text]:focus,
+#settingsContainer input[type=password]:focus {
+    border-color: rgba(240, 180, 41, 0.6);
+    box-shadow: inset 3px 0 0 var(--bt-gold), inset 0 -2px 0 var(--bt-gold);
+    outline: none;
+}
+
+.toggleSwitchSlider {
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0;
+    background: rgba(4, 5, 10, 0.85);
+    box-shadow: inset 2px 0 0 #404040;
+}
+
+input:checked + .toggleSwitchSlider {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: linear-gradient(180deg, rgba(85, 170, 85, 0.5), rgba(85, 170, 85, 0.2));
+    box-shadow: inset 2px 0 0 var(--bt-green);
+}
+
+.rangeSlider,
+.rangeSliderTrack {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0;
+    background: rgba(4, 5, 10, 0.85);
+}
+
+.settingsSelectSelected,
+.settingsSelectOptions {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0;
+    background: linear-gradient(180deg, rgba(14, 16, 24, 0.92), rgba(8, 10, 16, 0.95));
+    box-shadow: inset 2px 0 0 var(--bt-neutral);
+}
+
+#leaderboardPanel {
+    width: 600px;
+    padding: 10px 16px 12px;
+}
+
+#leaderboardTitle {
+    font-size: 24px;
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+    padding-bottom: 12px;
+    background: linear-gradient(180deg, rgba(240, 180, 41, 0), rgba(240, 180, 41, 0.1)) bottom / 60% 100% no-repeat;
+    background-position: center bottom;
+}
+
+#leaderboardTitle::after {
+    left: 6%;
+    right: 6%;
+}
+
+.lbTabs {
+    gap: 6px;
+}
+
+.lbTab {
+    height: 28px;
+}
+
+#leaderboardPodium {
+    display: grid;
+    grid-template-columns: 1fr 1.18fr 1fr;
+    align-items: end;
+    flex: none;
+    order: 3;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+#leaderboardPodium.hidden,
+#leaderboardPanel:not([data-state="ready"]) #leaderboardPodium {
+    display: none;
+}
+
+#leaderboardTable {
+    order: 4;
+    margin-top: 10px;
+    padding: 4px 6px 6px;
+}
+
+#leaderboardState {
+    order: 5;
+}
+
+.podiumCard {
+    --medal: #f0b429;
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    justify-items: center;
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 6px 8px 4px;
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--medal) 19%, transparent), transparent),
+        linear-gradient(180deg, rgba(12, 14, 22, 0.77), rgba(7, 8, 16, 0.82));
+    border: 1px solid var(--bt-line-soft);
+    border-top: 2px solid var(--medal);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+.podiumCard.place1 {
+    --medal: #ffd23f;
+    height: 108px;
+    animation: podiumGlow 3.2s ease-in-out infinite;
+}
+
+.podiumCard.place2 {
+    --medal: #c8ccd6;
+    height: 92px;
+}
+
+.podiumCard.place3 {
+    --medal: #cd7f32;
+    height: 80px;
+}
+
+@keyframes podiumGlow {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(255, 210, 63, 0.06); }
+    50% { box-shadow: 0 0 0 2px rgba(255, 210, 63, 0.3); }
+}
+
+.podiumCard.self {
+    outline: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+.podiumBadge {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    font-size: 16px;
+    color: #101010;
+    background: var(--medal);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.podiumName {
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 0 0 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--medal);
+}
+
+.podiumValue {
+    align-self: center;
+    font-size: 28px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--medal);
+}
+
+.podiumCard.place1 .podiumValue {
+    font-size: 32px;
+}
+
+.podiumCaption {
+    font-size: 16px;
+    line-height: 16px;
+    color: var(--bt-neutral);
+}
+
+.podiumEmpty {
+    grid-row: 2;
+    align-self: center;
+    font-size: 20px;
+    color: #505050;
+}
+
+.leaderboardRow.place1,
+.leaderboardRow.place2,
+.leaderboardRow.place3 {
+    background: none;
+}
+
+#leaderboardTitle { margin-bottom: 8px; padding-bottom: 10px; font-size: 20px; }
+.lbTab { height: 26px; }
+.lbTabs { margin-top: 6px; }
+#leaderboardPodium { margin-top: 8px; gap: 8px; }
+#leaderboardTable { margin-top: 8px; }
+.podiumCard { padding: 4px 6px 2px; }
+.podiumCard.place1 { height: 86px; }
+.podiumCard.place2 { height: 74px; }
+.podiumCard.place3 { height: 66px; }
+.podiumValue { font-size: 24px; }
+.podiumCard.place1 .podiumValue { font-size: 28px; }
+.podiumCaption { line-height: 14px; }
+.leaderboardRow { height: 24px; }
+
+.cube div {
+    background: rgba(240, 180, 41, 0.14);
+    border: 2px solid rgba(240, 180, 41, 0.7);
+    color: var(--bt-gold);
+    text-shadow: none;
+    box-shadow: 0 0 16px rgba(240, 180, 41, 0.25);
+    backdrop-filter: none;
+    font-weight: 400;
+}
+
+#waitingContainer {
+    background: rgba(4, 5, 10, 0.6);
+}
+
+.waitingSpinner:before,
+.waitingSpinner:after {
+    border-radius: 0;
+}

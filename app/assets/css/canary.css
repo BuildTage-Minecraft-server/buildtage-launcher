@@ -159,4 +159,108 @@ a {
 
 /* purple link color */
 
+html,
+body {
+  color: var(--bt-text);
+}
 
+.dialog {
+  gap: 10px;
+  padding: 22px 26px 20px;
+}
+
+.top {
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.top::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--bt-gold), rgba(240, 180, 41, 0.45) 40%, rgba(255, 255, 255, 0));
+}
+
+.top img {
+  width: 32px;
+  height: 32px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.panel {
+  padding: 12px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.19) 0, rgba(255, 255, 255, 0) 52px) top / 100% 52px no-repeat,
+    linear-gradient(180deg, rgba(12, 14, 22, 0.77), rgba(7, 8, 16, 0.82));
+  border: 1px solid var(--bt-line-soft);
+  border-radius: 0;
+  box-shadow: inset 0 2px 0 -1px var(--bt-hair), 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.notice {
+  padding: 12px 14px;
+  background: rgba(4, 5, 10, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 3px solid var(--bt-gold);
+  border-radius: 0;
+  font-size: 16px;
+  color: #d4d7e0;
+}
+
+.checkbox {
+  font-size: 16px;
+  color: var(--bt-text-dim);
+}
+
+button {
+  height: 36px;
+  padding: 0 20px;
+  font-weight: 400;
+  font-size: 16px;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+button:hover {
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+#declineBtn {
+  background:
+    linear-gradient(180deg, rgba(204, 85, 85, 0.34), rgba(204, 85, 85, 0.1)),
+    linear-gradient(180deg, rgba(14, 16, 24, 0.77), rgba(8, 10, 16, 0.77));
+  box-shadow: inset 4px 0 0 var(--bt-danger), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(204, 85, 85, 0.6);
+}
+
+#acceptBtn {
+  color: #fff;
+  background:
+    linear-gradient(180deg, rgba(85, 170, 85, 0.42), rgba(85, 170, 85, 0.14)),
+    linear-gradient(180deg, rgba(14, 16, 24, 0.77), rgba(8, 10, 16, 0.77));
+  box-shadow: inset 4px 0 0 var(--bt-green), inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(85, 170, 85, 0.7);
+}
+
+#acceptBtn[disabled] {
+  opacity: 1;
+  filter: none;
+  color: #909090;
+  background: linear-gradient(180deg, rgba(14, 16, 24, 0.77), rgba(8, 10, 16, 0.77));
+  box-shadow: inset 2px 0 0 #404040;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+a {
+  color: var(--bt-gold);
+}
