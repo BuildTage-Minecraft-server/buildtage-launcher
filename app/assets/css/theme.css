@@ -3459,16 +3459,6 @@ input:checked + .toggleSwitchSlider {
     100% { transform: scale(1); filter: brightness(1); }
 }
 
-@keyframes btPlayPress {
-    0% { transform: scale(1); filter: brightness(1); box-shadow: inset 5px 0 0 #77cc77, 0 0 0 0 rgba(119, 204, 119, 0.8); }
-    15% { transform: scale(0.96); filter: brightness(2); }
-    30% { transform: scale(1.04); filter: brightness(1.3); }
-    45% { transform: scale(1.04); filter: brightness(2.2); box-shadow: inset 5px 0 0 #aaffaa, 0 0 22px 4px rgba(119, 204, 119, 0.8); }
-    65% { transform: scale(1.02); filter: brightness(1.4); }
-    80% { transform: scale(1.03); filter: brightness(1.9); }
-    100% { transform: scale(1); filter: brightness(1); box-shadow: inset 5px 0 0 #77cc77, 0 0 0 14px rgba(119, 204, 119, 0); }
-}
-
 #settingsMediaButton:not(:disabled):active,
 #user_content:active,
 #modsButton:not(:disabled):active,
@@ -3499,8 +3489,8 @@ input:checked + .toggleSwitchSlider {
 }
 
 #launch_button:not(:disabled):active {
-    transform: scale(0.97);
-    filter: brightness(1.7);
+    transform: scale(0.975);
+    filter: brightness(1.2);
     animation: none;
 }
 
@@ -3508,8 +3498,12 @@ input:checked + .toggleSwitchSlider {
     animation: btPress 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-#launch_button.btClick {
-    animation: btPlayPress 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+
+@keyframes btPlayWave {
+    0% { opacity: 1; transform: scaleX(0); }
+    65% { opacity: 0.8; transform: scaleX(1); }
+    100% { opacity: 0; transform: scaleX(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3518,4 +3512,96 @@ input:checked + .toggleSwitchSlider {
     #launch_button.btClick {
         animation: none !important;
     }
+}
+
+@keyframes btStripes {
+    from { background-position: 0 0; }
+    to { background-position: 28px 0; }
+}
+
+@keyframes btPlaySweep {
+    0%, 55% { transform: translateX(-140%) skewX(-30deg); opacity: 0; }
+    62% { opacity: 1; }
+    100% { transform: translateX(520%) skewX(-30deg); opacity: 0; }
+}
+
+@keyframes btPlayBar {
+    0%, 100% { box-shadow: inset 4px 0 0 var(--bt-green), inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(85, 170, 85, 0.7), 0 0 0 rgba(85, 170, 85, 0); }
+    50% { box-shadow: inset 6px 0 0 #77cc77, inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 rgba(119, 204, 119, 0.95), 0 0 14px rgba(85, 170, 85, 0.45); }
+}
+
+@keyframes btPlayPop {
+    0% { transform: scale(1); filter: brightness(1); }
+    25% { transform: scale(0.965); filter: brightness(1.8); }
+    60% { transform: scale(1.025); filter: brightness(1.5); box-shadow: inset 8px 0 0 #aaffaa, 0 0 18px 2px rgba(119, 204, 119, 0.7); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+#launch_button {
+    letter-spacing: 0.14em;
+    transition: letter-spacing 0.25s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+#launch_button:not(:disabled) {
+    animation: btPlayBar 2.6s ease-in-out infinite;
+}
+
+#launch_button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0 8px, rgba(255, 255, 255, 0) 8px 14px);
+    background-size: 28px 100%;
+    animation: btStripes 1.8s linear infinite;
+    opacity: 0.8;
+}
+
+#launch_button::after {
+    width: 18%;
+    opacity: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+    animation: btPlaySweep 3.4s ease-in-out infinite;
+}
+
+#launch_button:hover::after {
+    animation: btPlaySweep 1.1s ease-in-out infinite;
+}
+
+#launch_button:hover:not(:disabled) {
+    letter-spacing: 0.22em;
+    text-shadow: 0 0 10px rgba(170, 255, 170, 0.6), 0 2px 0 rgba(0, 0, 0, 0.45);
+}
+
+#launch_button:disabled::before,
+#launch_button:disabled::after {
+    display: none;
+}
+
+#launch_button:not(:disabled):active {
+    animation: none;
+    transform: scale(0.97);
+    filter: brightness(1.6);
+}
+
+#launch_button.btClick {
+    animation: btPlayPop 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+#launch_button.btClick::before {
+    opacity: 1;
+    transform-origin: left center;
+    background: linear-gradient(90deg, rgba(119, 204, 119, 0.1), rgba(170, 255, 170, 0.5) 85%, rgba(255, 255, 255, 0.75));
+    animation: btPlayWave 0.4s cubic-bezier(0.3, 0.7, 0.3, 1);
+}
+
+#launch_button.btClick {
+    animation: btPlayPop 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes btPlayPop {
+    0% { transform: scale(1); letter-spacing: 0.14em; box-shadow: inset 5px 0 0 #77cc77, 0 0 0 0 rgba(119, 204, 119, 0.7); }
+    25% { transform: scale(0.975); letter-spacing: 0.1em; }
+    60% { transform: scale(1.02); letter-spacing: 0.24em; box-shadow: inset 8px 0 0 #aaffaa, 0 0 0 6px rgba(119, 204, 119, 0.35), 0 0 18px 2px rgba(119, 204, 119, 0.5); }
+    100% { transform: scale(1); letter-spacing: 0.14em; box-shadow: inset 5px 0 0 #77cc77, 0 0 0 14px rgba(119, 204, 119, 0); }
 }
