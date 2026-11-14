@@ -1,37 +1,65 @@
+@font-face {
+    font-family: 'Tiny5';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/tiny5-cyrillic-400-normal.woff2') format('woff2');
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+    font-family: 'Tiny5';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/tiny5-latin-400-normal.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
-    --bt-bg: #0e0d13;
-    --bt-card: #1b1a24;
-    --bt-card-2: #24232f;
-    --bt-line: rgba(255, 255, 255, 0.07);
-    --bt-line-strong: rgba(255, 255, 255, 0.14);
-    --bt-text: #f4f3f9;
-    --bt-text-dim: #a6a4b9;
-    --bt-accent: #8b5cf6;
-    --bt-accent-hover: #a07bf8;
-    --bt-accent-pressed: #7a4ae6;
-    --bt-accent-2: #b07cf9;
-    --bt-good: #3ecf9a;
-    --bt-font: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+    --bt-bg: #0a0d15;
+    --bt-card: #0f131c;
+    --bt-card-2: #1c2331;
+    --bt-line: rgba(160, 170, 190, 0.16);
+    --bt-line-strong: #465063;
+    --bt-text: #eef0f6;
+    --bt-text-dim: #9aa1b3;
+    --bt-accent: #3f9f58;
+    --bt-accent-hover: #4cc764;
+    --bt-accent-pressed: #2f7c43;
+    --bt-accent-2: #f0b429;
+    --bt-good: #58d174;
+    --bt-bad: #ff5d5d;
+    --bt-gold: #f0b429;
+    --bt-gold-dim: #8c6d22;
+    --bt-yellow: #ffd84a;
+    --bt-cyan: #4cd0ff;
+    --bt-bracket: #cfd4de;
+    --bt-edge: #465063;
+    --bt-edge-hi: #8a93a6;
+    --bt-green-bg: #1d3b27;
+    --bt-green-edge: #3f8f55;
+    --bt-font: 'Tiny5', 'Segoe UI', system-ui, sans-serif;
     --bt-font-title: var(--bt-font);
 
     --color-primary: var(--bt-accent);
     --color-primary-dark: var(--bt-accent-pressed);
     --color-primary-light: var(--bt-accent-hover);
-    --color-bg-darkest: #0e0d13;
-    --color-bg-dark: #14131b;
-    --color-bg-light: #1b1a24;
-    --color-accent: var(--bt-accent-2);
-    --color-accent-dark: #7f60f0;
-    --color-accent-light: #c0abff;
+    --color-bg-darkest: #0a0d15;
+    --color-bg-dark: #121620;
+    --color-bg-light: #1c2331;
+    --color-accent: var(--bt-gold);
+    --color-accent-dark: var(--bt-gold-dim);
+    --color-accent-light: #ffd84a;
     --color-surface: rgba(255, 255, 255, 0.04);
-    --color-overlay: rgba(10, 9, 14, 0.88);
-    --color-border: rgba(255, 255, 255, 0.09);
-    --color-text-secondary: #a6a4b9;
-    --glow-primary: 0 0 0 3px rgba(139, 92, 246, 0.28);
-    --glow-accent: 0 0 0 3px rgba(163, 132, 255, 0.28);
-    --border-radius-sm: 10px;
-    --border-radius-md: 14px;
-    --border-radius-lg: 22px;
+    --color-overlay: rgba(8, 10, 16, 0.9);
+    --color-border: rgba(160, 170, 190, 0.2);
+    --color-text-secondary: #9aa1b3;
+    --glow-primary: 0 0 0 2px rgba(88, 209, 116, 0.35);
+    --glow-accent: 0 0 0 2px rgba(240, 180, 41, 0.35);
+    --border-radius-sm: 0;
+    --border-radius-md: 0;
+    --border-radius-lg: 0;
 }
 
 html,
@@ -46,8 +74,25 @@ html {
 
 body {
     position: relative;
-    border-radius: 16px;
-    clip-path: inset(0 round 16px);
+    border-radius: 0;
+    clip-path: inset(0);
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 12px;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(var(--bt-gold-dim), var(--bt-gold-dim)) top left / 34px 2px no-repeat,
+        linear-gradient(var(--bt-gold-dim), var(--bt-gold-dim)) top left / 2px 34px no-repeat,
+        linear-gradient(var(--bt-gold-dim), var(--bt-gold-dim)) top right / 34px 2px no-repeat,
+        linear-gradient(var(--bt-gold-dim), var(--bt-gold-dim)) top right / 2px 34px no-repeat,
+        linear-gradient(var(--bt-gold-dim), var(--bt-gold-dim)) bottom left / 34px 2px no-repeat,
+        linear-gradient(var(--bt-gold-dim), var(--bt-gold-dim)) bottom left / 2px 34px no-repeat,
+        linear-gradient(var(--bt-gold-dim), var(--bt-gold-dim)) bottom right / 34px 2px no-repeat,
+        linear-gradient(var(--bt-gold-dim), var(--bt-gold-dim)) bottom right / 2px 34px no-repeat;
 }
 
 body::after {
@@ -55,20 +100,19 @@ body::after {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    border-radius: 16px;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+    border-radius: 0;
+    box-shadow: inset 0 0 0 1px rgba(160, 170, 190, 0.18);
     pointer-events: none;
 }
 
 body {
     background-color: var(--bt-bg) !important;
     background-image:
-        radial-gradient(60% 55% at 16% 8%, rgba(139, 92, 246, 0.17), rgba(139, 92, 246, 0) 62%),
-        radial-gradient(55% 50% at 92% 100%, rgba(98, 66, 200, 0.14), rgba(98, 66, 200, 0) 66%),
-        linear-gradient(180deg, #14121c 0%, #0e0d13 100%) !important;
-    background-size: 100% 100% !important;
-    background-position: 0 0 !important;
-    background-repeat: no-repeat !important;
+        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1.4px),
+        linear-gradient(180deg, #2b2618 0%, #171a24 42%, #0a0d15 100%) !important;
+    background-size: 22px 22px, 100% 100% !important;
+    background-position: 0 0, 0 0 !important;
+    background-repeat: repeat, no-repeat !important;
     background-attachment: fixed !important;
 }
 
@@ -82,10 +126,11 @@ body {
 body,
 body *:not(code):not(pre):not(kbd):not(samp) {
     font-family: var(--bt-font) !important;
+    font-synthesis: none;
 }
 
 ::selection {
-    background: rgba(139, 92, 246, 0.35);
+    background: rgba(88, 209, 116, 0.35);
 }
 
 ::-webkit-scrollbar {
@@ -94,16 +139,61 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.35);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.16);
-    border-radius: 8px;
+    background: var(--bt-edge);
+    border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.28);
+    background: var(--bt-edge-hi);
+}
+
+#leaderboardPanel,
+#leaderboardTable,
+#bottomBar,
+#loginForm,
+#overlayContent,
+.settingsAuthAccount,
+.settingsSelServContainer,
+#settingsSkinViewer,
+#settingsAboutCurrentContainer,
+.settingsChangelogContainer,
+#settingsUpdateStatusContainer,
+#settingsStorageInfo,
+#settingsReqModsContent,
+#settingsOptModsContent {
+    position: relative;
+}
+
+#leaderboardPanel::before,
+#leaderboardTable::before,
+#bottomBar::before,
+#loginForm::before,
+#overlayContent::before,
+.settingsAuthAccount::before,
+.settingsSelServContainer::before,
+#settingsSkinViewer::before,
+#settingsAboutCurrentContainer::before,
+.settingsChangelogContainer::before,
+#settingsUpdateStatusContainer::before,
+#settingsStorageInfo::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: 3;
+    pointer-events: none;
+    background:
+        linear-gradient(var(--bt-bracket), var(--bt-bracket)) top left / 10px 2px no-repeat,
+        linear-gradient(var(--bt-bracket), var(--bt-bracket)) top left / 2px 10px no-repeat,
+        linear-gradient(var(--bt-bracket), var(--bt-bracket)) top right / 10px 2px no-repeat,
+        linear-gradient(var(--bt-bracket), var(--bt-bracket)) top right / 2px 10px no-repeat,
+        linear-gradient(var(--bt-bracket), var(--bt-bracket)) bottom left / 10px 2px no-repeat,
+        linear-gradient(var(--bt-bracket), var(--bt-bracket)) bottom left / 2px 10px no-repeat,
+        linear-gradient(var(--bt-bracket), var(--bt-bracket)) bottom right / 10px 2px no-repeat,
+        linear-gradient(var(--bt-bracket), var(--bt-bracket)) bottom right / 2px 10px no-repeat;
 }
 
 #frameBar {
@@ -126,24 +216,24 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 #frameButtonDockWin {
     position: absolute;
-    top: 24px;
-    right: 24px;
+    top: 26px;
+    right: 22px;
     display: flex;
     align-items: center;
     gap: 4px;
     box-sizing: border-box;
-    height: 44px;
-    padding-left: 14px;
+    height: 38px;
+    padding-left: 12px;
 }
 
 #frameButtonDockWin::before {
     content: '';
     position: absolute;
-    top: 10px;
-    bottom: 10px;
+    top: 8px;
+    bottom: 8px;
     left: 0;
-    width: 1px;
-    background: var(--bt-line-strong);
+    width: 2px;
+    background: var(--bt-edge);
 }
 
 #frameButtonDockWin > .frameButton:not(:first-child) {
@@ -154,13 +244,13 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 44px;
-    width: 44px;
+    height: 36px;
+    width: 36px;
     margin: 0;
     padding: 0;
-    border-radius: 16px;
-    opacity: 0.6;
-    transition: background-color 0.25s ease, opacity 0.25s ease;
+    border-radius: 0;
+    opacity: 0.7;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
 }
 
 .frameButton svg {
@@ -169,45 +259,45 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 }
 
 .frameButton svg * {
-    transition: fill 0.25s ease, stroke 0.25s ease;
+    transition: fill 0.15s ease, stroke 0.15s ease;
 }
 
 .frameButton:hover,
 .frameButton:focus {
-    background-color: rgba(255, 255, 255, 0.08);
-    opacity: 0.95;
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 1;
 }
 
 .frameButton:active {
-    background-color: rgba(255, 255, 255, 0.12);
+    background-color: rgba(255, 255, 255, 0.16);
 }
 
 #frameButton_close:hover,
 #frameButton_close:focus {
-    background: rgba(255, 107, 120, 0.2) !important;
+    background: rgba(255, 93, 93, 0.25) !important;
     opacity: 1;
 }
 
 #frameButton_close:active {
-    background: rgba(255, 107, 120, 0.3) !important;
+    background: rgba(255, 93, 93, 0.4) !important;
 }
 
 #frameButton_close:hover svg *,
 #frameButton_close:focus svg * {
-    fill: #ff9aa3;
-    stroke: #ff9aa3;
+    fill: #ff9a9a;
+    stroke: #ff9a9a;
 }
 
 #topRow {
     position: absolute;
-    top: 8px;
-    left: 24px;
-    right: 142px;
+    top: 10px;
+    left: 22px;
+    right: 118px;
     z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 46px;
+    height: 38px;
     -webkit-app-region: drag;
 }
 
@@ -218,30 +308,52 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 .topIcon {
     flex: none;
-    height: 18px;
-    width: 18px;
+    height: 16px;
+    width: 16px;
+}
+
+#settingsMediaButton,
+#user_content,
+#modsButton,
+#server_status_wrapper,
+.lbTab,
+#leaderboardRetry,
+.settingsActionButton,
+#settingsOpenModStoreButton,
+.settingsSwitchServerButton,
+.settingsFileSelButton {
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
+    background: linear-gradient(180deg, #252d3d 0%, #1a2030 100%);
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+    color: var(--bt-text);
 }
 
 #settingsMediaButton {
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 44px;
-    padding: 0 18px 0 14px;
-    background: var(--bt-card);
-    border: 1px solid var(--bt-line);
-    border-radius: 16px;
-    color: var(--bt-text);
-    font-size: 14px;
-    font-weight: 600;
+    height: 38px;
+    padding: 0 16px 0 12px;
+    font-size: 16px;
+    font-weight: 400;
     cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 #settingsMediaButton:hover,
-#settingsMediaButton:focus {
-    background: var(--bt-card-2);
-    border-color: rgba(139, 92, 246, 0.55);
+#settingsMediaButton:focus,
+#user_content:hover,
+#modsButton:hover,
+#modsButton:focus,
+.lbTab:hover,
+.lbTab:focus,
+#leaderboardRetry:hover,
+#leaderboardRetry:focus {
+    border-color: var(--bt-edge-hi);
+    background-image:
+        linear-gradient(115deg, transparent 0 36%, rgba(255, 255, 255, 0.09) 36% 50%, transparent 50%),
+        linear-gradient(180deg, #2c3548 0%, #202838 100%);
     outline: none;
 }
 
@@ -249,29 +361,23 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 12px;
-    height: 44px;
-    padding: 0 7px 0 18px;
-    background: var(--bt-card);
-    border: 1px solid var(--bt-line);
-    border-radius: 16px;
-    transition: border-color 0.2s ease;
-}
-
-#user_content:hover {
-    border-color: rgba(139, 92, 246, 0.55);
+    gap: 10px;
+    height: 38px;
+    padding: 0 4px 0 14px;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease;
 }
 
 #user_text {
     position: static;
     right: auto;
     min-width: 0;
-    max-width: 200px;
+    max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
     letter-spacing: 0;
     text-shadow: none;
     color: var(--bt-text);
@@ -282,13 +388,14 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 32px;
-    width: 32px;
+    height: 26px;
+    width: 26px;
     background: rgba(255, 255, 255, 0.08) !important;
     background-image: none !important;
-    border: none;
-    border-radius: 6px;
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
     box-shadow: none;
+    box-sizing: border-box;
     color: var(--bt-text-dim);
     overflow: hidden;
 }
@@ -310,7 +417,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     opacity: 0;
     font-size: 0;
     cursor: pointer;
-    border-radius: 15px;
+    border-radius: 0;
     background-color: rgba(255, 255, 255, 0.06);
 }
 
@@ -320,19 +427,19 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 #bottomBar {
     position: absolute;
-    left: 24px;
-    right: 24px;
-    bottom: 18px;
+    left: 22px;
+    right: 22px;
+    bottom: 22px;
     z-index: 2;
     display: flex;
     align-items: center;
-    height: 72px;
-    padding: 0 20px;
+    height: 62px;
+    padding: 0 12px 0 18px;
     box-sizing: border-box;
-    background: var(--bt-card);
-    border: 1px solid var(--bt-line);
-    border-radius: 24px;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    background: linear-gradient(180deg, rgba(22, 27, 38, 0.96), rgba(10, 13, 20, 0.98));
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
+    box-shadow: none;
 }
 
 #launch_content {
@@ -343,7 +450,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     align-items: center;
     gap: 12px;
     min-width: 0;
-    margin-right: 128px;
+    margin-right: 62px;
 }
 
 #launch_details {
@@ -354,7 +461,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    margin-right: 94px;
+    margin-right: 62px;
 }
 
 #launch_details_left {
@@ -364,14 +471,14 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #launch_details_right {
     display: flex;
     flex-direction: column-reverse;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
 }
 
 #launch_details_text {
     max-width: none;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 400;
     letter-spacing: 0;
     text-align: center;
     text-transform: none;
@@ -380,40 +487,41 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 #launch_progress[value] {
     width: 100%;
-    height: 6px;
+    height: 10px;
     overflow: hidden;
-    border: none;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
 }
 
 #launch_progress[value]::-webkit-progress-bar {
-    border-radius: 6px;
+    border-radius: 0;
     background: transparent;
 }
 
 #launch_progress[value]::-webkit-progress-value {
-    border-radius: 6px;
-    background-image: linear-gradient(90deg, var(--bt-accent), var(--bt-accent-2));
+    border-radius: 0;
+    background-image: repeating-linear-gradient(90deg, var(--bt-good) 0 6px, var(--bt-accent) 6px 8px);
     background-size: auto;
     animation: none;
 }
 
 #server_selection_button {
     flex: none;
-    min-width: 110px;
-    max-width: 220px;
-    padding: 0 8px 0 4px;
+    min-width: 96px;
+    max-width: 200px;
+    padding: 0 6px 0 0;
     overflow: hidden;
     background: transparent;
     border: none;
     color: var(--bt-text);
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
-    letter-spacing: 0;
+    letter-spacing: 0.04em;
     text-align: left;
     text-overflow: ellipsis;
-    text-transform: none;
+    text-transform: uppercase;
     white-space: nowrap;
     pointer-events: none;
     cursor: default;
@@ -421,62 +529,51 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 #modsButton {
     flex: none;
-    height: 46px;
-    padding: 0 20px;
-    background: #0d0c13;
-    border: 1px solid var(--bt-line);
-    border-radius: 14px;
-    color: var(--bt-text);
-    font-size: 14px;
-    font-weight: 600;
+    height: 42px;
+    padding: 0 18px;
+    font-size: 16px;
+    font-weight: 400;
     cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-#modsButton:hover,
-#modsButton:focus {
-    background: #16141f;
-    border-color: rgba(139, 92, 246, 0.55);
-    outline: none;
+    transition: border-color 0.15s ease;
 }
 
 #launch_button {
     flex: 1;
-    height: 48px;
+    height: 42px;
     padding: 0;
-    border: none;
-    border-radius: 14px;
-    background: linear-gradient(135deg, var(--bt-accent), var(--bt-accent-2));
-    box-shadow: 0 8px 22px rgba(139, 92, 246, 0.4);
+    border: 2px solid var(--bt-green-edge);
+    border-radius: 0;
+    background: linear-gradient(180deg, #24562f 0%, #1a3f24 100%);
+    box-shadow: inset 4px 0 0 var(--bt-good), inset 0 -2px 0 rgba(0, 0, 0, 0.35);
     color: #fff;
-    font-size: 17px;
+    font-size: 20px;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    text-shadow: none;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    transition: border-color 0.15s ease, filter 0.15s ease;
 }
 
 #launch_button:hover,
 #launch_button:focus {
-    filter: brightness(1.08);
-    transform: translateY(-1px);
-    box-shadow: 0 12px 28px rgba(139, 92, 246, 0.52);
+    border-color: var(--bt-good);
+    background-image:
+        linear-gradient(115deg, transparent 0 36%, rgba(255, 255, 255, 0.1) 36% 50%, transparent 50%),
+        linear-gradient(180deg, #2c6a3a 0%, #1f4b2b 100%);
     color: #fff;
-    text-shadow: none;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
+    box-shadow: inset 4px 0 0 var(--bt-good), inset 0 -2px 0 rgba(0, 0, 0, 0.35);
     outline: none;
 }
 
 #launch_button:active {
-    filter: brightness(0.95);
-    transform: translateY(0);
+    filter: brightness(0.9);
     color: #fff;
 }
 
 #launch_button:disabled {
-    filter: grayscale(0.5) brightness(0.75);
-    box-shadow: none;
+    filter: grayscale(0.6) brightness(0.7);
     color: rgba(255, 255, 255, 0.75);
     cursor: default;
 }
@@ -488,79 +585,81 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     align-items: center;
     justify-content: center;
     width: auto;
-    min-width: 84px;
-    height: 46px;
-    padding: 0 14px;
+    min-width: 82px;
+    height: 42px;
+    padding: 0 12px;
     box-sizing: border-box;
-    background: #0d0c13;
-    border: 1px solid var(--bt-line);
-    border-radius: 14px;
+    background: linear-gradient(180deg, #0c1018 0%, #080b11 100%);
+    box-shadow: none;
 }
 
 #landingPlayerLabel {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--bt-text-dim);
 }
 
 #player_count {
-    margin: 0;
-    font-size: 14px;
+    margin: 2px 0 0;
+    line-height: 1;
+    font-size: 16px;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0;
-    color: var(--bt-text);
+    color: var(--bt-yellow);
     text-shadow: none;
 }
 
 #image_seal_container {
     position: absolute;
-    right: 30px;
-    bottom: 70px;
+    right: 33px;
+    bottom: 30px;
     z-index: 4;
-    height: 92px;
-    width: 92px;
+    height: 46px;
+    width: 46px;
     margin: 0;
-    border-radius: 26px;
-    box-shadow: 0 16px 36px rgba(139, 92, 246, 0.45);
+    border-radius: 0;
+    box-shadow: none;
 }
 
 #image_seal {
     height: 100%;
     width: 100%;
     border: none;
-    border-radius: 26px;
+    border-radius: 0;
 }
 
 #image_seal_container[update]:before,
 #image_seal_container[update]:after {
     width: 100%;
     height: 100%;
-    border-radius: 26px;
+    border-radius: 0;
 }
 
 #welcomeImageSeal {
     height: 84px;
     width: 84px;
     border: none;
-    border-radius: 24px;
+    border-radius: 0;
     background: none;
-    box-shadow: 0 12px 30px rgba(139, 92, 246, 0.4);
+    box-shadow: none;
 }
 
 #welcomeHeader {
     font-family: var(--bt-font-title) !important;
-    font-size: 26px;
+    font-size: 32px;
     font-weight: 700;
-    letter-spacing: 0;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 #welcomeDescription {
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 1.6;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.5;
     text-shadow: none;
     color: var(--bt-text-dim);
 }
@@ -568,18 +667,18 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #welcomeButton,
 #loginButton,
 #overlayAcknowledge {
-    border: none;
-    border-radius: 14px;
-    background: linear-gradient(135deg, var(--bt-accent), var(--bt-accent-2));
-    box-shadow: 0 10px 24px rgba(139, 92, 246, 0.35);
+    border: 2px solid var(--bt-green-edge);
+    border-radius: 0;
+    background: linear-gradient(180deg, #24562f 0%, #1a3f24 100%);
+    box-shadow: inset 4px 0 0 var(--bt-good), inset 0 -2px 0 rgba(0, 0, 0, 0.35);
     color: #fff;
     font-family: var(--bt-font-title) !important;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    text-shadow: none;
-    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
+    transition: border-color 0.15s ease, filter 0.15s ease;
 }
 
 #welcomeButton:hover,
@@ -588,17 +687,17 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #loginButton:focus,
 #overlayAcknowledge:hover,
 #overlayAcknowledge:focus {
-    filter: brightness(1.08);
-    transform: translateY(-1px);
-    box-shadow: 0 14px 30px rgba(139, 92, 246, 0.5);
+    border-color: var(--bt-good);
+    filter: brightness(1.12);
+    box-shadow: inset 4px 0 0 var(--bt-good), inset 0 -2px 0 rgba(0, 0, 0, 0.35);
     color: #fff;
-    text-shadow: none;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
 }
 
 #welcomeButton {
     right: 0;
     margin: 22px 0 0;
-    padding: 13px 28px;
+    padding: 12px 28px;
 }
 
 #loginContent {
@@ -611,10 +710,10 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     width: 360px;
     max-width: 100%;
     box-sizing: border-box;
-    padding: 28px 32px 22px;
-    background: var(--bt-card);
-    border: 1px solid var(--bt-line);
-    border-radius: 26px;
+    padding: 26px 30px 22px;
+    background: linear-gradient(180deg, rgba(22, 27, 38, 0.97), rgba(10, 13, 20, 0.98));
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
 }
 
@@ -623,17 +722,18 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     width: 56px;
     margin-bottom: 12px;
     border: none;
-    border-radius: 16px;
+    border-radius: 0;
     background: none;
-    box-shadow: 0 10px 26px rgba(139, 92, 246, 0.4);
+    box-shadow: none;
 }
 
 #loginSubheader {
     margin-bottom: 18px;
     font-family: var(--bt-font-title) !important;
-    font-size: 15px;
+    font-size: 20px;
     font-weight: 700;
-    letter-spacing: 0;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     color: var(--bt-text);
 }
 
@@ -649,29 +749,29 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 .loginField {
     box-sizing: border-box;
     width: 100%;
-    margin-bottom: 16px;
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--bt-line);
-    border-radius: 14px;
+    margin-bottom: 12px;
+    padding: 8px 14px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
     color: var(--bt-text);
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 400;
     letter-spacing: 0;
     text-align: left;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.15s ease;
 }
 
 .loginField:focus {
-    border-color: var(--bt-accent);
-    box-shadow: var(--glow-primary);
+    border-color: var(--bt-good);
+    box-shadow: none;
     outline: none;
 }
 
 .loginField::placeholder {
     color: var(--bt-text-dim);
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 400;
     letter-spacing: 0;
     text-align: left;
 }
@@ -679,30 +779,30 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 .loginErrorSpan {
     top: -14px;
     right: 4px;
-    font-size: 11px;
+    font-size: 16px;
     font-weight: 700;
     text-align: right;
 }
 
 #loginForm a {
-    color: var(--bt-accent-2);
+    color: var(--bt-gold);
     font-weight: 700;
 }
 
 #loginForm a:hover,
 #loginForm a:focus {
-    color: #c0abff;
+    color: var(--bt-yellow);
 }
 
 #loginButton {
     right: 0;
     width: 100%;
     margin: 14px 0 6px;
-    padding: 13px 16px;
+    padding: 12px 16px;
 }
 
 #loginButton:disabled {
-    filter: grayscale(0.5) brightness(0.75);
+    filter: grayscale(0.6) brightness(0.7);
     box-shadow: none;
 }
 
@@ -711,41 +811,198 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 }
 
 #overlayContainer {
-    background: rgba(8, 7, 12, 0.72);
-    backdrop-filter: blur(6px);
+    background: rgba(6, 8, 13, 0.78);
+    backdrop-filter: blur(4px);
 }
 
 #overlayContent {
     width: 360px;
-    padding: 28px;
-    background: var(--bt-card);
-    border: 1px solid var(--bt-line);
-    border-radius: 24px;
+    padding: 26px;
+    background: linear-gradient(180deg, rgba(22, 27, 38, 0.98), rgba(10, 13, 20, 0.99));
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
     box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
 }
 
 #overlayTitle {
     font-family: var(--bt-font-title) !important;
-    font-size: 19px;
+    font-size: 24px;
     font-weight: 700;
-    letter-spacing: 0;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 #overlayDesc {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.55;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
     color: var(--bt-text-dim);
 }
 
 #overlayAcknowledge {
-    padding: 11px 26px;
+    padding: 10px 26px;
+}
+
+#welcomeDescCTA,
+#loginRememberText,
+#loginForm a,
+.loginDisclaimerText {
+    font-size: 16px;
+    line-height: 1.15;
+}
+
+.loginDisclaimerText {
+    margin: 2px 0;
+    font-weight: 400;
+}
+
+#loginOptionsContent h2 {
+    margin: 12px 0 14px;
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.loginOptionsMainContent > img {
+    width: 88px;
+    height: 88px;
+}
+
+.loginOptionButtonContainer,
+.loginOptionDivider {
+    width: 280px;
+}
+
+.loginOptionButton,
+.loginOptionGuestButton {
+    height: 44px;
+    padding: 0 18px;
+    box-sizing: border-box;
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
+    background: linear-gradient(180deg, #252d3d 0%, #1a2030 100%);
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+    column-gap: 10px;
+    color: var(--bt-text);
+    font-size: 16px;
+    transition: border-color 0.15s ease;
+}
+
+.loginOptionButton span {
+    font-size: 16px;
+}
+
+#loginOptionVISoftware {
+    border-color: var(--bt-green-edge);
+    background: linear-gradient(180deg, #24562f 0%, #1a3f24 100%);
+    box-shadow: inset 4px 0 0 var(--bt-good), inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.loginOptionButton:hover,
+.loginOptionButton:focus,
+.loginOptionGuestButton:hover,
+.loginOptionGuestButton:focus {
+    border-color: var(--bt-edge-hi);
+    background: linear-gradient(180deg, #2c3548 0%, #202838 100%);
+    text-shadow: none;
+}
+
+#loginOptionVISoftware:hover,
+#loginOptionVISoftware:focus {
+    border-color: var(--bt-good);
+    background: linear-gradient(180deg, #2c6a3a 0%, #1f4b2b 100%);
+}
+
+.loginOptionDivider {
+    font-size: 16px;
+    letter-spacing: 0.04em;
+}
+
+.loginOptionDivider::before,
+.loginOptionDivider::after {
+    height: 2px;
+    background: var(--bt-line-strong);
+}
+
+#loginOptionCancelButton,
+#loginOptionBackButton,
+#loginOptionBackText {
+    font-size: 16px;
+}
+
+.serverSearchBox,
+.resourceSearchBox {
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--bt-text);
+    font-size: 16px;
+}
+
+.serverSearchBox:focus,
+.resourceSearchBox:focus {
+    border-color: var(--bt-good);
+    box-shadow: none;
+    outline: none;
+}
+
+.serverSearchGlobalButton,
+.button-secondary,
+.button-utility {
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
+    background: linear-gradient(180deg, #252d3d 0%, #1a2030 100%);
+    color: var(--bt-text);
+    font-size: 16px;
+}
+
+.serverSearchGlobalButton:hover,
+.serverSearchGlobalButton:focus,
+.button-secondary:hover,
+.button-utility:hover {
+    border-color: var(--bt-edge-hi);
+    background: linear-gradient(180deg, #2c3548 0%, #202838 100%);
+    box-shadow: none;
+}
+
+.button-primary,
+#serverSelectConfirm,
+#accountSelectConfirm {
+    padding: 4px 16px;
+    border: 2px solid var(--bt-green-edge);
+    border-radius: 0;
+    background: linear-gradient(180deg, #24562f 0%, #1a3f24 100%);
+    box-shadow: inset 3px 0 0 var(--bt-good);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.button-primary:hover,
+#serverSelectConfirm:hover,
+#serverSelectConfirm:focus,
+#accountSelectConfirm:hover,
+#accountSelectConfirm:focus {
+    border-color: var(--bt-good);
+    background: linear-gradient(180deg, #2c6a3a 0%, #1f4b2b 100%);
+    box-shadow: inset 3px 0 0 var(--bt-good);
+}
+
+#serverSelectCancel,
+#accountSelectCancel {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.serverListing {
+    border-radius: 0;
 }
 
 #serverSelectHeader,
 #accountSelectHeader {
     font-family: var(--bt-font-title) !important;
-    font-size: 22px;
+    font-size: 24px;
     letter-spacing: 0;
     text-transform: none;
 }
@@ -768,13 +1025,8 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #loginCancelButton,
 #loginOptionBackButton,
 #newsButton {
-    border-radius: 10px;
-    transition: background-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
-}
-
-.settingsNavItem {
-    padding: 6px 20px;
-    margin: 0;
+    border-radius: 0;
+    transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
 }
 
 .settingsNavItem:is(:hover, :focus):not([selected]),
@@ -884,14 +1136,15 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     box-shadow: none !important;
 }
 
+
 #settingsContainer {
     background: transparent;
 }
 
 #settingsContainerLeft {
-    width: 250px;
-    flex: 0 0 250px;
-    padding: 56px 20px 28px 40px;
+    width: 232px;
+    flex: 0 0 232px;
+    padding: 40px 18px 26px 34px;
 }
 
 #settingsNavContainer {
@@ -901,13 +1154,15 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #settingsNavHeader {
     height: auto;
     justify-content: flex-start;
-    margin-bottom: 28px;
-    padding-left: 14px;
+    margin-bottom: 22px;
+    padding-left: 0;
 }
 
 #settingsNavHeaderText {
-    font-size: 22px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     color: var(--bt-text);
 }
 
@@ -925,9 +1180,13 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 .settingsNavItem {
     position: relative;
     width: 100%;
-    margin: 0 0 2px;
-    padding: 9px 14px;
-    font-size: 14px;
+    margin: 0 0 4px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    border-radius: 0;
+    font-size: 20px;
+    text-align: left;
     color: var(--bt-text-dim);
     text-shadow: none;
 }
@@ -936,26 +1195,19 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 .settingsNavItem:focus {
     color: var(--bt-text);
     text-shadow: none;
+    border-color: var(--bt-edge);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .settingsNavItem[selected] {
-    color: var(--bt-text);
-    background-color: rgba(255, 255, 255, 0.07);
-}
-
-.settingsNavItem[selected]::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 9px;
-    bottom: 9px;
-    width: 3px;
-    border-radius: 2px;
-    background: var(--bt-accent);
+    color: #fff;
+    border-color: var(--bt-green-edge);
+    background: linear-gradient(180deg, #24492f 0%, #1a3624 100%);
+    box-shadow: inset 3px 0 0 var(--bt-good);
 }
 
 .settingsNavSpacer {
-    height: 14px;
+    height: 12px;
 }
 
 #settingsNavContentBottom {
@@ -965,29 +1217,36 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 .settingsNavDivider {
     width: 100%;
-    margin: 0 0 14px;
-    background: var(--bt-line);
+    height: 2px;
+    margin: 0 0 12px;
+    background: var(--bt-line-strong);
 }
 
 #settingsNavDone {
     width: 100%;
     margin: 0;
     padding: 10px 14px;
+    box-sizing: border-box;
     text-align: center;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: #fff;
-    background: var(--bt-accent) !important;
-    border-radius: 10px;
+    background: linear-gradient(180deg, #24562f 0%, #1a3f24 100%) !important;
+    border: 2px solid var(--bt-green-edge);
+    border-radius: 0;
+    box-shadow: inset 4px 0 0 var(--bt-good), inset 0 -2px 0 rgba(0, 0, 0, 0.35);
 }
 
 #settingsNavDone:hover,
 #settingsNavDone:focus {
-    background: var(--bt-accent-hover) !important;
+    border-color: var(--bt-good);
+    filter: brightness(1.12);
 }
 
 #settingsNavDone:active {
-    background: var(--bt-accent-pressed) !important;
+    filter: brightness(0.9);
     color: #fff;
 }
 
@@ -998,7 +1257,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 }
 
 .settingsTab {
-    padding: 56px 40px 0 8px;
+    padding: 44px 32px 0 8px;
     box-sizing: border-box;
 }
 
@@ -1012,7 +1271,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 .settingsTab::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.16);
-    border-radius: 3px;
+    border-radius: 0;
 }
 
 .settingsTab::-webkit-scrollbar-thumb:hover {
@@ -1028,18 +1287,20 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 }
 
 .settingsTabHeader {
-    margin-bottom: 22px;
+    margin-bottom: 14px;
 }
 
 .settingsTabHeaderText {
     font-family: var(--bt-font);
-    font-size: 22px;
-    font-weight: 600;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 .settingsTabHeaderDesc {
     margin-top: 4px;
-    font-size: 13px;
+    font-size: 16px;
     color: var(--bt-text-dim);
 }
 
@@ -1078,16 +1339,16 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 .settingsFieldTitle {
     font-family: var(--bt-font);
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
     line-height: 1.4;
     color: var(--bt-text);
 }
 
 .settingsFieldDesc {
     margin-top: 4px;
-    font-size: 12px;
-    line-height: 1.5;
+    font-size: 16px;
+    line-height: 1.2;
     color: var(--bt-text-dim);
 }
 
@@ -1099,9 +1360,9 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 .settingsAuthAccountTypeHeader {
     padding: 0 0 10px;
     margin-bottom: 18px;
-    border-bottom: 1px solid var(--bt-line);
-    font-size: 15px;
-    font-weight: 600;
+    border-bottom: 2px solid var(--bt-line-strong);
+    font-size: 20px;
+    font-weight: 700;
 }
 
 .settingsAuthAccount,
@@ -1112,9 +1373,9 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 .settingsChangelogContainer,
 #settingsUpdateStatusContainer,
 #settingsStorageInfo {
-    background: var(--bt-card);
-    border: 1px solid var(--bt-line);
-    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(22, 27, 38, 0.95), rgba(10, 13, 20, 0.97));
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
 }
 
 .settingsSelServContainer {
@@ -1137,16 +1398,16 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 .settingsAuthAccountDetailTitle,
 .settingsMemoryStatusTitle {
     font-family: var(--bt-font);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--bt-text-dim);
 }
 
 .settingsAuthAccountDetailValue {
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
 }
 
 .settingsAuthAccountActions {
@@ -1155,8 +1416,8 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 .settingsAuthAccountSelect {
     font-family: var(--bt-font);
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
     color: var(--bt-text);
     padding: 5px 10px;
 }
@@ -1168,7 +1429,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 .settingsAuthAccountLogOut {
     padding: 5px 12px;
     font-family: var(--bt-font);
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 .settingsAuthAccountLogOut:hover,
@@ -1185,25 +1446,25 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 }
 
 .settingsServerIcon {
-    border-radius: 10px;
+    border-radius: 0;
 }
 
 .settingsServerName {
     font-family: var(--bt-font);
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
 }
 
 .settingsServerDesc {
-    font-size: 12px;
+    font-size: 16px;
     color: var(--bt-text-dim);
 }
 
 .settingsServerBadge {
     padding: 3px 9px;
-    border-radius: 999px;
+    border-radius: 0;
     font-family: var(--bt-font);
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .settingsSwitchServerContainer {
@@ -1212,15 +1473,14 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 .settingsSwitchServerButton {
     padding: 6px 12px;
-    border: 1px solid var(--bt-line-strong);
-    border-radius: 8px;
     font-family: var(--bt-font);
+    font-size: 16px;
     color: var(--bt-text);
 }
 
 .settingsSwitchServerButton:hover,
 .settingsSwitchServerButton:focus {
-    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--bt-edge-hi);
 }
 
 .settingsModsHeader {
@@ -1254,7 +1514,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 }
 
 .settingsModVersion {
-    font-size: 11px;
+    font-size: 16px;
     color: var(--bt-text-dim);
 }
 
@@ -1264,20 +1524,20 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 
 #settingsContainer input[type=number],
 #settingsContainer input[type=text] {
-    padding: 9px 12px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--bt-line);
-    border-radius: 10px;
+    padding: 8px 12px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
     color: var(--bt-text);
     font-family: var(--bt-font);
-    font-size: 13px;
+    font-size: 16px;
     box-sizing: border-box;
 }
 
 #settingsContainer input[type=number]:focus,
 #settingsContainer input[type=text]:focus {
-    border-color: var(--bt-accent);
-    box-shadow: var(--glow-primary);
+    border-color: var(--bt-good);
+    box-shadow: none;
 }
 
 #settingsGameResolutionContainer {
@@ -1297,51 +1557,59 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 }
 
 .toggleSwitch {
-    width: 42px;
+    width: 46px;
     height: 24px;
 }
 
 .toggleSwitchSlider {
-    background-color: rgba(255, 255, 255, 0.16);
-    border: none;
+    background-color: rgba(0, 0, 0, 0.45);
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
+    box-sizing: border-box;
 }
 
 .toggleSwitchSlider:before {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     left: 3px;
     bottom: 3px;
-    background-color: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    border-radius: 0;
+    background-color: #d7dbe5;
+    box-shadow: none;
 }
 
 input:checked + .toggleSwitchSlider {
-    background-color: var(--bt-accent);
-    border: none;
+    background-color: var(--bt-green-bg);
+    border: 2px solid var(--bt-green-edge);
 }
 
 input:checked + .toggleSwitchSlider:before {
-    transform: translateX(18px);
+    background-color: #fff;
+    transform: translateX(22px);
 }
 
 .rangeSlider {
-    height: 4px;
+    height: 6px;
     margin: 18px 0;
-    background: rgba(255, 255, 255, 0.14);
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--bt-edge);
+    box-sizing: content-box;
 }
 
 .rangeSliderBar {
-    height: 4px;
-    background: var(--bt-accent);
-    border-radius: 2px 0 0 2px;
+    height: 6px;
+    background: var(--bt-good);
+    border-radius: 0;
 }
 
 .rangeSliderTrack {
-    top: -6px;
-    height: 16px;
-    border-radius: 4px;
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    top: -8px;
+    height: 20px;
+    border-radius: 0;
+    background: #d7dbe5;
+    border: 2px solid var(--bt-edge);
+    box-sizing: border-box;
+    box-shadow: none;
 }
 
 #settingsMemoryContainer {
@@ -1375,7 +1643,7 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 .settingsMemoryStatusValue {
-    font-size: 17px;
+    font-size: 20px;
     font-weight: 600;
     color: var(--bt-text);
 }
@@ -1385,7 +1653,7 @@ input:checked + .toggleSwitchSlider:before {
 .settingsFileSelDesc {
     width: 100%;
     margin: 14px 0;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 400;
     line-height: 1.5;
     color: var(--bt-text-dim);
@@ -1399,13 +1667,13 @@ input:checked + .toggleSwitchSlider:before {
 
 .settingsFileSelTitle {
     margin-bottom: 8px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
 }
 
 #settingsJavaExecDetails {
     margin-bottom: 10px;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 500;
     color: var(--bt-text-dim);
 }
@@ -1416,7 +1684,7 @@ input:checked + .toggleSwitchSlider:before {
     align-items: stretch;
     overflow: hidden;
     border: 1px solid var(--bt-line);
-    border-radius: 10px;
+    border-radius: 0;
     background: rgba(255, 255, 255, 0.05);
 }
 
@@ -1436,17 +1704,15 @@ input:checked + .toggleSwitchSlider:before {
 
 .settingsFileSelButton {
     padding: 0 16px;
-    border-left: 1px solid var(--bt-line);
-    border-radius: 0;
+    border-width: 0 0 0 2px;
     font-family: var(--bt-font);
-    font-weight: 600;
-    color: var(--bt-text);
-    background: rgba(255, 255, 255, 0.06);
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .settingsFileSelButton:hover,
 .settingsFileSelButton:focus {
-    background: rgba(255, 255, 255, 0.12);
+    background-image: linear-gradient(180deg, #2c3548 0%, #202838 100%);
 }
 
 .settingsFileSelButton:active {
@@ -1456,8 +1722,8 @@ input:checked + .toggleSwitchSlider:before {
 #settingsJVMOptsTitle,
 #settingsDataDirTitle {
     margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
 }
 
 #settingsStorageInfo {
@@ -1465,13 +1731,13 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 .settingsStorageLabel {
-    font-size: 13px;
+    font-size: 16px;
     color: var(--bt-text-dim);
 }
 
 .settingsStorageValue {
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
     color: var(--bt-text);
 }
 
@@ -1482,42 +1748,54 @@ input:checked + .toggleSwitchSlider:before {
 .settingsActionButton,
 #settingsOpenModStoreButton {
     padding: 8px 16px;
-    border-radius: 10px;
     font-family: var(--bt-font);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 400;
     text-shadow: none !important;
-    box-shadow: none;
-    background: rgba(139, 92, 246, 0.16);
-    border: 1px solid rgba(139, 92, 246, 0.4);
-    color: var(--bt-text);
+    cursor: pointer;
 }
 
 .settingsActionButton:hover,
-#settingsOpenModStoreButton:hover,
-#settingsOpenModStoreButton:focus {
-    background: rgba(139, 92, 246, 0.28);
-    border-color: rgba(139, 92, 246, 0.6);
+.settingsActionButton:focus {
+    border-color: var(--bt-edge-hi);
+    background-image:
+        linear-gradient(115deg, transparent 0 36%, rgba(255, 255, 255, 0.09) 36% 50%, transparent 50%),
+        linear-gradient(180deg, #2c3548 0%, #202838 100%);
 }
 
-.settingsActionButton:active,
-#settingsOpenModStoreButton:active {
-    background: rgba(139, 92, 246, 0.38);
+.settingsActionButton:active {
+    filter: brightness(0.9);
+}
+
+#settingsAccountSave,
+#settingsOpenModStoreButton {
+    background: linear-gradient(180deg, #24562f 0%, #1a3f24 100%);
+    border-color: var(--bt-green-edge);
+    box-shadow: inset 3px 0 0 var(--bt-good), inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+}
+
+#settingsAccountSave:hover,
+#settingsAccountSave:focus,
+#settingsOpenModStoreButton:hover,
+#settingsOpenModStoreButton:focus {
+    border-color: var(--bt-good);
+    background-image: linear-gradient(180deg, #2c6a3a 0%, #1f4b2b 100%);
 }
 
 .settingsActionButton.danger {
-    background: rgba(229, 72, 77, 0.14);
-    border-color: rgba(229, 72, 77, 0.4);
+    background: linear-gradient(180deg, #4a1f24 0%, #33161a 100%);
+    border-color: #a84048;
 }
 
-.settingsActionButton.danger:hover {
-    background: rgba(229, 72, 77, 0.26);
-    border-color: rgba(229, 72, 77, 0.6);
+.settingsActionButton.danger:hover,
+.settingsActionButton.danger:focus {
+    border-color: var(--bt-bad);
+    background-image: linear-gradient(180deg, #5c262c 0%, #3d1a1f 100%);
 }
 
 #settingsOpenModStoreButton {
     height: 46px;
-    font-size: 14px;
+    font-size: 20px;
 }
 
 .settingsSelectContainer {
@@ -1525,19 +1803,20 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 .settingsSelectSelected {
-    padding: 9px 36px 9px 14px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--bt-line);
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 500;
+    padding: 8px 36px 8px 14px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
+    font-size: 16px;
+    font-weight: 400;
     color: var(--bt-text);
     box-sizing: border-box;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    transition: border-color 0.15s ease;
 }
 
 .settingsSelectSelected:hover {
-    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--bt-edge-hi);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .settingsSelectSelected:after {
@@ -1555,8 +1834,8 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 .settingsSelectSelected.select-arrow-active {
-    border-radius: 10px;
-    border-color: var(--bt-accent);
+    border-radius: 0;
+    border-color: var(--bt-good);
 }
 
 .settingsSelectSelected.select-arrow-active:after {
@@ -1571,18 +1850,18 @@ input:checked + .toggleSwitchSlider:before {
     margin-top: 6px;
     padding: 4px;
     box-sizing: border-box;
-    background-color: var(--bt-card-2);
-    border: 1px solid var(--bt-line-strong);
-    border-radius: 12px;
+    background-color: #121721;
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
 }
 
 .settingsSelectOptions div {
     padding: 8px 12px;
     border: none;
-    border-radius: 8px;
+    border-radius: 0;
     background: transparent;
-    font-size: 13px;
+    font-size: 16px;
     color: var(--bt-text);
 }
 
@@ -1591,7 +1870,7 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 .settingsSelectOptions div[selected] {
-    background-color: rgba(139, 92, 246, 0.22) !important;
+    background-color: rgba(88, 209, 116, 0.22) !important;
 }
 
 #settingsAboutCurrentContent,
@@ -1611,18 +1890,18 @@ input:checked + .toggleSwitchSlider:before {
     width: 34px;
     height: 34px;
     padding: 0;
-    border-radius: 10px;
+    border-radius: 0;
 }
 
 #settingsAboutTitle {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: 700;
 }
 
 #settingsUpdateTitle {
     padding-left: 0;
-    font-size: 17px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
 }
 
 #settingsUpdateActionContainer {
@@ -1632,8 +1911,8 @@ input:checked + .toggleSwitchSlider:before {
 #settingsUpdateActionButton {
     padding: 8px 14px;
     margin-left: -14px;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
     text-shadow: none;
 }
 
@@ -1644,8 +1923,8 @@ input:checked + .toggleSwitchSlider:before {
 
 .settingsAboutButton {
     padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
+    border-radius: 0;
+    font-size: 16px;
     color: var(--bt-text-dim);
 }
 
@@ -1656,7 +1935,7 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 .settingsChangelogLabel {
-    font-size: 11px;
+    font-size: 16px;
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -1664,7 +1943,7 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 .settingsChangelogTitle {
-    font-size: 17px;
+    font-size: 20px;
     font-weight: 600;
 }
 
@@ -1705,7 +1984,7 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 #settingsTabMods .settingsServerName {
-    font-size: 15px;
+    font-size: 16px;
 }
 
 #settingsTabMods .settingsServerVersions {
@@ -1714,7 +1993,7 @@ input:checked + .toggleSwitchSlider:before {
 
 #settingsTabMods .settingsServerBadge {
     padding: 2px 8px;
-    font-size: 10px;
+    font-size: 16px;
 }
 
 #settingsTabMods .settingsSwitchServerContainer {
@@ -1766,7 +2045,7 @@ input:checked + .toggleSwitchSlider:before {
     flex: 0 0 auto;
     margin-bottom: 8px;
     padding-bottom: 6px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     line-height: 1.3;
 }
@@ -1775,7 +2054,7 @@ input:checked + .toggleSwitchSlider:before {
 #settingsOptModsContainer .settingsModsHeader small,
 #settingsReqModsContainer .settingsModsHeader span,
 #settingsOptModsContainer .settingsModsHeader span {
-    font-size: 11px;
+    font-size: 16px;
     font-weight: 400;
     color: var(--bt-text-dim);
 }
@@ -1800,7 +2079,7 @@ input:checked + .toggleSwitchSlider:before {
 #settingsReqModsContent::-webkit-scrollbar-thumb,
 #settingsOptModsContent::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.16);
-    border-radius: 3px;
+    border-radius: 0;
 }
 
 .settingsMod {
@@ -1827,7 +2106,7 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 .settingsModVersion {
-    font-size: 10px;
+    font-size: 16px;
 }
 
 .settingsModContent .toggleSwitch {
@@ -1889,8 +2168,8 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 #settingsTabMods:not([style*="none"]) {
-    padding-top: 56px;
-    padding-bottom: 28px;
+    padding-top: 44px;
+    padding-bottom: 24px;
 }
 
 #settingsTabMods .settingsTabHeader {
@@ -1922,11 +2201,11 @@ input:checked + .toggleSwitchSlider:before {
 
 .settingsChangelogButton {
     padding: 4px 8px;
-    font-size: 12px;
+    font-size: 16px;
 }
 
 .settingsChangelogText {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
     color: var(--bt-text-dim);
 }
@@ -1936,8 +2215,8 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 .settingsTab {
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0, transparent 30px, #000 56px);
-    mask-image: linear-gradient(to bottom, transparent 0, transparent 30px, #000 56px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, transparent 18px, #000 44px);
+    mask-image: linear-gradient(to bottom, transparent 0, transparent 18px, #000 44px);
 }
 
 .settingsFileSelActions {
@@ -1987,7 +2266,7 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 .settingsAuthAccountDetails {
-    padding: 18px 20px;
+    padding: 12px 18px;
 }
 
 .settingsAuthAccountActions {
@@ -1995,7 +2274,7 @@ input:checked + .toggleSwitchSlider:before {
     justify-content: flex-end;
     align-items: center;
     gap: 12px;
-    padding: 18px 20px;
+    padding: 12px 18px;
 }
 
 .settingsAuthAccountSelect {
@@ -2030,10 +2309,10 @@ input:checked + .toggleSwitchSlider:before {
     cursor: grab;
     user-select: none;
     background:
-        radial-gradient(70% 55% at 50% 38%, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0) 70%),
+        radial-gradient(70% 55% at 50% 38%, rgba(240, 180, 41, 0.14), rgba(240, 180, 41, 0) 70%),
         var(--bt-card);
     border: 1px solid var(--bt-line);
-    border-radius: 14px;
+    border-radius: 0;
 }
 
 #settingsSkinViewer.dragging {
@@ -2048,7 +2327,7 @@ input:checked + .toggleSwitchSlider:before {
     justify-content: center;
     padding: 0 16px;
     text-align: center;
-    font-size: 12px;
+    font-size: 16px;
     color: var(--bt-text-dim);
     pointer-events: none;
 }
@@ -2092,7 +2371,7 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 .settingsSkinSection .settingsFieldDesc {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .settingsSkinActions {
@@ -2104,7 +2383,7 @@ input:checked + .toggleSwitchSlider:before {
 #settingsSkinStatus {
     min-height: 16px;
     margin-top: 10px;
-    font-size: 12px;
+    font-size: 16px;
     line-height: 1.4;
     color: var(--bt-good);
 }
@@ -2127,58 +2406,58 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 #settingsSkinPanel {
-    margin-top: 16px;
+    margin-top: 14px;
 }
 
 #settingsSkinViewer {
-    flex: 0 0 190px;
-    height: 250px;
+    flex: 0 0 176px;
+    height: 206px;
 }
 
 #settingsSkinInfo {
     justify-content: flex-start;
-    gap: 26px;
+    gap: 14px;
     padding-top: 4px;
 }
 
 #settingsContainer input[type=password] {
-    padding: 9px 12px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--bt-line);
-    border-radius: 10px;
+    padding: 8px 12px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
     color: var(--bt-text);
     font-family: var(--bt-font);
-    font-size: 13px;
+    font-size: 16px;
     box-sizing: border-box;
 }
 
 #settingsContainer input[type=password]:focus {
     outline: none;
-    border-color: var(--bt-accent);
-    box-shadow: var(--glow-primary);
+    border-color: var(--bt-good);
+    box-shadow: none;
 }
 
 #settingsAccountForm {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 6px;
 }
 
 #settingsAccountName,
 #settingsAccountNewPassword,
 #settingsAccountPassword {
     min-width: 0;
-    height: 34px;
+    height: 32px;
 }
 
 #settingsAccountSave {
-    height: 34px;
+    height: 32px;
 }
 
 #settingsAccountStatus {
     min-height: 16px;
     margin-top: 10px;
-    font-size: 12px;
+    font-size: 16px;
     line-height: 1.4;
     color: var(--bt-good);
 }
@@ -2187,12 +2466,13 @@ input:checked + .toggleSwitchSlider:before {
     color: #e5484d;
 }
 
+
 #leaderboardLayer {
     position: absolute;
-    top: 62px;
-    right: 24px;
-    bottom: 98px;
-    left: 24px;
+    top: 58px;
+    right: 22px;
+    bottom: 96px;
+    left: 22px;
     z-index: 1;
     display: flex;
     align-items: center;
@@ -2203,81 +2483,115 @@ input:checked + .toggleSwitchSlider:before {
 #leaderboardPanel {
     display: flex;
     flex-direction: column;
-    width: 460px;
+    width: 580px;
     max-width: 100%;
     max-height: 100%;
     box-sizing: border-box;
-    padding: 14px 16px 12px;
-    background: var(--bt-card);
-    border: 1px solid var(--bt-line);
-    border-radius: 22px;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    padding: 12px 16px 14px;
+    background: linear-gradient(180deg, rgba(24, 29, 41, 0.94), rgba(10, 13, 20, 0.97));
+    border: 2px solid var(--bt-edge);
+    border-radius: 0;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
     pointer-events: auto;
 }
 
 #leaderboardHeader {
-    display: flex;
-    flex: none;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
+    display: contents;
 }
 
 #leaderboardTitle {
-    font-size: 15px;
+    position: relative;
+    flex: none;
+    order: 0;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    font-size: 20px;
     font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: var(--bt-text);
 }
 
+#leaderboardTitle::after {
+    content: '';
+    position: absolute;
+    left: 14%;
+    right: 14%;
+    bottom: 0;
+    height: 8px;
+    background:
+        linear-gradient(135deg, transparent 50%, var(--bt-gold) 50%) 0 0 / 4px 4px no-repeat,
+        linear-gradient(225deg, transparent 50%, var(--bt-gold) 50%) 4px 0 / 4px 4px no-repeat,
+        linear-gradient(45deg, transparent 50%, var(--bt-gold) 50%) 0 4px / 4px 4px no-repeat,
+        linear-gradient(315deg, transparent 50%, var(--bt-gold) 50%) 4px 4px / 4px 4px no-repeat,
+        linear-gradient(135deg, transparent 50%, var(--bt-gold) 50%) calc(100% - 8px) 0 / 4px 4px no-repeat,
+        linear-gradient(225deg, transparent 50%, var(--bt-gold) 50%) calc(100% - 4px) 0 / 4px 4px no-repeat,
+        linear-gradient(45deg, transparent 50%, var(--bt-gold) 50%) calc(100% - 8px) 4px / 4px 4px no-repeat,
+        linear-gradient(315deg, transparent 50%, var(--bt-gold) 50%) calc(100% - 4px) 4px / 4px 4px no-repeat,
+        linear-gradient(90deg, transparent, var(--bt-gold-dim) 12%, var(--bt-gold-dim) 88%, transparent) 0 3px / 100% 2px no-repeat;
+}
+
 #leaderboardSeason {
+    flex: none;
+    order: 2;
+    margin-top: 10px;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 12px;
+    font-size: 16px;
     font-variant-numeric: tabular-nums;
-    color: var(--bt-text-dim);
+    color: var(--bt-yellow);
+}
+
+#leaderboardSeason:empty {
+    display: none;
 }
 
 .lbTabs {
     display: grid;
     flex: none;
+    order: 1;
     grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-top: 10px;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.lbTabs:first-of-type {
+    margin-top: 0;
 }
 
 .lbTab {
     height: 30px;
-    background: var(--bt-card-2);
-    border: 1px solid var(--bt-line);
-    border-radius: 10px;
-    color: var(--bt-text-dim);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-.lbTab:hover,
-.lbTab:focus {
-    border-color: rgba(139, 92, 246, 0.55);
+    padding: 0;
     color: var(--bt-text);
-    outline: none;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-.lbTab.active {
-    background: var(--bt-accent);
-    border-color: transparent;
+.lbTab.active,
+.lbTab.active:hover,
+.lbTab.active:focus {
+    background: linear-gradient(180deg, #24492f 0%, #1a3624 100%);
+    border-color: var(--bt-green-edge);
+    box-shadow: inset 3px 0 0 var(--bt-good), inset 0 -2px 0 rgba(0, 0, 0, 0.3);
     color: #fff;
 }
 
 #leaderboardTable {
     display: flex;
     flex: 1 1 auto;
+    order: 3;
     flex-direction: column;
     min-height: 0;
     margin-top: 12px;
+    padding: 6px 8px 8px 8px;
+    box-sizing: border-box;
+    background: rgba(5, 7, 12, 0.8);
+    border: 2px solid var(--bt-edge);
 }
 
 #leaderboardPanel:not([data-state="ready"]) #leaderboardTable {
@@ -2293,19 +2607,23 @@ input:checked + .toggleSwitchSlider:before {
 
 .leaderboardRow {
     display: grid;
-    grid-template-columns: 30px minmax(0, 1fr) 44px 44px 52px 52px;
+    grid-template-columns: 34px minmax(0, 1fr) 54px 54px 58px 58px;
     align-items: center;
-    height: 28px;
+    height: 26px;
     padding: 0 8px;
     box-sizing: border-box;
-    border-radius: 10px;
-    font-size: 13px;
+    border-radius: 0;
+    font-size: 16px;
     font-variant-numeric: tabular-nums;
     color: var(--bt-text);
 }
 
+#leaderboardRows .leaderboardRow + .leaderboardRow {
+    box-shadow: 0 -1px 0 rgba(160, 170, 190, 0.08);
+}
+
 #leaderboardRows .leaderboardRow:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .leaderboardRow .lbName {
@@ -2320,26 +2638,24 @@ input:checked + .toggleSwitchSlider:before {
 .leaderboardRow .lbKd,
 .leaderboardRow .lbWr {
     text-align: right;
-    opacity: 0.7;
 }
 
-#leaderboardRows .lbKills { color: var(--bt-good); }
-#leaderboardRows .lbDeaths { color: #ff6b7a; }
-#leaderboardRows .lbKd { color: #ffd84a; }
-#leaderboardRows .lbWr { color: #55ddff; }
+#leaderboardRows .lbKills { color: #55f070; }
+#leaderboardRows .lbDeaths { color: var(--bt-bad); }
+#leaderboardRows .lbKd { color: var(--bt-yellow); }
+#leaderboardRows .lbWr { color: var(--bt-cyan); }
 
 #leaderboardTable[data-sort="kills"] .lbKills,
 #leaderboardTable[data-sort="kd"] .lbKd,
 #leaderboardTable[data-sort="winrate"] .lbWr {
-    font-weight: 800;
-    opacity: 1;
+    font-weight: 700;
 }
 
 .leaderboardRow.lbHead {
     height: 22px;
     margin-right: 8px;
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 400;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--bt-text-dim);
@@ -2348,10 +2664,7 @@ input:checked + .toggleSwitchSlider:before {
 .leaderboardRow.lbHead .lbKills,
 .leaderboardRow.lbHead .lbDeaths,
 .leaderboardRow.lbHead .lbKd,
-.leaderboardRow.lbHead .lbWr {
-    color: var(--bt-text-dim);
-}
-
+.leaderboardRow.lbHead .lbWr,
 .leaderboardRow.lbHead .lbRank {
     color: var(--bt-text-dim);
 }
@@ -2359,7 +2672,7 @@ input:checked + .toggleSwitchSlider:before {
 #leaderboardTable[data-sort="kills"] .lbHead .lbKills,
 #leaderboardTable[data-sort="kd"] .lbHead .lbKd,
 #leaderboardTable[data-sort="winrate"] .lbHead .lbWr {
-    color: var(--bt-accent-2);
+    color: var(--bt-gold);
 }
 
 .leaderboardRow .lbRank {
@@ -2367,24 +2680,25 @@ input:checked + .toggleSwitchSlider:before {
     color: var(--bt-text-dim);
 }
 
-.leaderboardRow.place1 { background: rgba(255, 216, 74, 0.08); }
-.leaderboardRow.place1 .lbRank { color: #ffd84a; }
+.leaderboardRow.place1 { background: rgba(240, 180, 41, 0.1); }
+.leaderboardRow.place1 .lbRank { color: var(--bt-yellow); }
 .leaderboardRow.place2 .lbRank { color: #d8dee8; }
 .leaderboardRow.place3 .lbRank { color: #d08848; }
 
 #leaderboardRows .leaderboardRow.self {
-    background: rgba(139, 92, 246, 0.18);
-    box-shadow: inset 3px 0 0 var(--bt-accent);
+    background: rgba(40, 130, 170, 0.28);
+    box-shadow: inset 3px 0 0 var(--bt-cyan);
 }
 
 #leaderboardState {
     display: flex;
     flex: none;
+    order: 3;
     flex-direction: column;
     align-items: center;
     gap: 10px;
     padding: 28px 0 22px;
-    font-size: 13px;
+    font-size: 16px;
     color: var(--bt-text-dim);
 }
 
@@ -2396,18 +2710,12 @@ input:checked + .toggleSwitchSlider:before {
 #leaderboardRetry {
     height: 30px;
     padding: 0 16px;
-    background: var(--bt-card-2);
-    border: 1px solid var(--bt-line-strong);
-    border-radius: 10px;
-    color: var(--bt-text);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 16px;
     cursor: pointer;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.15s ease;
 }
 
-#leaderboardRetry:hover,
-#leaderboardRetry:focus {
-    border-color: rgba(139, 92, 246, 0.55);
-    outline: none;
+.settingsMemoryHeader,
+.settingsMemoryLabel {
+    font-size: 16px;
 }
