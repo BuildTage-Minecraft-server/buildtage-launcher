@@ -3492,7 +3492,7 @@ input:checked + .toggleSwitchSlider {
 }
 
 .btClick:not(#launch_button) {
-    animation: btPress 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: btPress 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 
@@ -3523,11 +3523,11 @@ input:checked + .toggleSwitchSlider {
     opacity: 1;
     transform-origin: left center;
     background: linear-gradient(90deg, rgba(119, 204, 119, 0.1), rgba(170, 255, 170, 0.5) 85%, rgba(255, 255, 255, 0.75));
-    animation: btPlayWave 0.4s cubic-bezier(0.3, 0.7, 0.3, 1);
+    animation: btPlayWave 0.22s cubic-bezier(0.3, 0.7, 0.3, 1);
 }
 
 #launch_button.btClick {
-    animation: btPlayPop 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: btPlayPop 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 @keyframes btPlayPop {

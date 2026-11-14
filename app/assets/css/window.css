@@ -270,7 +270,7 @@ button:not(:disabled):active {
 }
 
 button.btClick {
-    animation: btPress 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: btPress 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 
