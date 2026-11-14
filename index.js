@@ -558,7 +558,6 @@ function createWindow() {
         height: 552,
         icon: getPlatformIcon('vis-icon'),
         frame: false,
-        transparent: true,
         show: false,
         webPreferences: {
             preload: path.join(__dirname, 'app', 'assets', 'js', 'preloader.js'),
@@ -566,7 +565,7 @@ function createWindow() {
             contextIsolation: false,
             devTools: ConfigManager.getChannel() !== 'latest'
         },
-        backgroundColor: '#00000000'
+        backgroundColor: '#08090f'
     })
     remoteMain.enable(win.webContents)
 
