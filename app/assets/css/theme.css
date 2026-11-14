@@ -3505,11 +3505,11 @@ input:checked + .toggleSwitchSlider {
 }
 
 .btClick:not(#launch_button) {
-    animation: btPress 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: btPress 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 #launch_button.btClick {
-    animation: btPlayPress 0.52s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: btPlayPress 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {

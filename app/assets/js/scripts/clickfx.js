@@ -9,6 +9,6 @@
         target.classList.remove('btClick')
         void target.offsetWidth
         target.classList.add('btClick')
-        setTimeout(() => target.classList.remove('btClick'), 520)
+        setTimeout(() => target.classList.remove('btClick'), 320)
     }, true)
 })()
