@@ -24,9 +24,10 @@
 const { DistributionAPI } = require('@visoftware/vis-launcher-core/common')
 
 const ConfigManager = require('./configmanager')
+const isDev = require('./isdev')
 const { CDN_URL, DISTRO_AUTH_HEADERS } = require('./apiconstants')
 
-const devMode = process.env.LAUNCHER_DEV_DISTRO === '1'
+const devMode = isDev && process.env.LAUNCHER_DEV_DISTRO === '1'
 
 const api = new DistributionAPI(
     ConfigManager.getLauncherDirectory(),

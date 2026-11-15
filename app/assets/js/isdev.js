@@ -22,7 +22,9 @@
 
 
 'use strict'
+const electron = require('electron')
+const app = electron.app || require('@electron/remote').app
 const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1
 const isEnvSet = 'ELECTRON_IS_DEV' in process.env
 
-module.exports = isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath))
+module.exports = app.isPackaged ? false : (isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath)))

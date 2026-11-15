@@ -63,6 +63,44 @@ async function authLibArgs(args) {
     }
 }
 
+const JVM_OPTION_ALLOWLIST = [
+    /^-Xm[nsx]\d+[kKmMgG]$/,
+    /^-Xss\d+[kKmMgG]$/,
+    /^-Xshare:(?:auto|off)$/,
+    /^-XX:[+-][A-Za-z0-9]+$/,
+    /^-XX:[A-Za-z0-9]+=[A-Za-z0-9.]+$/,
+    /^-Dfile\.encoding=[A-Za-z0-9-]+$/,
+    /^-Duser\.(?:language|country)=[A-Za-z_-]+$/,
+    /^-Djava\.net\.preferIPv4Stack=(?:true|false)$/
+]
+
+const JVM_OPTION_BLOCKLIST = /^-XX:[+-]?(?:Flags|VMOptionsFile|OnError|OnOutOfMemoryError|ErrorFile|SharedArchiveFile|ArchiveClassesAtExit|AllocateHeapAt|UnlockDiagnosticVMOptions|EnableDynamicAgentLoading|StartAttachListener)\b/
+
+const BLOCKED_ENV_KEYS = /^(?:JAVA_TOOL_OPTIONS|_JAVA_OPTIONS|JDK_JAVA_OPTIONS)$/i
+
+function sanitizeJvmOptions(options) {
+    const safe = []
+    for(const option of Array.isArray(options) ? options : []) {
+        if(typeof option === 'string' && JVM_OPTION_ALLOWLIST.some(rule => rule.test(option)) && !JVM_OPTION_BLOCKLIST.test(option)) {
+            safe.push(option)
+        } else {
+            logger.warn('Dropped disallowed JVM option:', option)
+        }
+    }
+    return safe
+}
+
+function buildGameEnv() {
+    const env = { ...process.env }
+    for(const key of Object.keys(env)) {
+        if(BLOCKED_ENV_KEYS.test(key)) {
+            logger.warn('Removed environment variable from the game process:', key)
+            delete env[key]
+        }
+    }
+    return env
+}
+
 /**
  * Only forge and fabric are top level mod loaders.
  * 
@@ -126,7 +164,8 @@ class ProcessBuilder {
 
         const child = child_process.spawn(ConfigManager.getJavaExecutable(this.server.rawServer.id), args, {
             cwd: this.gameDir,
-            detached: ConfigManager.getLaunchDetached()
+            detached: ConfigManager.getLaunchDetached(),
+            env: buildGameEnv()
         })
 
         if(ConfigManager.getLaunchDetached()){
@@ -503,7 +542,7 @@ class ProcessBuilder {
         }
         args.push('-Xmx' + ConfigManager.getMaxRAM(this.server.rawServer.id))
         args.push('-Xms' + ConfigManager.getMinRAM(this.server.rawServer.id))
-        args = args.concat(ConfigManager.getJVMOptions(this.server.rawServer.id))
+        args = args.concat(sanitizeJvmOptions(ConfigManager.getJVMOptions(this.server.rawServer.id)))
         args.push('-Djava.library.path=' + tempNativePath)
 
         // Main Java Class
@@ -554,7 +593,7 @@ class ProcessBuilder {
         }
         args.push('-Xmx' + ConfigManager.getMaxRAM(this.server.rawServer.id))
         args.push('-Xms' + ConfigManager.getMinRAM(this.server.rawServer.id))
-        args = args.concat(ConfigManager.getJVMOptions(this.server.rawServer.id))
+        args = args.concat(sanitizeJvmOptions(ConfigManager.getJVMOptions(this.server.rawServer.id)))
 
         // Main Java Class
         args.push(this.modManifest.mainClass)

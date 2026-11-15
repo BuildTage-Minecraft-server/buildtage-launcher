@@ -563,11 +563,15 @@ function createWindow() {
             preload: path.join(__dirname, 'app', 'assets', 'js', 'preloader.js'),
             nodeIntegration: true,
             contextIsolation: false,
-            devTools: ConfigManager.getChannel() !== 'latest'
+            devTools: isDev
         },
         backgroundColor: '#08090f'
     })
     remoteMain.enable(win.webContents)
+
+    if(!isDev) {
+        win.webContents.on('devtools-opened', () => win.webContents.closeDevTools())
+    }
 
     const data = {
         bkid: Math.floor((Math.random() * fs.readdirSync(path.join(__dirname, 'app', 'assets', 'images', 'backgrounds')).length)),
