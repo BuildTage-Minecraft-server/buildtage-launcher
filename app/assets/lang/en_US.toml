@@ -67,10 +67,9 @@ loginForgotPasswordLink = "https://auth.nekrasovdev.space/web/user"
 loginForgotPasswordText = "Account settings"
 loginRememberMeText = "Remember me"
 loginButtonText = "LOG IN"
-loginNeedAccountLink = "https://cbo.nekrasovdev.space/register"
-loginNeedAccountText = "No account? Register on the website"
-loginPasswordDisclaimer1 = "Your password is sent directly to the game account server and is never stored."
-loginPasswordDisclaimer2 = "Based on VIS Launcher by VI Software and contributors, licensed under AGPL-3.0."
+loginShowPassword = "Show"
+loginHidePassword = "Hide"
+loginRegisterButtonText = "REGISTER"
 
 [ejs.loginOptions]
 loginOptionsTitle = "Sign in"

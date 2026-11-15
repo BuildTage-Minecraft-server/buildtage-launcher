@@ -3564,33 +3564,83 @@ body {
     background-repeat: no-repeat, repeat, no-repeat, no-repeat !important;
 }
 
-#loginCancelContainer {
-    top: 44px;
-    right: 32px;
-    z-index: 5;
+#loginForm {
+    background: rgba(10, 13, 20, 0.97);
 }
 
-#loginCancelButton {
-    padding: 8px 16px;
-    border: 2px solid var(--bt-edge);
-    background: linear-gradient(180deg, #252d3d 0%, #1a2030 100%);
-    color: var(--bt-text);
+.loginFieldContainer {
+    position: relative;
+}
+
+#loginPassword {
+    padding-right: 130px;
+}
+
+#loginPasswordToggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 12px;
+    padding: 0 14px;
+    border: none;
+    background: none;
+    color: var(--bt-text-dim);
+    font-size: 16px;
     cursor: pointer;
 }
 
-#loginCancelButton:hover,
-#loginCancelButton:focus {
+#loginPasswordToggle:hover,
+#loginPasswordToggle:focus {
+    color: var(--bt-text);
+    outline: none;
+}
+
+#loginFormError {
+    display: none;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 0 4px;
+    padding: 8px 12px;
+    border: 2px solid var(--bt-bad);
+    background: rgba(255, 93, 93, 0.1);
+    color: #ffb4b4;
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+#loginActions {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+#loginActions #loginButton {
+    flex: 1 1 0;
+    width: auto;
+    margin: 0;
+}
+
+#loginRegisterButton {
+    flex: 1 1 0;
+    padding: 12px 16px;
+    border: 2px solid var(--bt-edge);
+    background: linear-gradient(180deg, #252d3d 0%, #1a2030 100%);
+    color: var(--bt-text);
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+#loginRegisterButton:hover,
+#loginRegisterButton:focus {
     border-color: var(--bt-edge-hi);
     outline: none;
 }
 
-#loginCancelButton:disabled {
+#loginRegisterButton:disabled {
     opacity: 0.5;
-}
-
-#loginCancelText {
-    font-size: 16px;
-    color: inherit;
+    cursor: not-allowed;
 }
 
 #loginButton:disabled {
@@ -3601,12 +3651,4 @@ body {
 
 #loginButton[loading] {
     opacity: 1;
-}
-
-#loginRegisterSpan {
-    margin: 10px 0 8px;
-}
-
-#loginRegisterSpan a {
-    font-size: 18px;
 }

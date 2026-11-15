@@ -27,9 +27,9 @@ loginEmailPlaceholder = "НИК"
 loginPasswordError = "* Обязательное поле"
 loginPasswordPlaceholder = "ПАРОЛЬ"
 loginButtonText = "ВОЙТИ"
-loginNeedAccountText = "Нет аккаунта? Зарегистрируйтесь на сайте"
-loginPasswordDisclaimer1 = "Пароль отправляется напрямую на сервер аккаунтов и нигде не хранится."
-loginPasswordDisclaimer2 = "Основано на VIS Launcher (VI Software), лицензия AGPL-3.0."
+loginShowPassword = "Показать"
+loginHidePassword = "Скрыть"
+loginRegisterButtonText = "РЕГИСТРАЦИЯ"
 
 [ejs.loginOptions]
 loginOptionsTitle = "Вход"
