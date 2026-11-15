@@ -22,9 +22,8 @@
 
 <div id="loginContainer" style="display: none;">
     <div id="loginCancelContainer" style="display: none;">
-        <button id="loginCancelButton">
-            <div id="loginCancelIcon">X</div>
-            <span id="loginCancelText"><%- lang('login.loginCancelText') %></span>
+        <button id="loginCancelButton" type="button">
+            <span id="loginCancelText">&larr; <%- lang('login.loginCancelText') %></span>
         </button>
     </div>
     <div id="loginContent">
@@ -49,25 +48,9 @@
                 <span class="loginErrorSpan" id="loginPasswordError"><%- lang('login.loginPasswordError') %></span>
                 <input id="loginPassword" class="loginField" type="password" placeholder="<%- lang('login.loginPasswordPlaceholder') %>"/>
             </div>
-            <div id="loginOptions">
-                <span class="loginSpanDim">
-                    <a href="<%- lang('login.loginForgotPasswordLink') %>"><%- lang('login.loginForgotPasswordText') %></a>
-                </span>
-                <label id="checkmarkContainer">
-                    <input id="loginRememberOption" type="checkbox" checked>
-                    <span id="loginRememberText" class="loginSpanDim"><%- lang('login.loginRememberMeText') %></span>
-                    <span class="loginCheckmark"></span>
-                </label>
-            </div>
-            <button id="loginButton" disabled>
+            <button id="loginButton" type="submit" disabled>
                 <div id="loginButtonContent">
                     <%- lang('login.loginButtonText') %>
-                    <svg id="loginSVG" viewBox="0 0 24.87 13.97">
-                        <defs>
-                            <style>.arrowLine{fill:none;stroke:#FFF;stroke-width:2px;transition: 0.25s ease;}</style>
-                        </defs>
-                        <polyline class="arrowLine" points="0.71 13.26 12.56 1.41 24.16 13.02"/>
-                    </svg>
                     <div class="circle-loader">
                         <div class="checkmark draw"></div>
                     </div>

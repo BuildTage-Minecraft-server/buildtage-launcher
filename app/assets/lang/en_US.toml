@@ -57,7 +57,7 @@ leaderboardColPlayer = "Player"
 leaderboardRetryButton = "Try again"
 
 [ejs.login]
-loginCancelText = "Cancel"
+loginCancelText = "Back"
 loginSubheader = "Sign in with your game account"
 loginEmailError = "* Invalid value"
 loginEmailPlaceholder = "USERNAME"
@@ -67,8 +67,8 @@ loginForgotPasswordLink = "https://auth.nekrasovdev.space/web/user"
 loginForgotPasswordText = "Account settings"
 loginRememberMeText = "Remember me"
 loginButtonText = "LOG IN"
-loginNeedAccountLink = "https://auth.nekrasovdev.space/web/registration"
-loginNeedAccountText = "Need an account?"
+loginNeedAccountLink = "https://cbo.nekrasovdev.space/register"
+loginNeedAccountText = "No account? Register on the website"
 loginPasswordDisclaimer1 = "Your password is sent directly to the game account server and is never stored."
 loginPasswordDisclaimer2 = "Based on VIS Launcher by VI Software and contributors, licensed under AGPL-3.0."
 
@@ -115,7 +115,7 @@ navLauncher = "Launcher"
 navAbout = "About"
 navUpdates = "Updates"
 navDone = "Done"
-tabAccountHeaderText = "Account Settings"
+tabAccountHeaderText = "Account"
 skinTitle = "Skin"
 skinDesc = "Drag the preview to rotate it. Upload a PNG file to change your skin."
 skinEmpty = "No skin set"
@@ -372,22 +372,14 @@ visnosupport = '<br><br><small>This is an error with the experience modpack, not
 executables = "Executables"
 allFiles = "All files"
 
-[js.settings.authAccountSelect]
-selectButton = "Select Account"
-selectedButton = "Account Selected ✓"
-
 [js.settings.authAccountLogout]
-lastAccountWarningTitle = "Warning<br>This is your last account"
-lastAccountWarningMessage = "To use the launcher, you must be logged in to at least one account. You will need to log in again afterward.<br><br>Are you sure you want to log out?"
-confirmButton = "I'm Sure"
+lastAccountWarningTitle = "Log out?"
+lastAccountWarningMessage = "You will need to sign in again to play."
+confirmButton = "Log out"
 cancelButton = "Cancel"
 
 [js.settings.authAccountPopulate]
 username = "Account name"
-rank = "Rank"
-uuid = "UUID"
-selectAccount = "Select Account"
-selectedAccount = "Account Selected ✓"
 logout = "Log Out"
 
 [js.settings.skin]

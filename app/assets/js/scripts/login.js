@@ -35,8 +35,6 @@ const loginEmailError       = document.getElementById('loginEmailError')
 const loginUsername         = document.getElementById('loginUsername')
 const loginPasswordError    = document.getElementById('loginPasswordError')
 const loginPassword         = document.getElementById('loginPassword')
-const checkmarkContainer    = document.getElementById('checkmarkContainer')
-const loginRememberOption   = document.getElementById('loginRememberOption')
 const loginButton           = document.getElementById('loginButton')
 const loginForm             = document.getElementById('loginForm')
 
@@ -107,7 +105,7 @@ function validatePassword(value){
         }
     } else {
         lp = false
-        showError(loginPasswordError, Lang.queryJS('login.error.invalidValue'))
+        showError(loginPasswordError, Lang.queryJS('login.error.requiredValue'))
         loginDisabled(true)
     }
 }
@@ -166,12 +164,6 @@ function formDisabled(v){
     loginCancelButton.disabled = v
     loginUsername.disabled = v
     loginPassword.disabled = v
-    if(v){
-        checkmarkContainer.setAttribute('disabled', v)
-    } else {
-        checkmarkContainer.removeAttribute('disabled')
-    }
-    loginRememberOption.disabled = v
 }
 
 let loginViewOnSuccess = VIEWS.landing
@@ -199,7 +191,12 @@ loginCancelButton.onclick = (e) => {
 }
 
 // Disable default form behavior.
-loginForm.onsubmit = () => { return false }
+loginForm.onsubmit = (e) => {
+    if(e && e.preventDefault){
+        e.preventDefault()
+    }
+    return false
+}
 
 // Bind login button behavior.
 loginButton.addEventListener('click', () => {

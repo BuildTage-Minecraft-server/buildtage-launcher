@@ -502,6 +502,9 @@ function processLogOut(val, isLastAccount){
 function refreshAuthAccountSelected(uuid){
     Array.from(document.getElementsByClassName('settingsAuthAccount')).map((val) => {
         const selBtn = val.getElementsByClassName('settingsAuthAccountSelect')[0]
+        if(selBtn == null){
+            return
+        }
         if(uuid === val.getAttribute('uuid')){
             selBtn.setAttribute('selected', '')
             selBtn.innerHTML = Lang.queryJS('settings.authAccountSelect.selectedButton')
@@ -525,8 +528,6 @@ function populateAuthAccounts(){
     if(authKeys.length === 0){
         return
     }
-    const selectedUUID = ConfigManager.getSelectedAccount().uuid
-
     let mojangAuthAccountStr = ''
 
     authKeys.forEach((val) => {
@@ -541,7 +542,6 @@ function populateAuthAccounts(){
                     </div>
                 </div>
                 <div class="settingsAuthAccountActions">
-                    <button class="settingsAuthAccountSelect" ${selectedUUID === acc.uuid ? 'selected>' + Lang.queryJS('settings.authAccountPopulate.selectedAccount') : '>' + Lang.queryJS('settings.authAccountPopulate.selectAccount')}</button>
                     <div class="settingsAuthAccountWrapper">
                         <button class="settingsAuthAccountLogOut">${Lang.queryJS('settings.authAccountPopulate.logout')}</button>
                     </div>

@@ -3563,3 +3563,50 @@ body {
     background-position: 0 0, 12px 12px, 0 0, 0 0 !important;
     background-repeat: no-repeat, repeat, no-repeat, no-repeat !important;
 }
+
+#loginCancelContainer {
+    top: 44px;
+    right: 32px;
+    z-index: 5;
+}
+
+#loginCancelButton {
+    padding: 8px 16px;
+    border: 2px solid var(--bt-edge);
+    background: linear-gradient(180deg, #252d3d 0%, #1a2030 100%);
+    color: var(--bt-text);
+    cursor: pointer;
+}
+
+#loginCancelButton:hover,
+#loginCancelButton:focus {
+    border-color: var(--bt-edge-hi);
+    outline: none;
+}
+
+#loginCancelButton:disabled {
+    opacity: 0.5;
+}
+
+#loginCancelText {
+    font-size: 16px;
+    color: inherit;
+}
+
+#loginButton:disabled {
+    opacity: 0.55;
+    filter: none;
+    cursor: not-allowed;
+}
+
+#loginButton[loading] {
+    opacity: 1;
+}
+
+#loginRegisterSpan {
+    margin: 10px 0 8px;
+}
+
+#loginRegisterSpan a {
+    font-size: 18px;
+}
