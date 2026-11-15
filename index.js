@@ -40,6 +40,10 @@ const ModStoreManager = require('./app/assets/js/modstoremanager')
 const pjson = require('./package.json')
 const { Client: DiscordRPCClient } = require('@visoftware/discord-rpc')
 
+if(!isDev && process.argv.some(arg => /^--(?:remote-debugging|inspect|debug|js-flags)/.test(arg))) {
+    app.exit(1)
+}
+
 let discordClient = null
 let discordActivity = null
 

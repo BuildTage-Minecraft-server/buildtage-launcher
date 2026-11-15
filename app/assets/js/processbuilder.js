@@ -46,20 +46,62 @@ const { AUTH_BASE_URL }     = require('./apiconstants')
  * @param {*} args 
  */
 
-async function authLibArgs(args) {
-    let authlibInjectorPath
-    if (process.env.NODE_ENV === 'development' || !app.isPackaged) {
-        authlibInjectorPath = path.join(app.getAppPath(), 'libraries', 'java', 'authlibinjector.jar')
-    } else {
-        authlibInjectorPath = path.join(process.resourcesPath, 'libraries', 'java', 'authlibinjector.jar')
-    }
+function authLibArgs(args) {
+    const authlibInjectorPath = app.isPackaged
+        ? path.join(process.resourcesPath, 'libraries', 'java', 'authlibinjector.jar')
+        : path.join(app.getAppPath(), 'libraries', 'java', 'authlibinjector.jar')
+    verifyAuthlibInjector(authlibInjectorPath)
     args.unshift(`-javaagent:${authlibInjectorPath}=${AUTH_BASE_URL}/authlib-injector`)
     args.push('-Dauthlibinjector.noShowServerName')
     if(disableHttpd){
-        args.push(args.push('-Dauthlibinjector.disableHttpd'))
+        args.push('-Dauthlibinjector.disableHttpd')
     }
     if(authlibDebug){
         args.push('-Dauthlibinjector.debug=' + authlibDebug)
+    }
+}
+
+function verifyAuthlibInjector(jarPath) {
+    if(!app.isPackaged) {
+        return
+    }
+    let expected
+    try {
+        expected = require('./integrity.json')['authlibinjector.jar']
+    } catch {
+        expected = null
+    }
+    const actual = crypto.createHash('sha256').update(fs.readFileSync(jarPath)).digest('hex')
+    if(typeof expected !== 'string' || expected !== actual) {
+        throw new Error('authlib-injector integrity check failed')
+    }
+}
+
+const JAVA_EXECUTABLE_NAME = /^javaw?(?:\.exe)?$/i
+
+const NATIVE_BINARY_MAGIC = [
+    Buffer.from([0x4d, 0x5a]),
+    Buffer.from([0x7f, 0x45, 0x4c, 0x46]),
+    Buffer.from([0xfe, 0xed, 0xfa, 0xce]),
+    Buffer.from([0xfe, 0xed, 0xfa, 0xcf]),
+    Buffer.from([0xce, 0xfa, 0xed, 0xfe]),
+    Buffer.from([0xcf, 0xfa, 0xed, 0xfe]),
+    Buffer.from([0xca, 0xfe, 0xba, 0xbe])
+]
+
+function assertNativeJavaExecutable(executable) {
+    if(typeof executable !== 'string' || !JAVA_EXECUTABLE_NAME.test(path.basename(executable))) {
+        throw new Error('Unexpected Java executable: ' + executable)
+    }
+    const header = Buffer.alloc(4)
+    const fd = fs.openSync(fs.realpathSync(executable), 'r')
+    try {
+        fs.readSync(fd, header, 0, header.length, 0)
+    } finally {
+        fs.closeSync(fd)
+    }
+    if(!NATIVE_BINARY_MAGIC.some(magic => header.subarray(0, magic.length).equals(magic))) {
+        throw new Error('Java executable is not a native binary: ' + executable)
     }
 }
 
@@ -74,9 +116,13 @@ const JVM_OPTION_ALLOWLIST = [
     /^-Djava\.net\.preferIPv4Stack=(?:true|false)$/
 ]
 
-const JVM_OPTION_BLOCKLIST = /^-XX:[+-]?(?:Flags|VMOptionsFile|OnError|OnOutOfMemoryError|ErrorFile|SharedArchiveFile|ArchiveClassesAtExit|AllocateHeapAt|UnlockDiagnosticVMOptions|EnableDynamicAgentLoading|StartAttachListener)\b/
+const JVM_OPTION_BLOCKLIST = /^-XX:[+-]?(?:Flags|VMOptionsFile|OnError|OnOutOfMemoryError|ErrorFile|SharedArchiveFile|ArchiveClassesAtExit|AllocateHeapAt|UnlockDiagnosticVMOptions|EnableDynamicAgentLoading|StartAttachListener|DisableAttachMechanism)\b/
 
-const BLOCKED_ENV_KEYS = /^(?:JAVA_TOOL_OPTIONS|_JAVA_OPTIONS|JDK_JAVA_OPTIONS)$/i
+const ENFORCED_JVM_OPTIONS = ['-XX:+DisableAttachMechanism']
+
+const PURGED_DIRECTORIES = ['mods', 'coremods', 'shaderpacks', 'resourcepacks', 'texturepacks']
+
+const BLOCKED_ENV_KEYS = /^(?:JAVA_TOOL_OPTIONS|_JAVA_OPTIONS|JDK_JAVA_OPTIONS|LD_PRELOAD|LD_AUDIT|DYLD_INSERT_LIBRARIES)$/i
 
 function sanitizeJvmOptions(options) {
     const safe = []
@@ -87,7 +133,7 @@ function sanitizeJvmOptions(options) {
             logger.warn('Dropped disallowed JVM option:', option)
         }
     }
-    return safe
+    return safe.concat(ENFORCED_JVM_OPTIONS)
 }
 
 function buildGameEnv() {
@@ -133,6 +179,7 @@ class ProcessBuilder {
      * Convienence method to run the functions typically used to build a process.
      */
     build(){
+        assertNativeJavaExecutable(ConfigManager.getJavaExecutable(this.server.rawServer.id))
         fs.ensureDirSync(this.gameDir)
         this.purgeThirdPartyContent()
         const tempNativePath = path.join(os.tmpdir(), ConfigManager.getTempNativeFolder(), crypto.pseudoRandomBytes(16).toString('hex'))
@@ -251,8 +298,8 @@ class ProcessBuilder {
     }
 
     /**
-     * Remove everything from the mods and shaderpacks folders of the instance
-     * which is not declared by the distribution.
+     * Remove everything from the mods, shaderpacks and resourcepacks folders of
+     * the instance which is not declared by the distribution.
      */
     purgeThirdPartyContent(){
         const normalize = p => {
@@ -297,10 +344,19 @@ class ProcessBuilder {
             }
         }
 
-        for(const dirName of ['mods', 'shaderpacks']){
+        for(const dirName of PURGED_DIRECTORIES){
             const dir = path.join(this.gameDir, dirName)
-            if(fs.existsSync(dir)){
+            let stat
+            try {
+                stat = fs.lstatSync(dir)
+            } catch {
+                continue
+            }
+            if(stat.isDirectory()){
                 purge(dir)
+            } else {
+                fs.removeSync(dir)
+                logger.info('Removed third-party entry:', dir)
             }
         }
     }

@@ -8,3 +8,4 @@
 ./cert/*
 gpg.log
 /.env
+/app/assets/js/integrity.json

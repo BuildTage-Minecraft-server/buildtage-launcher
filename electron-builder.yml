@@ -8,6 +8,12 @@ copyright: 'Copyright © 2026 Asesu23. Based on VIS Launcher, Copyright © 2022-
 asar: true
 compression: 'maximum'
 
+electronFuses:
+  enableNodeOptionsEnvironmentVariable: false
+  enableNodeCliInspectArguments: false
+  enableEmbeddedAsarIntegrityValidation: true
+  onlyLoadAppFromAsar: true
+
 files:
   - '**/*'
   - '.env'

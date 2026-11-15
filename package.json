@@ -11,6 +11,7 @@
   "scripts": {
     "start": "electron . --no-sandbox --ozone-platform=x11",
     "dev": "electron . --devtools --no-sandbox --ozone-platform=x11",
+    "predist": "node scripts/generate-integrity.js",
     "dist": "electron-builder build",
     "dist:win": "npm run dist -- --win",
     "dist:mac": "npm run dist -- --mac",
