@@ -20,34 +20,13 @@
     Website: https://visoftware.dev
 */
 
-const fs = require('fs')
-const path = require('path')
-
-function readEnv(name) {
-    if(process.env[name]) {
-        return process.env[name]
-    }
-    try {
-        const lines = fs.readFileSync(path.join(__dirname, '..', '..', '..', '.env'), 'utf8').split(/\r?\n/)
-        for(const line of lines) {
-            const match = /^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/.exec(line)
-            if(match != null && match[1] === name) {
-                return match[2].replace(/^(['"])(.*)\1$/, '$2')
-            }
-        }
-    } catch {
-        return ''
-    }
-    return ''
-}
-
 exports.API_BASE_URL = 'https://auth.nekrasovdev.space'
 exports.MAINWEBSITE_URL = 'https://nekrasovdev.space'
 exports.CDN_URL = 'https://cdn.nekrasovdev.space/distribution.json'
 exports.AUTH_BASE_URL = 'https://auth.nekrasovdev.space'
 exports.REGISTRATION_URL = 'https://cbo.nekrasovdev.space/register'
 exports.ACCOUNT_URL = 'https://auth.nekrasovdev.space/web/user'
-exports.DRASL_ADMIN_TOKEN = readEnv('DRASL_ADMIN_TOKEN')
+exports.ACCOUNT_API_URL = 'https://account.nekrasovdev.space'
 exports.LEADERBOARD_API_URL = ''
 exports.LEADERBOARD_API_PORT = 8765
 

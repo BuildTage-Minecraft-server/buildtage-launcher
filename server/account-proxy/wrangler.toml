@@ -1,0 +1,10 @@
+name = "buildtage-account-proxy"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+DRASL_URL = "https://auth.nekrasovdev.space"
+
+[[routes]]
+pattern = "account.nekrasovdev.space"
+custom_domain = true

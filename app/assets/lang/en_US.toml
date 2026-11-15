@@ -360,6 +360,11 @@ clearModstoreErrorTitle = "Error Clearing Cache"
 clearModstoreErrorMessage = "Failed to clear modstore cache: {error}"
 okay = "OK"
 
+[js.processbuilder.injection]
+header = "The game was stopped"
+message = "Unrecognized code was loaded into the game process, so the game was closed. Remove any third party overlays or injectors and start the game again."
+close = "Close"
+
 [js.processbuilder.exit]
 exitErrorHeader = "The game closed with an error code"
 message = "The game unexpectedly closed with the following code: "

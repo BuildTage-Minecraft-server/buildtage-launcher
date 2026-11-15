@@ -38,6 +38,7 @@ const logger = LoggerUtil.getLogger('ProcessBuilder')
 const disableHttpd         = localStorage.getItem('disableHttpd')
 const authlibDebug          = localStorage.getItem('authlibDebug')
 const { AUTH_BASE_URL }     = require('./apiconstants')
+const { startInjectionGuard } = require('./injectionguard')
 
 
 
@@ -92,6 +93,9 @@ const NATIVE_BINARY_MAGIC = [
 function assertNativeJavaExecutable(executable) {
     if(typeof executable !== 'string' || !JAVA_EXECUTABLE_NAME.test(path.basename(executable))) {
         throw new Error('Unexpected Java executable: ' + executable)
+    }
+    if(!ConfigManager.isManagedJavaExecutable(executable)) {
+        throw new Error('Java executable is outside of the launcher runtime: ' + executable)
     }
     const header = Buffer.alloc(4)
     const fd = fs.openSync(fs.realpathSync(executable), 'r')
@@ -209,10 +213,23 @@ class ProcessBuilder {
 
         logger.info('Launch Arguments:', args)
 
-        const child = child_process.spawn(ConfigManager.getJavaExecutable(this.server.rawServer.id), args, {
+        const javaExecutable = ConfigManager.getJavaExecutable(this.server.rawServer.id)
+        const child = child_process.spawn(javaExecutable, args, {
             cwd: this.gameDir,
             detached: ConfigManager.getLaunchDetached(),
             env: buildGameEnv()
+        })
+
+        let injectedModules = null
+        const guard = startInjectionGuard({
+            pid: child.pid,
+            javaHome: path.dirname(path.dirname(fs.realpathSync(javaExecutable))),
+            nativesDir: tempNativePath,
+            onViolation: modules => {
+                injectedModules = modules
+                logger.error('Foreign modules detected in the game process, terminating:', modules)
+                child.kill('SIGKILL')
+            }
         })
 
         if(ConfigManager.getLaunchDetached()){
@@ -238,8 +255,22 @@ class ProcessBuilder {
                 win.restore()
             }
             win.show()
+            guard.stop()
             logger.info('Exited with code', code)
-            if(code != 0){
+            if(injectedModules != null){
+                setOverlayContent(
+                    Lang.queryJS('processbuilder.injection.header'),
+                    Lang.queryJS('processbuilder.injection.message') + '<br><br><small>' + injectedModules.map(entry => path.basename(entry)).join(', ') + '</small>',
+                    Lang.queryJS('processbuilder.injection.close')
+                )
+                setOverlayHandler(() => {
+                    toggleOverlay(false)
+                })
+                setDismissHandler(() => {
+                    toggleOverlay(false)
+                })
+                toggleOverlay(true, true)
+            } else if(code != 0){
                 setOverlayContent(
                     Lang.queryJS('processbuilder.exit.exitErrorHeader'),
                     Lang.queryJS('processbuilder.exit.message') + code + Lang.queryJS('processbuilder.exit.visnosupport'),

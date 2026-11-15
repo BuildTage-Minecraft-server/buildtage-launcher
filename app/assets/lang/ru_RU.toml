@@ -232,6 +232,11 @@ preparingToLaunch = "Подготовка к запуску..."
 launchingGame = "Запуск игры..."
 doneEnjoyServer = "Готово. Приятной игры!"
 
+[js.processbuilder.injection]
+header = "Игра была остановлена"
+message = "В процесс игры была загружена неопознанная библиотека, поэтому игра закрыта. Отключите сторонние оверлеи и инжекторы и запустите игру снова."
+close = "Закрыть"
+
 [js.overlay]
 dismiss = "Закрыть"
 clearModstoreErrorTitle = "Ошибка очистки кэша"

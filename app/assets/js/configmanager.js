@@ -753,6 +753,36 @@ exports.setJavaExecutable = function(serverid, executable){
 }
 
 /**
+ * Retrieve the directory where the launcher installs its own Java runtimes.
+ * 
+ * @returns {string} The runtime directory.
+ */
+exports.getRuntimeDirectory = function(){
+    return path.join(exports.getDataDirectory(), 'runtime')
+}
+
+/**
+ * Check that a Java executable lives inside the launcher managed runtime directory.
+ * Symbolic links are resolved before the comparison.
+ * 
+ * @param {string} executable The path of the Java Executable.
+ * @returns {boolean} True if the executable is managed by the launcher.
+ */
+exports.isManagedJavaExecutable = function(executable){
+    if(typeof executable !== 'string' || executable.length === 0){
+        return false
+    }
+    try {
+        const root = fs.realpathSync(exports.getRuntimeDirectory())
+        const resolved = fs.realpathSync(executable)
+        const relative = path.relative(root, resolved)
+        return relative.length > 0 && !relative.startsWith('..') && !path.isAbsolute(relative)
+    } catch {
+        return false
+    }
+}
+
+/**
  * Retrieve the additional arguments for JVM initialization. Required arguments,
  * such as memory allocation, will be dynamically resolved and will not be included
  * in this value.

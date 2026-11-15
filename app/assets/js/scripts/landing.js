@@ -44,7 +44,6 @@ const {
     validateSelectedJvm,
     ensureJavaDirIsRoot,
     javaExecFromRoot,
-    discoverBestJvmInstallation,
     latestOpenJDK,
     extractJdk
 }                             = require('@visoftware/vis-launcher-core/java')
@@ -228,7 +227,7 @@ document.getElementById('launch_button').addEventListener('click', async e => {
     try {
         const server = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
         const jExe = ConfigManager.getJavaExecutable(ConfigManager.getSelectedServer())
-        if(jExe == null){
+        if(jExe == null || !ConfigManager.isManagedJavaExecutable(jExe)){
             await asyncSystemScan(server.effectiveJavaOptions)
         } else {
 
@@ -834,79 +833,71 @@ function showLaunchFailure(title, desc){
 /* System (Java) Scan */
 
 /**
- * Asynchronously scan the system for valid Java installations.
+ * Look for a valid Java installation inside the launcher runtime directory.
+ * 
+ * @param {string} supported The supported Java version range.
+ */
+async function findManagedJvm(supported){
+    const fsx = require('fs-extra')
+    const pathx = require('path')
+    const runtimeDir = ConfigManager.getRuntimeDirectory()
+    const listDirectories = async dir => {
+        try {
+            const entries = await fsx.readdir(dir, { withFileTypes: true })
+            return entries.filter(entry => entry.isDirectory()).map(entry => pathx.join(dir, entry.name))
+        } catch {
+            return []
+        }
+    }
+    const candidates = []
+    for(const first of await listDirectories(runtimeDir)) {
+        candidates.push(first)
+        candidates.push(...await listDirectories(first))
+    }
+    for(const candidate of candidates) {
+        const details = await validateSelectedJvm(ensureJavaDirIsRoot(candidate), supported)
+        if(details != null && ConfigManager.isManagedJavaExecutable(javaExecFromRoot(details.path))) {
+            return details
+        }
+    }
+    return null
+}
+
+/**
+ * Find the launcher managed Java, downloading it when it is missing.
  * 
  * @param {boolean} launchAfter Whether we should begin to launch after scanning. 
+ * @param {boolean} downloaded Whether a download has just completed.
  */
-async function asyncSystemScan(effectiveJavaOptions, launchAfter = true){
+async function asyncSystemScan(effectiveJavaOptions, launchAfter = true, downloaded = false){
 
     setLaunchDetails(Lang.queryJS('landing.systemScan.checking'))
     toggleLaunchArea(true)
     setLaunchPercentage(0, 100)
 
-    const jvmDetails = await discoverBestJvmInstallation(
-        ConfigManager.getDataDirectory(),
-        effectiveJavaOptions.supported
-    )
+    const jvmDetails = await findManagedJvm(effectiveJavaOptions.supported)
 
     if(jvmDetails == null) {
-        // If the result is null, no valid Java installation was found.
-        // Show this information to the user.
-        setOverlayContent(
-            Lang.queryJS('landing.systemScan.noCompatibleJava'),
-            Lang.queryJS('landing.systemScan.installJavaMessage', { 'major': effectiveJavaOptions.suggestedMajor }),
-            Lang.queryJS('landing.systemScan.installJava'),
-            Lang.queryJS('landing.systemScan.installJavaManually')
-        )
-        setOverlayHandler(() => {
-            setLaunchDetails(Lang.queryJS('landing.systemScan.javaDownloadPrepare'))
-            toggleOverlay(false)
-            
-            try {
-                downloadJava(effectiveJavaOptions, launchAfter)
-            } catch(err) {
-                loggerLanding.error('Unhandled error in Java Download', err)
-                showLaunchFailure(Lang.queryJS('landing.systemScan.javaDownloadFailureTitle'), Lang.queryJS('landing.systemScan.javaDownloadFailureText'))
-            }
-        })
-        setDismissHandler(() => {
-            $('#overlayContent').fadeOut(250, () => {
-                //$('#overlayDismiss').toggle(false)
-                setOverlayContent(
-                    Lang.queryJS('landing.systemScan.javaRequired', { 'major': effectiveJavaOptions.suggestedMajor }),
-                    Lang.queryJS('landing.systemScan.javaRequiredMessage', { 'major': effectiveJavaOptions.suggestedMajor }),
-                    Lang.queryJS('landing.systemScan.javaRequiredDismiss'),
-                    Lang.queryJS('landing.systemScan.javaRequiredCancel')
-                )
-                setOverlayHandler(() => {
-                    toggleLaunchArea(false)
-                    toggleOverlay(false)
-                })
-                setDismissHandler(() => {
-                    toggleOverlay(false, true)
-
-                    asyncSystemScan(effectiveJavaOptions, launchAfter)
-                })
-                $('#overlayContent').fadeIn(250)
-            })
-        })
-        toggleOverlay(true, true)
-    } else {
-        // Java installation found, use this to launch the game.
-        const javaExec = javaExecFromRoot(jvmDetails.path)
-        ConfigManager.setJavaExecutable(ConfigManager.getSelectedServer(), javaExec)
-        ConfigManager.save()
-
-        // We need to make sure that the updated value is on the settings UI.
-        // Just incase the settings UI is already open.
-        settingsJavaExecVal.value = javaExec
-        await populateJavaExecDetails(settingsJavaExecVal.value)
-
-        // TODO Callback hell, refactor
-        // TODO Move this out, separate concerns.
-        if(launchAfter){
-            await dlAsync()
+        if(downloaded) {
+            showLaunchFailure(Lang.queryJS('landing.systemScan.javaDownloadFailureTitle'), Lang.queryJS('landing.systemScan.javaDownloadFailureText'))
+            return
         }
+        setLaunchDetails(Lang.queryJS('landing.systemScan.javaDownloadPrepare'))
+        try {
+            await downloadJava(effectiveJavaOptions, launchAfter)
+        } catch(err) {
+            loggerLanding.error('Unhandled error in Java Download', err)
+            showLaunchFailure(Lang.queryJS('landing.systemScan.javaDownloadFailureTitle'), Lang.queryJS('landing.systemScan.javaDownloadFailureText'))
+        }
+        return
+    }
+
+    const javaExec = javaExecFromRoot(jvmDetails.path)
+    ConfigManager.setJavaExecutable(ConfigManager.getSelectedServer(), javaExec)
+    ConfigManager.save()
+
+    if(launchAfter){
+        await dlAsync()
     }
 
 }
@@ -969,9 +960,7 @@ async function downloadJava(effectiveJavaOptions, launchAfter = true) {
     clearInterval(extractListener)
     setLaunchDetails(Lang.queryJS('landing.downloadJava.javaInstalled'))
 
-    // TODO Callback hell
-    // Refactor the launch functions
-    asyncSystemScan(effectiveJavaOptions, launchAfter)
+    await asyncSystemScan(effectiveJavaOptions, launchAfter, true)
 
 }
 

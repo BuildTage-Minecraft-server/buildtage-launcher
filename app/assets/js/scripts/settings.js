@@ -83,7 +83,6 @@ function bindFileSelectors(){
     for(let ele of document.getElementsByClassName('settingsFileSelButton')){
         
         ele.onclick = async e => {
-            const isJavaExecSel = ele.id === 'settingsJavaExecSel'
             const directoryDialog = ele.hasAttribute('dialogDirectory') && ele.getAttribute('dialogDirectory') == 'true'
             const properties = directoryDialog ? ['openDirectory', 'createDirectory'] : ['openFile']
 
@@ -95,19 +94,9 @@ function bindFileSelectors(){
                 options.title = ele.getAttribute('dialogTitle')
             }
 
-            if(isJavaExecSel && process.platform === 'win32') {
-                options.filters = [
-                    { name: Lang.queryJS('settings.fileSelectors.executables'), extensions: ['exe'] },
-                    { name: Lang.queryJS('settings.fileSelectors.allFiles'), extensions: ['*'] }
-                ]
-            }
-
             const res = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), options)
             if(!res.canceled) {
                 ele.previousElementSibling.value = res.filePaths[0]
-                if(isJavaExecSel) {
-                    await populateJavaExecDetails(ele.previousElementSibling.value)
-                }
             }
         }
     }
@@ -198,10 +187,7 @@ async function initSettingsValues(){
             if(v.tagName === 'INPUT'){
                 if(v.type === 'number' || v.type === 'text'){
                     // Special Conditions
-                    if(cVal === 'JavaExecutable'){
-                        v.value = gFn.apply(null, gFnOpts)
-                        await populateJavaExecDetails(v.value)
-                    } else if (cVal === 'DataDirectory'){
+                    if (cVal === 'DataDirectory'){
                         v.value = gFn.apply(null, gFnOpts)
                     } else if(cVal === 'JVMOptions'){
                         v.value = gFn.apply(null, gFnOpts).join(' ')
@@ -1001,8 +987,6 @@ const settingsMaxRAMLabel     = document.getElementById('settingsMaxRAMLabel')
 const settingsMinRAMLabel     = document.getElementById('settingsMinRAMLabel')
 const settingsMemoryTotal     = document.getElementById('settingsMemoryTotal')
 const settingsMemoryAvail     = document.getElementById('settingsMemoryAvail')
-const settingsJavaExecDetails = document.getElementById('settingsJavaExecDetails')
-const settingsJavaReqDesc     = document.getElementById('settingsJavaReqDesc')
 const settingsJvmOptsLink     = document.getElementById('settingsJvmOptsLink')
 
 // Bind on change event for min memory container.
@@ -1179,28 +1163,6 @@ function populateMemoryStatus(){
     settingsMemoryAvail.innerHTML = Number(os.freemem()/1073741824).toFixed(1) + 'G'
 }
 
-/**
- * Validate the provided executable path and display the data on
- * the UI.
- * 
- * @param {string} execPath The executable path to populate against.
- */
-async function populateJavaExecDetails(execPath){
-    const server = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
-
-    const details = await validateSelectedJvm(ensureJavaDirIsRoot(execPath), server.effectiveJavaOptions.supported)
-
-    if(details != null) {
-        settingsJavaExecDetails.innerHTML = Lang.queryJS('settings.java.selectedJava', { version: details.semverStr, vendor: details.vendor })
-    } else {
-        settingsJavaExecDetails.innerHTML = Lang.queryJS('settings.java.invalidSelection')
-    }
-}
-
-function populateJavaReqDesc(server) {
-    settingsJavaReqDesc.innerHTML = Lang.queryJS('settings.java.requiresJava', { major: server.effectiveJavaOptions.suggestedMajor })
-}
-
 function populateJvmOptsLink(server) {
     const major = server.effectiveJavaOptions.suggestedMajor
     
@@ -1236,7 +1198,6 @@ async function prepareJavaTab(){
     bindMinMaxRam(server)
     bindRangeSlider(server)
     populateMemoryStatus()
-    populateJavaReqDesc(server)
     populateJvmOptsLink(server)
 }
 

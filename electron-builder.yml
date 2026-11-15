@@ -16,8 +16,7 @@ electronFuses:
 
 files:
   - '**/*'
-  - '.env'
-  - '!{dist,.gitignore,.vscode,docs,dev-app-update.yml,.nvmrc,eslint.config.mjs,scripts}'
+  - '!{dist,.gitignore,.vscode,docs,server,dev-app-update.yml,.nvmrc,eslint.config.mjs,scripts}'
 
 extraResources:
   - 'libraries'
