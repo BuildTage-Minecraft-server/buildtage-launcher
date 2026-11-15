@@ -149,7 +149,7 @@ function configureAutoUpdaterForSplash(allowPrerelease = false) {
                 const percent = progress && progress.percent ? Math.floor(progress.percent) : 0
                 const transferredMB = progress && progress.transferred ? (progress.transferred / (1024 * 1024)).toFixed(1) : '0'
                 const totalMB = progress && progress.total ? (progress.total / (1024 * 1024)).toFixed(1) : '0'
-                if (splashWin && splashWin.webContents) splashWin.webContents.send('splash-progress', { percent, message: `Downloading ${transferredMB}mb / ${totalMB}mb` })
+                if (splashWin && splashWin.webContents) splashWin.webContents.send('splash-progress', { percent, message: `Загрузка ${transferredMB} МБ / ${totalMB} МБ` })
                 if (splashWin && splashWin.webContents) splashWin.webContents.send('autoUpdateNotification', 'download-progress', progress)
             } catch { void 0 }
         })
@@ -157,7 +157,7 @@ function configureAutoUpdaterForSplash(allowPrerelease = false) {
         autoUpdater.on('update-downloaded', (info) => {
             try {
                 if (splashWin && splashWin.webContents) splashWin.webContents.send('autoUpdateNotification', 'update-downloaded', info)
-                if (splashWin && splashWin.webContents) splashWin.webContents.send('splash-message', 'Installing update...')
+                if (splashWin && splashWin.webContents) splashWin.webContents.send('splash-message', 'Установка обновления...')
             } catch { void 0 }
             // Mandatory install when running a production build. In dev we don't auto-install.
             if (!isDev) {
@@ -949,7 +949,7 @@ if (!gotTheLock) {
                 // apply it (production) before continuing startup. This blocks
                 // the boot until update resolution per user request.
                 try {
-                    if (splashWin && splashWin.webContents) splashWin.webContents.send('splash-message', 'Checking for updates...')
+                    if (splashWin && splashWin.webContents) splashWin.webContents.send('splash-message', 'Проверка обновлений...')
 
                     const waitForUpdateResolution = () => new Promise((resolve) => {
                         // Resolve values: { status: 'no-update' } | { status: 'downloaded', info } | { status: 'error', error, hadUpdate?: boolean }
@@ -992,8 +992,8 @@ if (!gotTheLock) {
                     if (updateResult.status === 'downloaded') {
                         try {
                             if (splashWin && splashWin.webContents) {
-                                splashWin.webContents.send('splash-progress', { percent: 100, message: 'Update downloaded' })
-                                splashWin.webContents.send('splash-message', 'Applying update...')
+                                splashWin.webContents.send('splash-progress', { percent: 100, message: 'Обновление загружено' })
+                                splashWin.webContents.send('splash-message', 'Применение обновления...')
                             }
                         } catch { void 0 }
                         // In production, quit and install immediately to apply the update.
@@ -1007,10 +1007,10 @@ if (!gotTheLock) {
                         }
                     } else if (updateResult.status === 'error') {
                         console.error('Auto-update failed during check/download:', updateResult.error)
-                        const message = updateResult.hadUpdate ? 'Update download failed (continuing)' : 'Update check failed (continuing)'
+                        const message = updateResult.hadUpdate ? 'Не удалось загрузить обновление, продолжаем запуск' : 'Не удалось проверить обновления, продолжаем запуск'
                         try { if (splashWin && splashWin.webContents) splashWin.webContents.send('splash-message', message) } catch { void 0 }
                     } else {
-                        try { if (splashWin && splashWin.webContents) splashWin.webContents.send('splash-message', 'No updates found') } catch { void 0 }
+                        try { if (splashWin && splashWin.webContents) splashWin.webContents.send('splash-message', 'Обновлений нет') } catch { void 0 }
                     }
                 } catch (err) {
                     console.error('Error while waiting for update resolution', err)

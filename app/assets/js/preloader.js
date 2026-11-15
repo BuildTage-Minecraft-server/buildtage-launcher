@@ -45,22 +45,22 @@ const isWaylandSession = process.argv.some(arg => arg.includes('session-type=way
 
 if (isWaylandSession && isWaylandNative) {
     logger.info('Detected native Wayland without X11 bridge. Requesting relaunch...')
-    sendSplashMessage('Optimizing for Linux display server...')
+    sendSplashMessage('Оптимизация для графического сервера Linux...')
     // Request main process to relaunch with X11 compatibility
     ipcRenderer.send('relaunch-for-x11')
 }
 
-sendSplashProgress(5, 'Starting...')
+sendSplashProgress(5, 'Запуск...')
 
 // Load ConfigManager
-sendSplashProgress(12, 'Loading configuration...')
+sendSplashProgress(12, 'Загрузка конфигурации...')
 try{
     ConfigManager.load()
-    sendSplashProgress(20, 'Loaded configuration...')
+    sendSplashProgress(20, 'Конфигурация загружена')
 } catch(err) {
     logger.warn('Failed to load config during preloader', err)
     // continue with defaults; report a low progress
-    sendSplashProgress(10, 'Using default configuration')
+    sendSplashProgress(10, 'Используется конфигурация по умолчанию')
 }
 // Yuck!
 // TODO Fix this
@@ -70,13 +70,13 @@ DistroAPI['instanceDir'] = ConfigManager.getInstanceDirectory()
 DistroAPI['authHeaders'] = require('./apiconstants').DISTRO_AUTH_HEADERS
 
 // Load language packs
-sendSplashProgress(18, 'Loading language packs...')
+sendSplashProgress(18, 'Загрузка языковых пакетов...')
 try{
     LangLoader.setupLanguage()
-    sendSplashProgress(22, 'Language packs loaded')
+    sendSplashProgress(22, 'Языковые пакеты загружены')
 } catch(err) {
     logger.warn('Failed to load language packs', err)
-    sendSplashProgress(20, 'Loading language packs...')
+    sendSplashProgress(20, 'Загрузка языковых пакетов...')
 }
 
 /**
@@ -92,17 +92,17 @@ function onDistroLoad(data){
                 logger.info('Determinando el servidor predeterminado...')
                 const defaultServerId = data.getMainServer().rawServer.id
                 ConfigManager.setSelectedServer(defaultServerId)
-                sendSplashMessage('Determining default server...')
+                sendSplashMessage('Определение сервера по умолчанию...')
                 ConfigManager.save()
             }
-            sendSplashProgress(95, 'Finalizing...')
+            sendSplashProgress(95, 'Завершение...')
             setTimeout(() => {
-                sendSplashProgress(100, 'Checking for updates')
+                sendSplashProgress(100, 'Проверка обновлений')
             }, 200)
         } else {
             logger.warn('Distribution index unavailable')
-            sendSplashMessage('Failed to load distribution index')
-            sendSplashProgress(100, 'Checking for updates (offline)')
+            sendSplashMessage('Не удалось загрузить индекс сборки')
+            sendSplashProgress(100, 'Проверка обновлений (нет сети)')
         }
     } finally {
         // Always notify main process and splash that we're done (success=false when data==null)
@@ -113,19 +113,19 @@ function onDistroLoad(data){
 }
 
 // Ensure Distribution is downloaded and cached.
-sendSplashProgress(30, 'Checking distribution index...')
+sendSplashProgress(30, 'Проверка индекса сборки...')
 DistroAPI.getDistribution()
     .then(heliosDistro => {
         logger.info('Índice de distribución cargado.')
-        sendSplashProgress(75, 'Distribution index loaded')
+        sendSplashProgress(75, 'Индекс сборки загружен')
         // call handler once
         onDistroLoad(heliosDistro)
     })
     .catch(err => {
         logger.warn('Failed to load distribution index', err)
         // Let UI know we failed but still proceed so the app can show an error state
-        sendSplashMessage('Failed to load distribution index')
-        sendSplashProgress(60, 'Distribution load failed')
+        sendSplashMessage('Не удалось загрузить индекс сборки')
+        sendSplashProgress(60, 'Не удалось загрузить сборку')
         onDistroLoad(null)
     })
 

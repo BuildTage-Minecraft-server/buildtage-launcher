@@ -33,24 +33,24 @@ document.addEventListener('readystatechange', () => {
         if (fill) fill.style.width = pct + '%'
         if (text) {
             if (message) text.textContent = message
-            else if (pct >= 100) text.textContent = 'Slowly but surely'
+            else if (pct >= 100) text.textContent = 'Потихоньку, но верно'
         }
     }
 
     ipcRenderer.on('splash-progress', (_ev, payload) => {
         if (!payload) return
         const pct = typeof payload.percent === 'number' ? payload.percent : 0
-        setProgress(pct, payload.message || 'Please wait')
+        setProgress(pct, payload.message || 'Подождите...')
     })
 
     ipcRenderer.on('splash-message', (_ev, message) => {
         if (!message) return
         if (text) text.textContent = message
     })
-    ipcRenderer.on('splash-done', () => setProgress(100, 'Almost there') )
+    ipcRenderer.on('splash-done', () => setProgress(100, 'Почти готово') )
     
     ipcRenderer.on('splash-optimize-display', () => {
-        setProgress(50, 'Finalizing setup...')
+        setProgress(50, 'Завершаем настройку...')
     })
 })
 
