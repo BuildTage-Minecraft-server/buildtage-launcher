@@ -405,6 +405,12 @@ const leaderboardSeason = document.getElementById('leaderboardSeason')
 const leaderboardStateText = document.getElementById('leaderboardStateText')
 const leaderboardRetry = document.getElementById('leaderboardRetry')
 
+const leaderboardFs = require('fs')
+const leaderboardPath = require('path')
+const LEADERBOARD_CACHE_FILE = leaderboardPath.join(ConfigManager.getLauncherDirectory(), 'leaderboard-cache.json')
+const LEADERBOARD_PERIODS = ['all', 'week', 'month']
+const LEADERBOARD_SORTS = ['kills', 'kd', 'winrate']
+
 const leaderboardCache = new Map()
 let leaderboardPeriod = 'all'
 let leaderboardSort = 'kills'
@@ -412,6 +418,43 @@ let leaderboardRequestId = 0
 let leaderboardFailures = 0
 let leaderboardRetryTimer = null
 let leaderboardSeasonState = null
+
+function loadLeaderboardCache() {
+    try {
+        const stored = JSON.parse(leaderboardFs.readFileSync(LEADERBOARD_CACHE_FILE, 'utf8'))
+        for(const [key, entry] of Object.entries(stored)) {
+            if(entry != null && entry.data != null && Array.isArray(entry.data.entries) && typeof entry.receivedAt === 'number') {
+                leaderboardCache.set(key, entry)
+            }
+        }
+    } catch(err) {
+        loggerLanding.debug(err)
+    }
+}
+
+function saveLeaderboardCache() {
+    leaderboardFs.writeFile(LEADERBOARD_CACHE_FILE, JSON.stringify(Object.fromEntries(leaderboardCache)), err => {
+        if(err) {
+            loggerLanding.debug(err)
+        }
+    })
+}
+
+async function prefetchLeaderboard() {
+    const keys = LEADERBOARD_PERIODS.flatMap(period => LEADERBOARD_SORTS.map(sort => [period, sort]))
+    const results = await Promise.allSettled(keys.map(async ([period, sort]) => {
+        const entry = { data: await fetchLeaderboard(period, sort), receivedAt: Date.now() }
+        const key = `${period}:${sort}`
+        leaderboardCache.set(key, entry)
+        if(key === `${leaderboardPeriod}:${leaderboardSort}`) {
+            renderLeaderboard(entry, true)
+        }
+    }))
+    if(results.some(r => r.status === 'fulfilled')) {
+        leaderboardFailures = 0
+        saveLeaderboardCache()
+    }
+}
 
 function setLeaderboardState(state) {
     leaderboardPanel.setAttribute('data-state', state)
@@ -587,6 +630,7 @@ async function refreshLeaderboard(showCached) {
     try {
         const entry = { data: await fetchLeaderboard(period, sort), receivedAt: Date.now() }
         leaderboardCache.set(key, entry)
+        saveLeaderboardCache()
         leaderboardFailures = 0
         if(requestId === leaderboardRequestId) {
             renderLeaderboard(entry, !showCached)
@@ -637,7 +681,9 @@ setInterval(() => {
     }
 }, LEADERBOARD_POLL_MS)
 setInterval(updateLeaderboardSeason, 1000)
+loadLeaderboardCache()
 refreshLeaderboard(true)
+prefetchLeaderboard()
 
 // Update Mojang Status Color
 const refreshMojangStatuses = async function(){
