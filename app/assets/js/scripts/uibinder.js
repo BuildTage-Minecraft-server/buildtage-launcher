@@ -32,6 +32,7 @@ const { Type } = require('@visoftware/distribution-types')
 const AuthManager = require('./assets/js/authmanager')
 const ConfigManager = require('./assets/js/configmanager')
 const { DistroAPI } = require('./assets/js/distromanager')
+const { REGISTRATION_URL } = require('./assets/js/apiconstants')
 const { error } = require('console')
 
 let rscShouldLoad = false
@@ -41,7 +42,6 @@ let fatalStartupError = false
 // Mapping of each view to their container IDs.
 const VIEWS = {
     landing: '#landingContainer',
-    loginOptions: '#loginOptionsContainer',
     login: '#loginContainer',
     settings: '#settingsContainer',
     welcome: '#welcomeContainer',
@@ -50,6 +50,20 @@ const VIEWS = {
 
 // The currently shown view container.
 let currentView
+
+function refreshRegistrationLink() {
+    const button = document.getElementById('frameRegisterButton')
+    if (button != null) {
+        button.style.display = ConfigManager.isRegistrationAvailable() ? 'flex' : 'none'
+    }
+}
+
+function initRegistrationLink() {
+    document.getElementById('frameRegisterButton')?.addEventListener('click', () => {
+        shell.openExternal(REGISTRATION_URL)
+    })
+    refreshRegistrationLink()
+}
 
 /**
  * Switch launcher views.
@@ -109,6 +123,7 @@ async function showMainUI(data) {
     document.getElementById('frameBar').style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
 
     $('#main').show()
+    initRegistrationLink()
 
     const isLoggedIn = Object.keys(ConfigManager.getAuthAccounts()).length > 0
 
@@ -126,11 +141,9 @@ async function showMainUI(data) {
             currentView = VIEWS.landing
             $(VIEWS.landing).fadeIn(1000)
         } else {
-            loginOptionsCancelEnabled(false)
-            loginOptionsViewOnLoginSuccess = VIEWS.landing
-            loginOptionsViewOnLoginCancel = VIEWS.loginOptions
-            currentView = VIEWS.loginOptions
-            $(VIEWS.loginOptions).fadeIn(1000)
+            loginViewOnSuccess = VIEWS.landing
+            currentView = VIEWS.login
+            $(VIEWS.login).fadeIn(1000)
         }
     }
 
@@ -167,11 +180,9 @@ function continueMainUILogic(checkver) {
             currentView = VIEWS.landing
             $(VIEWS.landing).fadeIn(1000)
         } else {
-            loginOptionsCancelEnabled(false)
-            loginOptionsViewOnLoginSuccess = VIEWS.landing
-            loginOptionsViewOnLoginCancel = VIEWS.loginOptions
-            currentView = VIEWS.loginOptions
-            $(VIEWS.loginOptions).fadeIn(1000)
+            loginViewOnSuccess = VIEWS.landing
+            currentView = VIEWS.login
+            $(VIEWS.login).fadeIn(1000)
         }
     }
 
@@ -496,45 +507,12 @@ async function validateSelectedAccount() {
                 Lang.queryJS('uibinder.validateAccount.selectAnotherAccountButton')
             )
             setOverlayHandler(() => {
-
-                // Mojang
-                // For convenience, pre-populate the username of the account.
                 document.getElementById('loginUsername').value = selectedAcc.username
-                validateEmail(selectedAcc.username)
-
-                loginOptionsViewOnLoginSuccess = getCurrentView()
-                loginOptionsViewOnLoginCancel = VIEWS.loginOptions
-
-                if (accLen > 0) {
-                    loginOptionsViewOnCancel = getCurrentView()
-                    loginOptionsViewCancelHandler = () => {
-                        ConfigManager.addMojangAuthAccount(selectedAcc.uuid, selectedAcc.accessToken, selectedAcc.username, selectedAcc.displayName)
-                        ConfigManager.save()
-                        validateSelectedAccount()
-                    }
-                    loginOptionsCancelEnabled(true)
-                } else {
-                    loginOptionsCancelEnabled(false)
-                }
+                refreshLoginState()
                 toggleOverlay(false)
-                switchView(getCurrentView(), VIEWS.loginOptions)
+                openLoginView(getCurrentView())
             })
-            setDismissHandler(async () => {
-                if (accLen > 1) {
-                    prepareAccountSelectionList()
-                    $('#overlayContent').fadeOut(250, () => {
-                        bindOverlayKeys(true, 'accountSelectContent', true)
-                        $('#accountSelectContent').fadeIn(250)
-                    })
-                } else {
-                    const accountsObj = ConfigManager.getAuthAccounts()
-                    const accounts = Array.from(Object.keys(accountsObj), v => accountsObj[v])
-                    // This function validates the account switch.
-                    await setSelectedAccount(accounts[0].uuid)
-                    toggleOverlay(false)
-                }
-            })
-            toggleOverlay(true, accLen > 0)
+            toggleOverlay(true, false)
         } else {
             return true
         }

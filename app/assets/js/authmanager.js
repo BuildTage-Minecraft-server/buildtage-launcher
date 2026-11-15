@@ -52,6 +52,14 @@ const log = LoggerUtil.getLogger('AuthManager')
 const addMojangAccount = async function(username, password) {
     try {
         const session = await Yggdrasil.authenticate(username, password, ConfigManager.getClientToken())
+        const previous = Object.values(ConfigManager.getAuthAccounts()).filter(acc => acc.uuid !== session.selectedProfile.id)
+        for(const acc of previous){
+            try {
+                await Yggdrasil.invalidate(acc.accessToken, ConfigManager.getClientToken())
+            } catch (invalidateErr){
+                log.warn('Unable to invalidate the replaced account token.', invalidateErr)
+            }
+        }
         const ret = ConfigManager.addMojangAuthAccount(session.selectedProfile.id, session.accessToken, username, session.selectedProfile.name)
         if(ConfigManager.getClientToken() == null){
             ConfigManager.setClientToken(session.clientToken)

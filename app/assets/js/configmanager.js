@@ -153,6 +153,7 @@ const DEFAULT_CONFIG = {
     selectedServer: null,
     selectedAccount: null,
     authenticationDatabase: {},
+    registrationLocked: false,
     modConfigurations: [],
     javaConfig: {}
 }
@@ -166,6 +167,35 @@ let config = null
  */
 exports.save = function(){
     fs.writeFileSync(configPath, JSON.stringify(config, null, 4), 'UTF-8')
+}
+
+/**
+ * Keep at most one authenticated account in the configuration and lock
+ * registration as soon as the launcher holds an account.
+ */
+function enforceSingleAccount(){
+    const uuids = Object.keys(config.authenticationDatabase)
+    if(uuids.length === 0){
+        return
+    }
+    const keep = config.authenticationDatabase[config.selectedAccount] != null ? config.selectedAccount : uuids[0]
+    for(const uuid of uuids){
+        if(uuid !== keep){
+            delete config.authenticationDatabase[uuid]
+        }
+    }
+    config.selectedAccount = keep
+    config.registrationLocked = true
+}
+
+/**
+ * Check whether the registration link may be shown. Registration is available
+ * only while this launcher has never held an account.
+ * 
+ * @returns {boolean} True if registration is available, otherwise false.
+ */
+exports.isRegistrationAvailable = function(){
+    return !config.registrationLocked && Object.keys(config.authenticationDatabase).length === 0
 }
 
 /**
@@ -203,6 +233,7 @@ exports.load = function(){
         }
         if(doValidate){
             config = validateKeySet(DEFAULT_CONFIG, config)
+            enforceSingleAccount()
             exports.save()
         }
     }
@@ -415,7 +446,13 @@ exports.updateMojangAuthAccount = function(uuid, accessToken){
  * @returns {Object} The authenticated account object created by this action.
  */
 exports.addMojangAuthAccount = function(uuid, accessToken, username, displayName){
+    for(const key of Object.keys(config.authenticationDatabase)){
+        if(key !== uuid){
+            delete config.authenticationDatabase[key]
+        }
+    }
     config.selectedAccount = uuid
+    config.registrationLocked = true
     config.authenticationDatabase[uuid] = {
         type: 'mojang',
         accessToken,

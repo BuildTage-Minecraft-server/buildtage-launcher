@@ -278,6 +278,31 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     opacity: 1;
 }
 
+#frameRegisterButton {
+    position: absolute;
+    top: 26px;
+    right: 122px;
+    display: none;
+    align-items: center;
+    height: 38px;
+    padding: 0 14px;
+    border: 2px solid var(--bt-edge);
+    background: transparent;
+    color: var(--bt-text-dim);
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    -webkit-app-region: no-drag !important;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+#frameRegisterButton:hover,
+#frameRegisterButton:focus {
+    color: var(--bt-text);
+    border-color: var(--bt-edge-hi);
+    outline: none;
+}
+
 #frameButton_close:active {
     background: rgba(255, 93, 93, 0.4) !important;
 }
@@ -3619,28 +3644,6 @@ body {
     flex: 1 1 0;
     width: auto;
     margin: 0;
-}
-
-#loginRegisterButton {
-    flex: 1 1 0;
-    padding: 12px 16px;
-    border: 2px solid var(--bt-edge);
-    background: linear-gradient(180deg, #252d3d 0%, #1a2030 100%);
-    color: var(--bt-text);
-    font-size: 16px;
-    letter-spacing: 2px;
-    cursor: pointer;
-}
-
-#loginRegisterButton:hover,
-#loginRegisterButton:focus {
-    border-color: var(--bt-edge-hi);
-    outline: none;
-}
-
-#loginRegisterButton:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 #loginButton:disabled {

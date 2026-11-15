@@ -481,10 +481,7 @@ function processLogOut(val, isLastAccount){
             refreshSkinPanel()
         }
         if(isLastAccount) {
-            loginOptionsCancelEnabled(false)
-            loginOptionsViewOnLoginSuccess = VIEWS.settings
-            loginOptionsViewOnLoginCancel = VIEWS.loginOptions
-            switchView(getCurrentView(), VIEWS.loginOptions)
+            openLoginView(VIEWS.settings)
         }
     })
     $(parent).fadeOut(250, () => {
@@ -1807,7 +1804,7 @@ function applyGuestModeSettingsRestrictions() {
         if (loginBtn) {
             loginBtn.onclick = () => {
                 ConfigManager.endGuestMode()
-                switchView(getCurrentView(), VIEWS.loginOptions)
+                openLoginView(VIEWS.landing)
             }
         }
         

@@ -138,9 +138,7 @@ function showGuestModeLoginPrompt() {
         toggleOverlay(false)
         ConfigManager.endGuestMode()
         hideGuestModeBanner()
-        loginOptionsViewOnLoginSuccess = VIEWS.landing
-        loginOptionsViewOnLoginCancel = VIEWS.landing
-        switchView(getCurrentView(), VIEWS.loginOptions)
+        openLoginView(VIEWS.landing)
     })
     
     setDismissHandler(() => {
@@ -203,11 +201,7 @@ document.getElementById('launch_button').addEventListener('click', async e => {
             setOverlayHandler(() => {
                 toggleOverlay(false)
 
-                // Redirect to login options
-                
-                loginOptionsViewOnLoginSuccess = VIEWS.landing
-                loginOptionsViewOnLoginCancel = VIEWS.landing
-                switchView(getCurrentView(), VIEWS.loginOptions)
+                openLoginView(VIEWS.landing)
 
                 // Reset the launch area when the user dismisses the notification
                 toggleLaunchArea(false)
@@ -307,9 +301,7 @@ if (guestModeLoginButton) {
     guestModeLoginButton.onclick = () => {
         ConfigManager.endGuestMode()
         hideGuestModeBanner()
-        loginOptionsViewOnLoginSuccess = VIEWS.landing
-        loginOptionsViewOnLoginCancel = VIEWS.landing
-        switchView(getCurrentView(), VIEWS.loginOptions)
+        openLoginView(VIEWS.landing)
     }
 }
 

@@ -20,7 +20,9 @@
 */
 
 
-const { REGISTRATION_URL } = require('./assets/js/apiconstants')
+const loginLogger = LoggerUtil.getLogger('Login')
+
+const DISTRO_REFRESH_TIMEOUT = 15000
 
 const validUsername         = /^[a-zA-Z0-9_]{3,16}$/
 const basicEmail            = /^\S+@\S+\.\S+$/
@@ -32,7 +34,6 @@ const loginPassword         = document.getElementById('loginPassword')
 const loginPasswordToggle   = document.getElementById('loginPasswordToggle')
 const loginFormError        = document.getElementById('loginFormError')
 const loginButton           = document.getElementById('loginButton')
-const loginRegisterButton   = document.getElementById('loginRegisterButton')
 const loginForm             = document.getElementById('loginForm')
 
 let loginBusy = false
@@ -134,10 +135,6 @@ loginPasswordToggle.addEventListener('click', () => {
     loginPassword.focus()
 })
 
-loginRegisterButton.addEventListener('click', () => {
-    shell.openExternal(REGISTRATION_URL)
-})
-
 function loginLoading(v){
     if(v){
         loginButton.setAttribute('loading', v)
@@ -151,17 +148,24 @@ function loginLoading(v){
 function formDisabled(v){
     loginBusy = v
     loginButton.disabled = v || !isFormValid()
-    loginRegisterButton.disabled = v
     loginPasswordToggle.disabled = v
     loginUsername.disabled = v
     loginPassword.disabled = v
 }
 
 let loginViewOnSuccess = VIEWS.landing
-let loginViewOnCancel = VIEWS.settings
-let loginViewCancelHandler
 
-function loginCancelEnabled(){
+function openLoginView(onSuccess = VIEWS.landing, from = getCurrentView()){
+    loginViewOnSuccess = onSuccess
+    switchView(from, VIEWS.login, 500, 500)
+}
+
+function withTimeout(promise, ms){
+    let timer
+    const timeout = new Promise(resolve => {
+        timer = setTimeout(resolve, ms)
+    })
+    return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
 }
 
 loginForm.onsubmit = (e) => {
@@ -189,7 +193,8 @@ loginButton.addEventListener('click', () => {
 
     AuthManager.addMojangAccount(loginUsername.value.trim(), loginPassword.value).then(async (value) => {
         updateSelectedAccount(value)
-        await ConfigManager.refreshDistroAndSettings(value)
+        await withTimeout(ConfigManager.refreshDistroAndSettings(value), DISTRO_REFRESH_TIMEOUT)
+        refreshRegistrationLink()
         loginButton.innerHTML = loginButton.innerHTML.replace(Lang.queryJS('login.loggingIn'), Lang.queryJS('login.success'))
         $('.circle-loader').toggleClass('load-complete')
         $('.checkmark').toggle()
@@ -199,7 +204,6 @@ loginButton.addEventListener('click', () => {
                     await prepareSettings()
                 }
                 loginViewOnSuccess = VIEWS.landing
-                loginViewCancelHandler = null
                 loginUsername.value = ''
                 loginPassword.value = ''
                 loginPassword.type = 'password'
@@ -212,7 +216,7 @@ loginButton.addEventListener('click', () => {
             })
         }, 1000)
     }).catch((err) => {
-        log.error('Error while logging in.', err)
+        loginLogger.error('Error while logging in.', err)
         loginLoading(false)
         formDisabled(false)
         showFormError(describeLoginError(err))

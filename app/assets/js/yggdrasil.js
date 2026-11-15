@@ -33,6 +33,7 @@ const https = require('https')
 const { YGGDRASIL_AUTH_URLS } = require('./apiconstants')
 
 const REQUEST_TIMEOUT = 10000
+const REQUEST_DEADLINE = 20000
 
 const ERRORS = {
     invalidCredentials: {
@@ -74,6 +75,11 @@ function postJson(base, endpoint, payload) {
         const url = new URL(`${base}/${endpoint}`)
         const body = JSON.stringify(payload)
         const client = url.protocol === 'http:' ? http : https
+        let deadline = null
+        const finish = (fn, value) => {
+            clearTimeout(deadline)
+            fn(value)
+        }
         const req = client.request(url, {
             method: 'POST',
             headers: {
@@ -85,6 +91,12 @@ function postJson(base, endpoint, payload) {
         }, res => {
             const chunks = []
             res.on('data', chunk => chunks.push(chunk))
+            res.on('error', err => finish(reject, err))
+            res.on('close', () => {
+                if(!res.complete) {
+                    finish(reject, new Error('Connection closed before the response was complete'))
+                }
+            })
             res.on('end', () => {
                 const text = Buffer.concat(chunks).toString('utf8')
                 let json = null
@@ -95,11 +107,12 @@ function postJson(base, endpoint, payload) {
                         json = null
                     }
                 }
-                resolve({ status: res.statusCode, json })
+                finish(resolve, { status: res.statusCode, json })
             })
         })
         req.on('timeout', () => req.destroy(new Error('Request timed out')))
-        req.on('error', reject)
+        req.on('error', err => finish(reject, err))
+        deadline = setTimeout(() => req.destroy(new Error('Request deadline exceeded')), REQUEST_DEADLINE)
         req.write(body)
         req.end()
     })
