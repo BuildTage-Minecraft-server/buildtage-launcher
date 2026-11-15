@@ -393,7 +393,9 @@ server_selection_button.onclick = async e => {
 const { LEADERBOARD_API_URL, LEADERBOARD_API_PORT } = require('./assets/js/apiconstants')
 
 const LEADERBOARD_ROWS = 10
-const LEADERBOARD_POLL_MS = 30000
+const LEADERBOARD_POLL_MS = 600000
+const LEADERBOARD_FRESH_MS = 60000
+const LEADERBOARD_LOADING_DELAY_MS = 400
 const LEADERBOARD_RETRY_MS = 5000
 const LEADERBOARD_TIMEOUT_MS = 5000
 
@@ -412,6 +414,8 @@ const LEADERBOARD_PERIODS = ['all', 'week', 'month']
 const LEADERBOARD_SORTS = ['kills', 'kd', 'winrate']
 
 const leaderboardCache = new Map()
+const leaderboardPending = new Map()
+let leaderboardSignature = null
 let leaderboardPeriod = 'all'
 let leaderboardSort = 'kills'
 let leaderboardRequestId = 0
@@ -440,13 +444,27 @@ function saveLeaderboardCache() {
     })
 }
 
+function loadLeaderboardEntry(period, sort) {
+    const key = `${period}:${sort}`
+    let pending = leaderboardPending.get(key)
+    if(pending == null) {
+        pending = fetchLeaderboard(period, sort)
+            .then(data => {
+                const entry = { data, receivedAt: Date.now() }
+                leaderboardCache.set(key, entry)
+                return entry
+            })
+            .finally(() => leaderboardPending.delete(key))
+        leaderboardPending.set(key, pending)
+    }
+    return pending
+}
+
 async function prefetchLeaderboard() {
     const keys = LEADERBOARD_PERIODS.flatMap(period => LEADERBOARD_SORTS.map(sort => [period, sort]))
     const results = await Promise.allSettled(keys.map(async ([period, sort]) => {
-        const entry = { data: await fetchLeaderboard(period, sort), receivedAt: Date.now() }
-        const key = `${period}:${sort}`
-        leaderboardCache.set(key, entry)
-        if(key === `${leaderboardPeriod}:${leaderboardSort}`) {
+        const entry = await loadLeaderboardEntry(period, sort)
+        if(period === leaderboardPeriod && sort === leaderboardSort) {
             renderLeaderboard(entry, true)
         }
     }))
@@ -579,18 +597,26 @@ function updateLeaderboardSeason() {
     leaderboardSeason.textContent = `${ends} \u00B7 ${cond}`
 }
 
-function renderLeaderboard(entry, keepScroll) {
+function renderLeaderboard(entry, keepScroll, animate = false) {
     const { data, receivedAt } = entry
     const entries = Array.isArray(data.entries) ? data.entries : []
     const scroll = keepScroll ? leaderboardRows.scrollTop : 0
     const account = ConfigManager.getSelectedAccount()
     const self = account != null && account.displayName != null ? account.displayName.toLowerCase() : ''
+    const signature = JSON.stringify([data.period, data.sort, entries, self])
+    const wasReady = leaderboardPanel.getAttribute('data-state') === 'ready'
 
-    leaderboardPodium.replaceChildren(...[2, 1, 3].map(place => createPodiumCard(entries[place - 1], place, data.sort, self)))
-    leaderboardPodium.classList.toggle('hidden', entries.length === 0)
-    leaderboardRows.replaceChildren(...entries.slice(3).map(e => createLeaderboardRow(e, self)))
-    leaderboardRows.scrollTop = scroll
-    leaderboardTable.setAttribute('data-sort', data.sort)
+    if(signature !== leaderboardSignature) {
+        leaderboardSignature = signature
+        leaderboardPanel.classList.toggle('lbFresh', animate)
+        leaderboardPodium.replaceChildren(...[2, 1, 3].map(place => createPodiumCard(entries[place - 1], place, data.sort, self)))
+        leaderboardPodium.classList.toggle('hidden', entries.length === 0)
+        leaderboardRows.replaceChildren(...entries.slice(3).map(e => createLeaderboardRow(e, self)))
+        leaderboardRows.scrollTop = scroll
+        leaderboardTable.setAttribute('data-sort', data.sort)
+    } else if(!wasReady) {
+        leaderboardPanel.classList.remove('lbFresh')
+    }
 
     if(entries.length === 0) {
         setLeaderboardState('empty')
@@ -612,28 +638,35 @@ function renderLeaderboard(entry, keepScroll) {
     }
 }
 
-async function refreshLeaderboard(showCached) {
+async function refreshLeaderboard(showCached, animate = false) {
     const period = leaderboardPeriod
     const sort = leaderboardSort
     const key = `${period}:${sort}`
     const requestId = ++leaderboardRequestId
     const cached = leaderboardCache.get(key)
+    let loadingTimer = null
 
     if(showCached) {
         if(cached != null) {
-            renderLeaderboard(cached, false)
+            renderLeaderboard(cached, false, animate)
+            if(Date.now() - cached.receivedAt < LEADERBOARD_FRESH_MS) {
+                return
+            }
         } else {
-            setLeaderboardState('loading')
+            loadingTimer = setTimeout(() => {
+                if(requestId === leaderboardRequestId) {
+                    setLeaderboardState('loading')
+                }
+            }, LEADERBOARD_LOADING_DELAY_MS)
         }
     }
 
     try {
-        const entry = { data: await fetchLeaderboard(period, sort), receivedAt: Date.now() }
-        leaderboardCache.set(key, entry)
+        const entry = await loadLeaderboardEntry(period, sort)
         saveLeaderboardCache()
         leaderboardFailures = 0
         if(requestId === leaderboardRequestId) {
-            renderLeaderboard(entry, !showCached)
+            renderLeaderboard(entry, !showCached, animate && cached == null)
         }
     } catch(err) {
         loggerLanding.warn('Unable to load the leaderboard.')
@@ -646,6 +679,8 @@ async function refreshLeaderboard(showCached) {
             clearTimeout(leaderboardRetryTimer)
             leaderboardRetryTimer = setTimeout(() => refreshLeaderboard(false), LEADERBOARD_RETRY_MS)
         }
+    } finally {
+        clearTimeout(loadingTimer)
     }
 }
 
@@ -666,23 +701,23 @@ document.querySelectorAll('#leaderboardPanel .lbTab').forEach(button => {
             other.setAttribute('aria-selected', String(other === button))
         })
         button.blur()
-        refreshLeaderboard(true)
+        refreshLeaderboard(true, true)
     }
 })
 
 leaderboardRetry.onclick = () => {
     leaderboardFailures = 0
-    refreshLeaderboard(true)
+    refreshLeaderboard(true, true)
 }
 
 setInterval(() => {
     if(isLeaderboardVisible()) {
-        refreshLeaderboard(false)
+        prefetchLeaderboard()
     }
 }, LEADERBOARD_POLL_MS)
 setInterval(updateLeaderboardSeason, 1000)
 loadLeaderboardCache()
-refreshLeaderboard(true)
+refreshLeaderboard(true, true)
 prefetchLeaderboard()
 
 // Update Mojang Status Color

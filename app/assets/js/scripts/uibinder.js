@@ -164,33 +164,7 @@ async function showMainUI(data) {
 
 
 function continueMainUILogic(checkver) {
-    const isLoggedIn = Object.keys(ConfigManager.getAuthAccounts()).length > 0
-
     localStorage.setItem('buildstatus', 'maintained')
-    // If this is enabled in a development environment we'll get ratelimited.
-    // The relaunch frequency is usually far too high.
-    if (!isDev && isLoggedIn) {
-        validateSelectedAccount()
-    }
-    if (ConfigManager.isFirstLaunch()) {
-        currentView = VIEWS.welcome
-        $(VIEWS.welcome).fadeIn(1000)
-    } else {
-        if (isLoggedIn) {
-            currentView = VIEWS.landing
-            $(VIEWS.landing).fadeIn(1000)
-        } else {
-            loginViewOnSuccess = VIEWS.landing
-            currentView = VIEWS.login
-            $(VIEWS.login).fadeIn(1000)
-        }
-    }
-
-    setTimeout(() => {
-        $('#loadingContainer').fadeOut(500, () => {
-            $('#loadSpinnerImage').removeClass('rotating')
-        })
-    }, 250)
 
     // Disable tabbing to the news container.
     initNews().then(() => {
