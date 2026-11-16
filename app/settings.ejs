@@ -422,28 +422,25 @@
                     </div>
                 </div>
                 <div id="settingsAboutButtons">
-                    <a href="<%- lang('settings.sourceGithubLink') %>" id="settingsAboutSourceButton"
-                        class="settingsAboutButton"><%- lang('settings.sourceGithub') %></a>
-                    <a href="https://github.com/VI-Software/vis-launcher#credits" id="settingsAboutSourceButton" class="settingsAboutButton">Credits</a>
                     <a href="<%- lang('settings.supportLink') %>" id="settingsAboutSupportButton"
                         class="settingsAboutButton"><%- lang('settings.support') %></a>
-                    <a href="#" id="settingsAboutDevToolsButton" class="settingsAboutButton"><%-
-                            lang('settings.devToolsConsole') %></a>
                 </div>
             </div>
             <div class="settingsChangelogContainer">
                 <div class="settingsChangelogContent">
                     <div class="settingsChangelogHeadline">
-                        <div class="settingsChangelogLabel"><%- lang('settings.releaseNotes') %></div>
-                        <div class="settingsChangelogTitle"><%- lang('settings.changelog') %></div>
+                        <div class="settingsChangelogLabel"><%- lang('settings.aboutInfoLabel') %></div>
+                        <div class="settingsChangelogTitle"><%- lang('settings.aboutInfoTitle') %></div>
                     </div>
                     <div class="settingsChangelogText">
-                        <%- lang('settings.noReleaseNotes') %>
+                        <p><%- lang('settings.aboutInfoAccount') %></p>
+                        <p><%- lang('settings.aboutInfoGame') %></p>
+                        <p><%- lang('settings.aboutInfoServers') %></p>
+                        <p><%- lang('settings.aboutInfoMods') %></p>
+                        <p><%- lang('settings.aboutInfoSettings') %></p>
+                        <p><%- lang('settings.aboutInfoUpdates') %></p>
+                        <p><%- lang('settings.aboutInfoSupport', { url: lang('settings.supportLink') }) %></p>
                     </div>
-                </div>
-                <div class="settingsChangelogActions">
-                    <a class="settingsChangelogButton settingsAboutButton" href="#"><%-
-                            lang('settings.viewReleaseNotes') %></a>
                 </div>
             </div>
         </div>

@@ -29,7 +29,6 @@ mediaDiscordURL = "https://discord.com"
 canaryWebsiteURL = "https://nekrasovdev.space"
 
 [ejs.settings]
-sourceGithubLink = "https://github.com/Asesu23/buildtage-launcher"
 supportLink = "https://github.com/Asesu23/buildtage-launcher/issues"
 
 [launcher]
