@@ -32,7 +32,6 @@ const { Type } = require('@visoftware/distribution-types')
 const AuthManager = require('./assets/js/authmanager')
 const ConfigManager = require('./assets/js/configmanager')
 const { DistroAPI } = require('./assets/js/distromanager')
-const { REGISTRATION_URL } = require('./assets/js/apiconstants')
 const { error } = require('console')
 
 let rscShouldLoad = false
@@ -56,11 +55,12 @@ function refreshRegistrationLink() {
     if (button != null) {
         button.style.display = ConfigManager.isRegistrationAvailable() ? 'flex' : 'none'
     }
+    refreshLoginModeToggle()
 }
 
 function initRegistrationLink() {
     document.getElementById('frameRegisterButton')?.addEventListener('click', () => {
-        shell.openExternal(REGISTRATION_URL)
+        openRegistration()
     })
     refreshRegistrationLink()
 }

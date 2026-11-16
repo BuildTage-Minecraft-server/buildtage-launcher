@@ -1,5 +1,7 @@
 const MAX_BODY_BYTES = 2048
 const UPSTREAM_TIMEOUT_MS = 10000
+const USERNAME_PATTERN = /^[a-zA-Z0-9_]{3,16}$/
+const MIN_PASSWORD_LENGTH = 8
 
 function reply(status, code, message) {
     const body = { code }
@@ -90,6 +92,9 @@ async function findUserUuid(env, username) {
 }
 
 function classifyFailure(status, message) {
+    if(status === 429) {
+        return reply(429, 'rateLimited')
+    }
     if(status === 409 || /taken|already|exists|in use/i.test(message)) {
         return reply(409, 'nameTaken')
     }
@@ -97,6 +102,50 @@ function classifyFailure(status, message) {
         return reply(502, 'unavailable')
     }
     return reply(400, 'rejected', message)
+}
+
+function parseRegistration(raw) {
+    let data
+    try {
+        data = JSON.parse(raw)
+    } catch {
+        return null
+    }
+    if(data == null || typeof data !== 'object' || typeof data.username !== 'string' || typeof data.password !== 'string') {
+        return null
+    }
+    if(!USERNAME_PATTERN.test(data.username) || data.password.length < MIN_PASSWORD_LENGTH || data.password.length > 256) {
+        return null
+    }
+    return { username: data.username, password: data.password }
+}
+
+async function readFailureMessage(res) {
+    try {
+        return String((await res.json()).message || '')
+    } catch {
+        return ''
+    }
+}
+
+async function registerAccount(request, env) {
+    const raw = await request.text()
+    if(raw.length > MAX_BODY_BYTES) {
+        return reply(413, 'rejected')
+    }
+    const parsed = parseRegistration(raw)
+    if(parsed == null) {
+        return reply(400, 'rejected')
+    }
+    const res = await upstream(env, '/drasl/api/v1/users', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${env.DRASL_ADMIN_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: parsed.username, password: parsed.password, playerName: parsed.username })
+    })
+    if(res.ok) {
+        return reply(201, 'ok')
+    }
+    return classifyFailure(res.status, await readFailureMessage(res))
 }
 
 async function updateAccount(request, env) {
@@ -124,19 +173,19 @@ async function updateAccount(request, env) {
     if(res.ok) {
         return reply(200, 'ok')
     }
-    let message = ''
-    try {
-        message = (await res.json()).message || ''
-    } catch {
-        message = ''
-    }
-    return classifyFailure(res.status, String(message))
+    return classifyFailure(res.status, await readFailureMessage(res))
+}
+
+const ROUTES = {
+    '/account/update': updateAccount,
+    '/account/register': registerAccount
 }
 
 export default {
     async fetch(request, env) {
         const url = new URL(request.url)
-        if(url.pathname !== '/account/update') {
+        const handler = ROUTES[url.pathname]
+        if(handler == null) {
             return reply(404, 'rejected')
         }
         if(request.method !== 'POST') {
@@ -146,7 +195,7 @@ export default {
             return reply(503, 'unavailable')
         }
         try {
-            return await updateAccount(request, env)
+            return await handler(request, env)
         } catch {
             return reply(502, 'unavailable')
         }

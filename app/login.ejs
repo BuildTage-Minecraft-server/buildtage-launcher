@@ -24,7 +24,7 @@
     <div id="loginContent">
         <form id="loginForm" novalidate>
             <img id="loginImageSeal" src="assets/images/buildtage-logo.svg"/>
-            <span id="loginSubheader"><%- lang('login.loginSubheader') %></span>
+            <span id="loginSubheader" data-login="<%- lang('login.loginSubheader') %>" data-register="<%- lang('login.loginRegisterSubheader') %>"><%- lang('login.loginSubheader') %></span>
             <div class="loginFieldContainer">
                 <span class="loginErrorSpan" id="loginEmailError"><%- lang('login.loginEmailError') %></span>
                 <input id="loginUsername" class="loginField" type="text" autocomplete="username" spellcheck="false" maxlength="64" placeholder="<%- lang('login.loginEmailPlaceholder') %>"/>
@@ -34,17 +34,22 @@
                 <input id="loginPassword" class="loginField" type="password" autocomplete="current-password" placeholder="<%- lang('login.loginPasswordPlaceholder') %>"/>
                 <button id="loginPasswordToggle" type="button" data-show="<%- lang('login.loginShowPassword') %>" data-hide="<%- lang('login.loginHidePassword') %>"><%- lang('login.loginShowPassword') %></button>
             </div>
+            <div class="loginFieldContainer" id="loginPasswordConfirmContainer" style="display: none;">
+                <span class="loginErrorSpan" id="loginPasswordConfirmError"><%- lang('login.loginPasswordError') %></span>
+                <input id="loginPasswordConfirm" class="loginField" type="password" autocomplete="new-password" placeholder="<%- lang('login.loginPasswordConfirmPlaceholder') %>"/>
+            </div>
             <div id="loginFormError" role="alert"></div>
             <div id="loginActions">
                 <button id="loginButton" type="submit" disabled>
                     <div id="loginButtonContent">
-                        <%- lang('login.loginButtonText') %>
+                        <span id="loginButtonText"><%- lang('login.loginButtonText') %></span>
                         <div class="circle-loader">
                             <div class="checkmark draw"></div>
                         </div>
                     </div>
                 </button>
             </div>
+            <button id="loginModeToggle" type="button" data-login="<%- lang('login.loginSwitchToRegister') %>" data-register="<%- lang('login.loginSwitchToLogin') %>" style="display: none;"><%- lang('login.loginSwitchToRegister') %></button>
         </form>
     </div>
     <script src="./assets/js/scripts/login.js"></script>

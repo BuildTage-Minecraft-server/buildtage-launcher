@@ -22,7 +22,10 @@
 
 const loginLogger = LoggerUtil.getLogger('Login')
 
+const AccountService = require('./assets/js/accountmanager')
+
 const DISTRO_REFRESH_TIMEOUT = 15000
+const MIN_PASSWORD_LENGTH = 8
 
 const validUsername         = /^[a-zA-Z0-9_]{3,16}$/
 const basicEmail            = /^\S+@\S+\.\S+$/
@@ -32,11 +35,18 @@ const loginUsername         = document.getElementById('loginUsername')
 const loginPasswordError    = document.getElementById('loginPasswordError')
 const loginPassword         = document.getElementById('loginPassword')
 const loginPasswordToggle   = document.getElementById('loginPasswordToggle')
+const loginPasswordConfirmContainer = document.getElementById('loginPasswordConfirmContainer')
+const loginPasswordConfirmError = document.getElementById('loginPasswordConfirmError')
+const loginPasswordConfirm  = document.getElementById('loginPasswordConfirm')
+const loginSubheader        = document.getElementById('loginSubheader')
+const loginButtonText       = document.getElementById('loginButtonText')
+const loginModeToggle       = document.getElementById('loginModeToggle')
 const loginFormError        = document.getElementById('loginFormError')
 const loginButton           = document.getElementById('loginButton')
 const loginForm             = document.getElementById('loginForm')
 
 let loginBusy = false
+let loginMode = 'login'
 
 function showError(element, value){
     element.innerHTML = value
@@ -61,11 +71,24 @@ function showFormError(text){
 }
 
 function isUsernameValid(value){
+    if(loginMode === 'register'){
+        return validUsername.test(value)
+    }
     return validUsername.test(value) || basicEmail.test(value)
 }
 
+function isPasswordValid(){
+    if(loginMode === 'register'){
+        return loginPassword.value.length >= MIN_PASSWORD_LENGTH
+    }
+    return loginPassword.value.length > 0
+}
+
 function isFormValid(){
-    return isUsernameValid(loginUsername.value.trim()) && loginPassword.value.length > 0
+    if(!isUsernameValid(loginUsername.value.trim()) || !isPasswordValid()){
+        return false
+    }
+    return loginMode !== 'register' || loginPasswordConfirm.value === loginPassword.value
 }
 
 function loginDisabled(v){
@@ -98,8 +121,18 @@ function validatePasswordField(report){
         if(report){
             showError(loginPasswordError, Lang.queryJS('login.error.requiredValue'))
         }
+    } else if(report && !isPasswordValid()){
+        showError(loginPasswordError, Lang.queryJS('login.error.passwordShort'))
     } else {
         hideError(loginPasswordError)
+    }
+}
+
+function validatePasswordConfirmField(report){
+    if(loginMode !== 'register' || loginPasswordConfirm.value === loginPassword.value){
+        hideError(loginPasswordConfirmError)
+    } else if(report){
+        showError(loginPasswordConfirmError, Lang.queryJS('login.error.passwordMismatch'))
     }
 }
 
@@ -107,13 +140,16 @@ function onFieldInput(){
     showFormError('')
     validateUsernameField(false)
     validatePasswordField(false)
+    validatePasswordConfirmField(false)
     refreshLoginState()
 }
 
 loginUsername.addEventListener('input', onFieldInput)
 loginPassword.addEventListener('input', onFieldInput)
+loginPasswordConfirm.addEventListener('input', onFieldInput)
 loginUsername.addEventListener('change', onFieldInput)
 loginPassword.addEventListener('change', onFieldInput)
+loginPasswordConfirm.addEventListener('change', onFieldInput)
 
 loginUsername.addEventListener('focusout', () => {
     validateUsernameField(true)
@@ -125,23 +161,37 @@ loginPassword.addEventListener('focusout', () => {
     shakeError(loginPasswordError)
     refreshLoginState()
 })
+loginPasswordConfirm.addEventListener('focusout', () => {
+    validatePasswordConfirmField(true)
+    shakeError(loginPasswordConfirmError)
+    refreshLoginState()
+})
 
 setInterval(refreshLoginState, 300)
 
 loginPasswordToggle.addEventListener('click', () => {
     const reveal = loginPassword.type === 'password'
     loginPassword.type = reveal ? 'text' : 'password'
+    loginPasswordConfirm.type = loginPassword.type
     loginPasswordToggle.textContent = reveal ? loginPasswordToggle.dataset.hide : loginPasswordToggle.dataset.show
     loginPassword.focus()
 })
 
+function setLoginButtonText(text){
+    loginButtonText.textContent = text
+}
+
+function idleButtonText(){
+    return Lang.queryJS(loginMode === 'register' ? 'login.registerButton' : 'login.login')
+}
+
 function loginLoading(v){
     if(v){
         loginButton.setAttribute('loading', v)
-        loginButton.innerHTML = loginButton.innerHTML.replace(Lang.queryJS('login.login'), Lang.queryJS('login.loggingIn'))
+        setLoginButtonText(Lang.queryJS(loginMode === 'register' ? 'login.registering' : 'login.loggingIn'))
     } else {
         loginButton.removeAttribute('loading')
-        loginButton.innerHTML = loginButton.innerHTML.replace(Lang.queryJS('login.loggingIn'), Lang.queryJS('login.login'))
+        setLoginButtonText(idleButtonText())
     }
 }
 
@@ -149,15 +199,62 @@ function formDisabled(v){
     loginBusy = v
     loginButton.disabled = v || !isFormValid()
     loginPasswordToggle.disabled = v
+    loginModeToggle.disabled = v
     loginUsername.disabled = v
     loginPassword.disabled = v
+    loginPasswordConfirm.disabled = v
 }
+
+function setLoginMode(mode){
+    loginMode = mode
+    const registering = mode === 'register'
+    loginPasswordConfirmContainer.style.display = registering ? 'flex' : 'none'
+    loginSubheader.textContent = loginSubheader.dataset[mode]
+    loginModeToggle.textContent = loginModeToggle.dataset[mode]
+    loginPassword.autocomplete = registering ? 'new-password' : 'current-password'
+    loginPasswordConfirm.value = ''
+    hideError(loginEmailError)
+    hideError(loginPasswordError)
+    hideError(loginPasswordConfirmError)
+    showFormError('')
+    if(!loginButton.hasAttribute('loading')){
+        setLoginButtonText(idleButtonText())
+    }
+    refreshLoginState()
+}
+
+function refreshLoginModeToggle(){
+    const available = ConfigManager.isRegistrationAvailable()
+    loginModeToggle.style.display = available ? 'block' : 'none'
+    if(!available && loginMode === 'register'){
+        setLoginMode('login')
+    }
+}
+
+loginModeToggle.addEventListener('click', () => {
+    if(!loginBusy){
+        setLoginMode(loginMode === 'register' ? 'login' : 'register')
+        loginUsername.focus()
+    }
+})
 
 let loginViewOnSuccess = VIEWS.landing
 
-function openLoginView(onSuccess = VIEWS.landing, from = getCurrentView()){
+function openLoginView(onSuccess = VIEWS.landing, from = getCurrentView(), mode = 'login'){
     loginViewOnSuccess = onSuccess
+    setLoginMode(mode)
+    refreshLoginModeToggle()
     switchView(from, VIEWS.login, 500, 500)
+}
+
+function openRegistration(){
+    if(getCurrentView() === VIEWS.login){
+        setLoginMode('register')
+        loginUsername.focus()
+        return
+    }
+    const from = getCurrentView()
+    openLoginView(from === VIEWS.settings ? VIEWS.settings : VIEWS.landing, from, 'register')
 }
 
 function withTimeout(promise, ms){
@@ -176,6 +273,10 @@ loginForm.onsubmit = (e) => {
 }
 
 function describeLoginError(err){
+    if(err instanceof AccountService.AccountError){
+        const detail = err.code === 'rejected' && err.message && err.message !== 'rejected' ? ` ${err.message}` : ''
+        return Lang.queryJS(`login.registerError.${err.code}`) + detail
+    }
     if(err != null && typeof err === 'object' && typeof err.desc === 'string' && err.desc.length > 0){
         return err.desc
     }
@@ -191,11 +292,24 @@ loginButton.addEventListener('click', () => {
     formDisabled(true)
     loginLoading(true)
 
-    AuthManager.addMojangAccount(loginUsername.value.trim(), loginPassword.value).then(async (value) => {
+    const username = loginUsername.value.trim()
+    const password = loginPassword.value
+    let attempt
+    if(loginMode === 'register'){
+        attempt = AccountService.registerAccount(username, password).then(() => {
+            setLoginMode('login')
+            loginLoading(true)
+            return AuthManager.addMojangAccount(username, password)
+        })
+    } else {
+        attempt = AuthManager.addMojangAccount(username, password)
+    }
+
+    attempt.then(async (value) => {
         updateSelectedAccount(value)
         await withTimeout(ConfigManager.refreshDistroAndSettings(value), DISTRO_REFRESH_TIMEOUT)
         refreshRegistrationLink()
-        loginButton.innerHTML = loginButton.innerHTML.replace(Lang.queryJS('login.loggingIn'), Lang.queryJS('login.success'))
+        setLoginButtonText(Lang.queryJS('login.success'))
         $('.circle-loader').toggleClass('load-complete')
         $('.checkmark').toggle()
         setTimeout(() => {
@@ -207,11 +321,12 @@ loginButton.addEventListener('click', () => {
                 loginUsername.value = ''
                 loginPassword.value = ''
                 loginPassword.type = 'password'
+                loginPasswordConfirm.type = 'password'
                 loginPasswordToggle.textContent = loginPasswordToggle.dataset.show
                 $('.circle-loader').toggleClass('load-complete')
                 $('.checkmark').toggle()
+                setLoginMode('login')
                 loginLoading(false)
-                loginButton.innerHTML = loginButton.innerHTML.replace(Lang.queryJS('login.success'), Lang.queryJS('login.login'))
                 formDisabled(false)
             })
         }, 1000)

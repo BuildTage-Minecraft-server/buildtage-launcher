@@ -3,6 +3,7 @@ const https = require('https')
 const { ACCOUNT_API_URL } = require('./apiconstants')
 
 const UPDATE_URL = `${ACCOUNT_API_URL}/account/update`
+const REGISTER_URL = `${ACCOUNT_API_URL}/account/register`
 const REQUEST_TIMEOUT = 15000
 const KNOWN_CODES = new Set(['wrongPassword', 'rateLimited', 'nameTaken', 'rejected', 'unavailable'])
 
@@ -40,17 +41,10 @@ function send(method, url, headers, payload) {
     })
 }
 
-exports.updateAccount = async function(username, password, changes) {
-    const payload = { username, password }
-    if(changes.playerName) {
-        payload.playerName = changes.playerName
-    }
-    if(changes.newPassword) {
-        payload.newPassword = changes.newPassword
-    }
+async function post(url, payload) {
     let res
     try {
-        res = await send('POST', UPDATE_URL, {}, payload)
+        res = await send('POST', url, {}, payload)
     } catch(err) {
         throw new AccountError('network', err.message)
     }
@@ -69,4 +63,19 @@ exports.updateAccount = async function(username, password, changes) {
         code = 'unavailable'
     }
     throw new AccountError(code, message)
+}
+
+exports.updateAccount = function(username, password, changes) {
+    const payload = { username, password }
+    if(changes.playerName) {
+        payload.playerName = changes.playerName
+    }
+    if(changes.newPassword) {
+        payload.newPassword = changes.newPassword
+    }
+    return post(UPDATE_URL, payload)
+}
+
+exports.registerAccount = function(username, password) {
+    return post(REGISTER_URL, { username, password })
 }

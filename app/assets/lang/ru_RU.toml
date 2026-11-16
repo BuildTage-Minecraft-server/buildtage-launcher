@@ -30,6 +30,10 @@ loginButtonText = "ВОЙТИ"
 loginShowPassword = "Показать"
 loginHidePassword = "Скрыть"
 loginRegisterButtonText = "РЕГИСТРАЦИЯ"
+loginRegisterSubheader = "Создание аккаунта"
+loginPasswordConfirmPlaceholder = "ПОВТОРИТЕ ПАРОЛЬ"
+loginSwitchToRegister = "Нет аккаунта? Зарегистрироваться"
+loginSwitchToLogin = "Уже есть аккаунт? Войти"
 
 [ejs.loginOptions]
 loginOptionsTitle = "Вход"
@@ -165,10 +169,21 @@ login = "ВОЙТИ"
 loggingIn = "ВХОД..."
 success = "ГОТОВО"
 tryAgain = "Повторить"
+registerButton = "РЕГИСТРАЦИЯ"
+registering = "РЕГИСТРАЦИЯ..."
 
 [js.login.error]
 invalidValue = "* Неверное значение"
 requiredValue = "* Обязательное поле"
+passwordShort = "* Минимум 8 символов"
+passwordMismatch = "* Пароли не совпадают"
+
+[js.login.registerError]
+nameTaken = "Это имя уже занято."
+rateLimited = "Слишком много попыток. Повторите через минуту."
+unavailable = "Регистрация сейчас недоступна."
+rejected = "Сервер отклонил регистрацию."
+network = "Не удалось связаться с сервером."
 
 [js.login.error.unknown]
 title = "Ошибка входа"

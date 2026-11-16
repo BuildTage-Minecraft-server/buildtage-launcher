@@ -70,6 +70,10 @@ loginButtonText = "LOG IN"
 loginShowPassword = "Show"
 loginHidePassword = "Hide"
 loginRegisterButtonText = "REGISTER"
+loginRegisterSubheader = "Create a game account"
+loginPasswordConfirmPlaceholder = "CONFIRM PASSWORD"
+loginSwitchToRegister = "No account? Register"
+loginSwitchToLogin = "Have an account? Log in"
 
 [ejs.loginOptions]
 loginOptionsTitle = "Sign in"
@@ -239,10 +243,21 @@ login = "LOG IN"
 loggingIn = "LOGGING IN"
 success = "SUCCESS"
 tryAgain = "Try Again"
+registerButton = "REGISTER"
+registering = "REGISTERING"
 
 [js.login.error]
 invalidValue = "* Invalid value"
 requiredValue = "* Required"
+passwordShort = "* At least 8 characters"
+passwordMismatch = "* Passwords do not match"
+
+[js.login.registerError]
+nameTaken = "This name is already taken."
+rateLimited = "Too many attempts. Try again in a minute."
+unavailable = "Registration is not available right now."
+rejected = "The server rejected the registration."
+network = "Could not reach the server."
 
 [js.login.error.unknown]
 title = "Unknown error during login"

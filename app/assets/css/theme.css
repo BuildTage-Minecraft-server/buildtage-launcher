@@ -835,6 +835,29 @@ body *:not(code):not(pre):not(kbd):not(samp) {
     justify-content: center;
 }
 
+#loginModeToggle {
+    margin-top: 8px;
+    padding: 4px 8px;
+    background: none;
+    border: none;
+    color: var(--bt-gold);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+#loginModeToggle:hover,
+#loginModeToggle:focus {
+    color: var(--bt-yellow);
+    outline: none;
+}
+
+#loginModeToggle:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 #overlayContainer {
     background: rgba(6, 8, 13, 0.78);
     backdrop-filter: blur(4px);
