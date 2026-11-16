@@ -78,6 +78,7 @@ loginRegisterSubheader = "Crea una cuenta de juego"
 loginPasswordConfirmPlaceholder = "CONFIRMAR CONTRASEÑA"
 loginSwitchToRegister = "¿No tienes cuenta? Regístrate"
 loginSwitchToLogin = "¿Ya tienes cuenta? Inicia sesión"
+loginLegalNotice = 'Al iniciar sesión o registrarte, aceptas la <a href="https://www.gnu.org/licenses/agpl-3.0.html">licencia del launcher (AGPL-3.0)</a>.'
 
 [ejs.loginOptions]
 loginOptionsTitle = "Opciones de inicio de sesión"

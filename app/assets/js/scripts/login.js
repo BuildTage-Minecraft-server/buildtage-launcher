@@ -309,6 +309,9 @@ loginButton.addEventListener('click', () => {
         updateSelectedAccount(value)
         await withTimeout(ConfigManager.refreshDistroAndSettings(value), DISTRO_REFRESH_TIMEOUT)
         refreshRegistrationLink()
+        if(!ConfigManager.getLegalAccepted()){
+            ConfigManager.setLegalAccepted(remote.app.getVersion())
+        }
         setLoginButtonText(Lang.queryJS('login.success'))
         $('.circle-loader').toggleClass('load-complete')
         $('.checkmark').toggle()

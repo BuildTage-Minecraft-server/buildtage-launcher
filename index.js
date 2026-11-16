@@ -337,63 +337,10 @@ ipcMain.on('discord-rpc-shutdown', (_event) => {
     }
 })
 
-// Handle legal acceptance/decline from legal window
-let legalWin
 // When true, temporarily suppress global dialog IPC handlers because
 // we are running the early dialog flow which awaits those same events.
 let suppressDialogIPC = false
 let ranInitialDialogs = false
-ipcMain.on('legal-accepted', (event) => {
-    if (suppressDialogIPC) {
-        return
-    }
-    try {
-        ConfigManager.load()
-    } catch (err) {
-        console.error('Error loading config before setting legal acceptance', err)
-    }
-    ConfigManager.setLegalAccepted(pjson.version)
-    if (legalWin) {
-        try { legalWin.close() } catch (e) { console.error('Error closing legal window after acceptance', e) }
-    }
-
-    // Show main window after legal acceptance
-    try {
-        if (!win) {
-            createWindow()
-            createMenu()
-
-            // If the splash is already closed, show main window once it's ready
-            if (!splashWin && win) {
-                try {
-                    win.once && win.once('ready-to-show', () => {
-                        try { if (win.isMinimized && win.isMinimized()) win.restore(); win.show(); win.focus() } catch (e) { console.error('Error showing main window after ready-to-show', e) }
-                    })
-                } catch (e) { console.error('Error attaching ready-to-show for main window', e) }
-                // Also attempt an immediate show/focus with a brief alwaysOnTop
-                // toggle to force the window to the foreground on platforms where
-                // windows may remain in background but only if splash is no longer visible.
-                if (!splashWin) {
-                    try {
-                        try { if (win.isMinimized && win.isMinimized()) win.restore() } catch { void 0 }
-                        try { win.setAlwaysOnTop(true) } catch { void 0 }
-                        try { win.show(); win.focus() } catch (e) { console.error('Error forcing main window visible immediately after creation', e) }
-                        setTimeout(() => { try { win.setAlwaysOnTop(false) } catch { void 0 } }, 250)
-                    } catch (e) { console.error('Immediate show/focus attempt failed', e) }
-                }
-            }
-        } else {
-            try { if (win.isMinimized && win.isMinimized()) win.restore(); win.show(); win.focus() } catch (e) { console.error('Error showing existing main window after legal acceptance', e) }
-        }
-    } catch (err) {
-        console.error('Error starting launcher after legal acceptance', err)
-    }
-})
-
-ipcMain.on('legal-declined', (event) => {
-    // User declined legal notices. We'll just quit the app.
-    app.quit()
-})
 
 // Mod Store window IPC handler
 ipcMain.on('open-mod-store', () => {
@@ -795,56 +742,29 @@ if (!gotTheLock) {
 
         function startAfterPrechecks() {
 
-            if (!ConfigManager.getLegalAccepted()) {
-                // Parent the legal window to the main window if it exists,
-                // otherwise parent to the splash so it will appear above it
-                // during startup.
-                legalWin = new BrowserWindow({
-                    width: 960,
-                    height: 720,
-                    resizable: false,
-                    modal: !!(win || splashWin),
-                    parent: win || splashWin || null,
-                    show: false,
-                    icon: getPlatformIcon('vis-icon'),
-                    webPreferences: {
-                        nodeIntegration: true,
-                        contextIsolation: false
-                    }
-                })
-                remoteMain.enable(legalWin.webContents)
-                ejse.data('version', pjson.version)
-                legalWin.loadURL(pathToFileURL(path.join(__dirname, 'app', 'legal.ejs')).toString())
-                legalWin.removeMenu()
-                // Show the legal dialog once ready; it will appear above the
-                // splash if parented correctly.
-                legalWin.once('ready-to-show', () => { legalWin.show() })
-                legalWin.on('closed', () => { legalWin = null })
-            } else {
-                createWindow()
-                createMenu()
-                // If splash was used previously, ensure the main window is shown
-                try {
-                    if (!splashWin && win) {
-                        win.once && win.once('ready-to-show', () => {
-                            try { if (win.isMinimized && win.isMinimized()) win.restore(); win.show() } catch { void 0 }
-                        })
-                    }
-                } catch { void 0 }
-                // Attempt an immediate show/focus with a brief alwaysOnTop toggle
-                // but only if splash is no longer visible.
-                if (!splashWin) {
-                    try {
-                        try { if (win && win.isMinimized && win.isMinimized()) win.restore() } catch { void 0 }
-                        try { if (win) win.setAlwaysOnTop(true) } catch { void 0 }
-                        try { if (win) { win.show(); win.focus() } } catch (e) { console.error('Error forcing main window visible in startAfterPrechecks', e) }
-                        setTimeout(() => { try { if (win) win.setAlwaysOnTop(false) } catch { void 0 } }, 250)
-                    } catch (e) { console.error('Immediate show/focus attempt in startAfterPrechecks failed', e) }
+            createWindow()
+            createMenu()
+            // If splash was used previously, ensure the main window is shown
+            try {
+                if (!splashWin && win) {
+                    win.once && win.once('ready-to-show', () => {
+                        try { if (win.isMinimized && win.isMinimized()) win.restore(); win.show() } catch { void 0 }
+                    })
                 }
+            } catch { void 0 }
+            // Attempt an immediate show/focus with a brief alwaysOnTop toggle
+            // but only if splash is no longer visible.
+            if (!splashWin) {
+                try {
+                    try { if (win && win.isMinimized && win.isMinimized()) win.restore() } catch { void 0 }
+                    try { if (win) win.setAlwaysOnTop(true) } catch { void 0 }
+                    try { if (win) { win.show(); win.focus() } } catch (e) { console.error('Error forcing main window visible in startAfterPrechecks', e) }
+                    setTimeout(() => { try { if (win) win.setAlwaysOnTop(false) } catch { void 0 } }, 250)
+                } catch (e) { console.error('Immediate show/focus attempt in startAfterPrechecks failed', e) }
             }
         }
 
-        // Run initial dialogs (canary -> legal) before showing the splash.
+        // Run initial dialogs (canary) before showing the splash.
         try {
             try { ConfigManager.load() } catch { /* best-effort */ }
             // Temporarily suppress global dialog IPC handlers while we await replies
@@ -898,41 +818,6 @@ if (!gotTheLock) {
                 }
             }
 
-            // Legal flow: if legal not accepted, show it and wait
-            if (!ConfigManager.getLegalAccepted()) {
-                let legalWinEarly = new BrowserWindow({
-                    width: 960,
-                    height: 720,
-                    resizable: false,
-                    modal: !!(win || splashWin),
-                    parent: win || splashWin || null,
-                    show: false,
-                    icon: getPlatformIcon('vis-icon'),
-                    webPreferences: {
-                        nodeIntegration: true,
-                        contextIsolation: false
-                    }
-                })
-                remoteMain.enable(legalWinEarly.webContents)
-                ejse.data('version', pjson.version)
-                legalWinEarly.loadURL(pathToFileURL(path.join(__dirname, 'app', 'legal.ejs')).toString())
-                legalWinEarly.removeMenu()
-                legalWinEarly.once('ready-to-show', () => legalWinEarly.show())
-
-                const legalRes = await Promise.race([
-                    waitOnce('legal-accepted'),
-                    waitOnce('legal-declined')
-                ])
-
-                try { legalWinEarly.close() } catch { void 0 }
-                if (legalRes && legalRes.channel === 'legal-declined') {
-                    // If declined we quit
-                    app.quit()
-                    return
-                }
-                // Mark accepted
-                try { ConfigManager.setLegalAccepted(pjson.version) } catch { /* ignore */ }
-            }
         } catch (err) {
             console.error('Error during initial dialogs', err)
         } finally {
@@ -1030,43 +915,20 @@ if (!gotTheLock) {
                     console.error('Error during post-splash startup', e)
                 }
 
-                // Then wait until either the main window or legal window exists
+                // Then wait until the main window exists
                 // before closing the splash so app doesn't receive window-all-closed.
                 const maxWait = 5000 // ms
                 const pollInterval = 100
                 let waited = 0
                 const checkAndClose = () => {
                     const elapsedNow = splashShownAt ? (Date.now() - splashShownAt) : minShowMs
-                    // Close only when min display time has passed and a main/legal window exists
-                    if ((elapsedNow >= minShowMs) && (win || legalWin)) {
-                        // Make sure the UI the user should see is visible before
-                        // closing the splash. Prefer legal dialog if present,
-                        // otherwise show the main window.
+                    // Close only when min display time has passed and the main window exists
+                    if ((elapsedNow >= minShowMs) && win) {
+                        // Make sure the main window is visible before closing the splash.
                         try {
-                            if (legalWin) {
-                                try {
-                                    // Only force the legal window to front if the splash is
-                                    // not visible if the splash is still shown we should
-                                    // avoid taking focus away from it.
-                                    if (!splashWin) {
-                                        try { legalWin.setAlwaysOnTop(true) } catch { void 0 }
-                                        legalWin.show()
-                                        try { legalWin.focus() } catch { void 0 }
-                                        // Restore alwaysOnTop state
-                                        setTimeout(() => { try { legalWin.setAlwaysOnTop(false) } catch { void 0 } }, 250)
-                                    } else {
-                                        // If splash is still visible, just ensure legalWin is
-                                        // shown once the splash closes (handled elsewhere).
-                                        try { /* no-op: wait for splash to close */ } catch { void 0 }
-                                    }
-                                } catch (e) { console.error('Error showing legalWin before splash close', e) }
-                            } else if (win) {
-                                try {
-                                    if (win.isMinimized && win.isMinimized()) win.restore()
-                                    win.show()
-                                } catch (e) { console.error('Error showing main window before splash close', e) }
-                            }
-                        } catch (e) { console.error('Error during splash close show logic', e) }
+                            if (win.isMinimized && win.isMinimized()) win.restore()
+                            win.show()
+                        } catch (e) { console.error('Error showing main window before splash close', e) }
 
                         // After attempting to show the intended window, set a
                         // short fallback to ensure the main window is visible
@@ -1074,7 +936,7 @@ if (!gotTheLock) {
                         try {
                             setTimeout(() => {
                                 try {
-                                    const anyVisible = (win && win.isVisible && win.isVisible()) || (legalWin && legalWin.isVisible && legalWin.isVisible())
+                                    const anyVisible = win && win.isVisible && win.isVisible()
                                     if (!anyVisible) {
                                         console.warn('No visible window after splash close attempts; creating and showing main window as fallback')
                                         if (!win) {
@@ -1104,13 +966,13 @@ if (!gotTheLock) {
             })
             // We created the splash and will continue startup once the preloader
             // signals completion. Return here to avoid running the duplicate
-            // legal/createWindow logic below and accidentally creating two apps.
+            // createWindow logic below and accidentally creating two apps.
             return
         } catch (err) {
             console.error('Failed to create splash window', err)
             startAfterPrechecks()
         }
-        // If legal not accepted, show legal window first, otherwise create main window
+        // Create the main window
         try {
             ConfigManager.load()
             // If this is a canary build, and user has not acknowledged canary warnings,
@@ -1153,10 +1015,7 @@ if (!gotTheLock) {
                     }
                     ejse.data('websiteURL', LangLoader.queryEJS('landing.websiteURL'))
                     try { canaryWin.close() } catch (err) { console.error('Error closing canary window', err) }
-                    // After canary dialog, we must re-check legal acceptance and
-                    // only create the main window if legal was accepted for this
-                    // version. This prevents the canary dialog from skipping the
-                    // legal acceptance flow.
+                    // After the canary dialog, continue with the normal startup.
                     startAfterPrechecks()
                 })
                 ipcMain.once('canary-close', () => {
@@ -1168,58 +1027,19 @@ if (!gotTheLock) {
                 // Wait here and skip creating the main window until user responds
                 return
             }
-            if (!ranInitialDialogs && !ConfigManager.getLegalAccepted()) {
-                legalWin = new BrowserWindow({
-                    width: 960,
-                    height: 720,
-                    resizable: false,
-                    modal: !!(win || splashWin),
-                    parent: win || splashWin || null,
-                    show: false,
-                    icon: getPlatformIcon('vis-icon'),
-                    webPreferences: {
-                        nodeIntegration: true,
-                        contextIsolation: false
-                    }
-                })
-                remoteMain.enable(legalWin.webContents)
-                ejse.data('version', pjson.version)
-                legalWin.loadURL(pathToFileURL(path.join(__dirname, 'app', 'legal.ejs')).toString())
-                legalWin.removeMenu()
-                legalWin.once('ready-to-show', () => legalWin.show())
-                legalWin.on('closed', () => { legalWin = null })
-            } else {
-                createWindow()
-                createMenu()
-                try {
-                    if (!splashWin && win) {
-                        win.once && win.once('ready-to-show', () => {
-                            try { if (win.isMinimized && win.isMinimized()) win.restore(); win.show() } catch { void 0 }
-                        })
-                    }
-                } catch { void 0 }
-            }
-        } catch (err) {
-            console.error('Failed to load configuration for legal check', err)
-            // If anything goes wrong, show legal window as safe default
-            legalWin = new BrowserWindow({
-                width: 960,
-                height: 720,
-                resizable: false,
-                modal: !!win,
-                parent: win || null,
-                show: false,
-                icon: getPlatformIcon('vis-icon'),
-                webPreferences: {
-                    nodeIntegration: true,
-                    contextIsolation: false
+            createWindow()
+            createMenu()
+            try {
+                if (!splashWin && win) {
+                    win.once && win.once('ready-to-show', () => {
+                        try { if (win.isMinimized && win.isMinimized()) win.restore(); win.show() } catch { void 0 }
+                    })
                 }
-            })
-            remoteMain.enable(legalWin.webContents)
-            legalWin.loadURL(pathToFileURL(path.join(__dirname, 'app', 'legal.ejs')).toString())
-            legalWin.removeMenu()
-            legalWin.once('ready-to-show', () => legalWin.show())
-            legalWin.on('closed', () => { legalWin = null })
+            } catch { void 0 }
+        } catch (err) {
+            console.error('Failed to load configuration', err)
+            createWindow()
+            createMenu()
         }
     })
 }
