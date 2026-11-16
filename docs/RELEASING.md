@@ -25,6 +25,8 @@ The tag starts the Release workflow. It first checks that the tag equals `v<vers
 - **GitHub release.** The installers are attached to a release with generated notes. A version with a prerelease suffix, for example `1.3.0-canary.1`, is marked as a pre-release.
 - **Cloudflare R2.** The installers and the update manifests are uploaded to the `launcher/` folder of the bucket. The manifests go last, so a client never sees an update whose files are not there yet.
 
+If a run fails because of a GitHub outage (a runner that was never assigned, a failed checkout, an interrupted artifact transfer or an API error), the [Auto rerun workflow](../.github/workflows/auto-rerun.yml) restarts only the failed jobs after a short pause. It gives up after three attempts in total and ignores real failures such as a broken build, so a genuine bug is never retried in a loop. Network heavy steps (`npm ci` and the GitHub release upload) also retry on their own.
+
 Every push to a branch also runs the [Build workflow](../.github/workflows/build.yml), which builds the installers without publishing them. Starting it by hand attaches the installers to the run as artifacts, which is useful for testing before releasing.
 
 ## Auto-update

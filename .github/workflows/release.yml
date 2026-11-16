@@ -82,7 +82,12 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          for attempt in 1 2 3; do
+            npm ci && break
+            [ "$attempt" -lt 3 ] || exit 1
+            sleep $((attempt * 15))
+          done
 
       - name: Build installers
         run: npm run dist -- --publish never
@@ -165,12 +170,19 @@ jobs:
           set -euo pipefail
           shopt -s nullglob
           assets=(release/*.exe release/*.dmg release/*.zip release/*.AppImage)
-          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" "${assets[@]}" --clobber
-          else
-            gh release create "$GITHUB_REF_NAME" "${assets[@]}" \
-              --verify-tag \
-              --generate-notes \
-              --title "$TITLE" \
-              --prerelease="$PRERELEASE"
-          fi
+          publish() {
+            if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+              gh release upload "$GITHUB_REF_NAME" "${assets[@]}" --clobber
+            else
+              gh release create "$GITHUB_REF_NAME" "${assets[@]}" \
+                --verify-tag \
+                --generate-notes \
+                --title "$TITLE" \
+                --prerelease="$PRERELEASE"
+            fi
+          }
+          for attempt in 1 2 3; do
+            publish && break
+            [ "$attempt" -lt 3 ] || exit 1
+            sleep $((attempt * 15))
+          done
