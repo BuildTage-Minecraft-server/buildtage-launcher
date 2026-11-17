@@ -1,9 +1,9 @@
 const http = require('http')
 const https = require('https')
-const { ACCOUNT_API_URL } = require('./apiconstants')
+const { ACCOUNT_API_URL, REGISTER_API_URL } = require('./apiconstants')
 
 const UPDATE_URL = `${ACCOUNT_API_URL}/account/update`
-const REGISTER_URL = `${ACCOUNT_API_URL}/account/register`
+const REGISTER_URL = REGISTER_API_URL
 const REQUEST_TIMEOUT = 15000
 const KNOWN_CODES = new Set(['wrongPassword', 'rateLimited', 'nameTaken', 'rejected', 'unavailable'])
 

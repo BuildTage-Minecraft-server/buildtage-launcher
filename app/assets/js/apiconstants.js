@@ -26,6 +26,7 @@ exports.CDN_URL = 'https://cdn.nekrasovdev.space/distribution.json'
 exports.AUTH_BASE_URL = 'https://auth.nekrasovdev.space'
 exports.ACCOUNT_URL = 'https://auth.nekrasovdev.space/web/user'
 exports.ACCOUNT_API_URL = 'https://account.nekrasovdev.space'
+exports.REGISTER_API_URL = 'https://cbo.nekrasovdev.space/api/account/register'
 exports.LEADERBOARD_API_URL = ''
 exports.LEADERBOARD_API_PORT = 8765
 
