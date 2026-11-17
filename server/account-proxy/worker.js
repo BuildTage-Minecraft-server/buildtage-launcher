@@ -80,7 +80,7 @@ async function verifyPassword(env, username, password) {
 }
 
 async function findUserUuid(env, username) {
-    const res = await upstream(env, '/drasl/api/v2/users', {
+    const res = await upstream(env, '/drasl/api/v3/users', {
         headers: { Authorization: `Bearer ${env.DRASL_ADMIN_TOKEN}` }
     })
     if(!res.ok) {
@@ -137,7 +137,7 @@ async function registerAccount(request, env) {
     if(parsed == null) {
         return reply(400, 'rejected')
     }
-    const res = await upstream(env, '/drasl/api/v2/users', {
+    const res = await upstream(env, '/drasl/api/v3/users', {
         method: 'POST',
         headers: { Authorization: `Bearer ${env.DRASL_ADMIN_TOKEN}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: parsed.username, password: parsed.password, playerName: parsed.username })
@@ -165,7 +165,7 @@ async function updateAccount(request, env) {
     if(uuid == null) {
         return reply(502, 'unavailable')
     }
-    const res = await upstream(env, `/drasl/api/v2/users/${encodeURIComponent(uuid)}`, {
+    const res = await upstream(env, `/drasl/api/v3/users/${encodeURIComponent(uuid)}`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${env.DRASL_ADMIN_TOKEN}`, 'Content-Type': 'application/json' },
         body: JSON.stringify(parsed.changes)
