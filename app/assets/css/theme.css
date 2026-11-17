@@ -199,7 +199,7 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #frameBar {
     z-index: 600;
     height: 16px;
-    background: transparent !important;
+    background: rgba(0, 0, 0, 0.5) !important;
     border: none;
     backdrop-filter: none;
 }
@@ -856,28 +856,6 @@ body *:not(code):not(pre):not(kbd):not(samp) {
 #loginModeToggle:disabled {
     opacity: 0.5;
     pointer-events: none;
-}
-
-#loginLegalNotice {
-    display: block;
-    width: 100%;
-    margin-top: 10px;
-    font-size: 14px;
-    line-height: 1.3;
-    text-align: center;
-    color: var(--bt-text-dim);
-}
-
-#loginLegalNotice a {
-    color: var(--bt-gold);
-    text-decoration: none;
-}
-
-#loginLegalNotice a:hover,
-#loginLegalNotice a:focus {
-    color: var(--bt-yellow);
-    text-decoration: underline;
-    outline: none;
 }
 
 #overlayContainer {
