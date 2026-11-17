@@ -153,7 +153,6 @@ const DEFAULT_CONFIG = {
     selectedServer: null,
     selectedAccount: null,
     authenticationDatabase: {},
-    registrationLocked: false,
     modConfigurations: [],
     javaConfig: {}
 }
@@ -170,8 +169,7 @@ exports.save = function(){
 }
 
 /**
- * Keep at most one authenticated account in the configuration and lock
- * registration as soon as the launcher holds an account.
+ * Keep at most one authenticated account in the configuration.
  */
 function enforceSingleAccount(){
     const uuids = Object.keys(config.authenticationDatabase)
@@ -185,17 +183,16 @@ function enforceSingleAccount(){
         }
     }
     config.selectedAccount = keep
-    config.registrationLocked = true
 }
 
 /**
  * Check whether the registration link may be shown. Registration is available
- * only while this launcher has never held an account.
+ * only while this launcher holds no account.
  * 
  * @returns {boolean} True if registration is available, otherwise false.
  */
 exports.isRegistrationAvailable = function(){
-    return !config.registrationLocked && Object.keys(config.authenticationDatabase).length === 0
+    return Object.keys(config.authenticationDatabase).length === 0
 }
 
 /**
@@ -452,7 +449,6 @@ exports.addMojangAuthAccount = function(uuid, accessToken, username, displayName
         }
     }
     config.selectedAccount = uuid
-    config.registrationLocked = true
     config.authenticationDatabase[uuid] = {
         type: 'mojang',
         accessToken,
