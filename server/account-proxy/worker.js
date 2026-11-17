@@ -92,6 +92,7 @@ async function findUserUuid(env, username) {
 }
 
 function classifyFailure(status, message) {
+    console.error('drasl failure', status, message)
     if(status === 429) {
         return reply(429, 'rateLimited')
     }
@@ -196,7 +197,8 @@ export default {
         }
         try {
             return await handler(request, env)
-        } catch {
+        } catch (err) {
+            console.error('upstream error', err)
             return reply(502, 'unavailable')
         }
     }
