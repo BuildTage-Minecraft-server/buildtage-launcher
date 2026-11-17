@@ -38,9 +38,7 @@
             </div>
             <div id="settingsNavItemsContainer">
                 <div id="settingsNavItemsContent">
-                    <button class="settingsNavItem" rSc="settingsTabAccount" id="settingsNavAccount" selected><%-
-                            lang('settings.navAccount') %></button>
-                    <button class="settingsNavItem" rSc="settingsTabMinecraft"><%- lang('settings.navMinecraft')
+                    <button class="settingsNavItem" rSc="settingsTabMinecraft" selected><%- lang('settings.navMinecraft')
                             %></button>
                     <button class="settingsNavItem" rSc="settingsTabMods"><%- lang('settings.navMods') %></button>
                     <button class="settingsNavItem" rSc="settingsTabJava"><%- lang('settings.navJava') %></button>
@@ -59,44 +57,7 @@
         </div>
     </div>
     <div id="settingsContainerRight">
-        <div id="settingsTabAccount" class="settingsTab">
-            <div class="settingsTabHeader">
-                <span class="settingsTabHeaderText"><%- lang('settings.tabAccountHeaderText') %></span>
-            </div>
-            <div class="settingsAuthAccountTypeContainer">
-                <div class="settingsCurrentAccounts" id="settingsCurrentMojangAccounts">
-                    <!-- VI Software auth accounts populated here. -->
-                </div>
-            </div>
-            <div id="settingsSkinPanel">
-                <div id="settingsSkinViewer">
-                    <div id="settingsSkinEmpty"><%- lang('settings.skinEmpty') %></div>
-                </div>
-                <div id="settingsSkinInfo">
-                    <div class="settingsSkinSection">
-                        <div class="settingsFieldTitle"><%- lang('settings.skinTitle') %></div>
-                        <div class="settingsFieldDesc"><%- lang('settings.skinDesc') %></div>
-                        <div class="settingsSkinActions">
-                            <button id="settingsSkinUpload" class="settingsActionButton"><%- lang('settings.skinUpload') %></button>
-                            <button id="settingsSkinReset" class="settingsActionButton danger"><%- lang('settings.skinReset') %></button>
-                        </div>
-                        <div id="settingsSkinStatus"></div>
-                    </div>
-                    <div class="settingsSkinSection">
-                        <div class="settingsFieldTitle"><%- lang('settings.accountDataTitle') %></div>
-                        <div class="settingsFieldDesc"><%- lang('settings.accountDataDesc') %></div>
-                        <div id="settingsAccountForm">
-                            <input type="text" id="settingsAccountName" autocomplete="off" spellcheck="false" placeholder="<%- lang('settings.accountNamePlaceholder') %>">
-                            <input type="password" id="settingsAccountNewPassword" autocomplete="new-password" placeholder="<%- lang('settings.accountPasswordPlaceholder') %>">
-                            <input type="password" id="settingsAccountPassword" autocomplete="current-password" placeholder="<%- lang('settings.accountCurrentPlaceholder') %>">
-                            <button id="settingsAccountSave" class="settingsActionButton"><%- lang('settings.accountSave') %></button>
-                        </div>
-                        <div id="settingsAccountStatus"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="settingsTabMinecraft" class="settingsTab" style="display: none;">
+        <div id="settingsTabMinecraft" class="settingsTab">
             <div class="settingsTabHeader">
                 <span class="settingsTabHeaderText"><%- lang('settings.minecraftTabHeaderText') %></span>
                 <span class="settingsTabHeaderDesc"><%- lang('settings.minecraftTabHeaderDesc') %></span>

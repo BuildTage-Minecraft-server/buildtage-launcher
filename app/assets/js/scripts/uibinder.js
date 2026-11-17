@@ -43,6 +43,7 @@ const VIEWS = {
     landing: '#landingContainer',
     login: '#loginContainer',
     settings: '#settingsContainer',
+    profile: '#profileContainer',
     welcome: '#welcomeContainer',
     waiting: '#waitingContainer'
 }
