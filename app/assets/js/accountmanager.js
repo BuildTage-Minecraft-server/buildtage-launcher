@@ -1,10 +1,14 @@
 const http = require('http')
 const https = require('https')
-const { ACCOUNT_API_URL, REGISTER_API_URL } = require('./apiconstants')
+const crypto = require('crypto')
+const { ACCOUNT_API_URL, REGISTER_API_URL, REGISTER_CHALLENGE_URL } = require('./apiconstants')
 
 const UPDATE_URL = `${ACCOUNT_API_URL}/account/update`
 const REGISTER_URL = REGISTER_API_URL
+const CHALLENGE_URL = REGISTER_CHALLENGE_URL
 const REQUEST_TIMEOUT = 15000
+const MAX_PROOF_BITS = 26
+const PROOF_CHUNK_SIZE = 4000
 const KNOWN_CODES = new Set(['wrongPassword', 'rateLimited', 'nameTaken', 'rejected', 'unavailable'])
 
 class AccountError extends Error {
@@ -49,7 +53,11 @@ async function post(url, payload) {
         throw new AccountError('network', err.message)
     }
     if(res.status >= 200 && res.status < 300) {
-        return
+        try {
+            return JSON.parse(res.body)
+        } catch {
+            return {}
+        }
     }
     let code = 'unavailable'
     let message = ''
@@ -76,6 +84,51 @@ exports.updateAccount = function(username, password, changes) {
     return post(UPDATE_URL, payload)
 }
 
-exports.registerAccount = function(username, password) {
-    return post(REGISTER_URL, { username, password })
+function leadingZeroBits(digest) {
+    let count = 0
+    for(const byte of digest) {
+        if(byte === 0) {
+            count += 8
+            continue
+        }
+        count += Math.clz32(byte) - 24
+        break
+    }
+    return count
+}
+
+function solveChallenge(challenge, bits) {
+    return new Promise(resolve => {
+        const prefix = `${challenge}:`
+        let nonce = 0
+        const step = () => {
+            const limit = nonce + PROOF_CHUNK_SIZE
+            for(; nonce < limit; nonce++) {
+                const digest = crypto.createHash('sha256').update(prefix + nonce).digest()
+                if(leadingZeroBits(digest) >= bits) {
+                    resolve(String(nonce))
+                    return
+                }
+            }
+            setImmediate(step)
+        }
+        step()
+    })
+}
+
+async function requestProof(username) {
+    const task = await post(CHALLENGE_URL, { username })
+    const bits = Number(task.bits)
+    if(!Number.isInteger(bits) || bits <= 0) {
+        return {}
+    }
+    if(bits > MAX_PROOF_BITS || typeof task.challenge !== 'string') {
+        throw new AccountError('unavailable')
+    }
+    return { challenge: task.challenge, nonce: await solveChallenge(task.challenge, bits) }
+}
+
+exports.registerAccount = async function(username, password) {
+    const proof = await requestProof(username)
+    await post(REGISTER_URL, { username, password, ...proof })
 }

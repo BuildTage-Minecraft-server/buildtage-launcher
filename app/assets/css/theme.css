@@ -3895,45 +3895,39 @@ body {
     user-select: text;
 }
 
-.profileSectionHead {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.profileSectionTitle {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--bt-text);
-}
-
 .profileSectionDesc {
-    margin: 4px 0 12px;
+    margin: 0 0 12px;
     font-size: 16px;
     line-height: 1.2;
     color: var(--bt-text-dim);
 }
 
-.profileLink {
-    padding: 0;
-    border: none;
-    background: none;
-    font-size: 16px;
-    cursor: pointer;
-    color: var(--bt-cyan);
-}
-
-.profileLink:hover,
-.profileLink:focus {
-    outline: none;
-    text-decoration: underline;
-}
-
 #profileFields {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px 14px;
+    gap: 12px 18px;
+}
+
+.profileGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.profileGroupPassword {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+}
+
+.profileGroupTitle {
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--bt-line-strong);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--bt-text);
 }
 
 .profileField {
@@ -3943,15 +3937,53 @@ body {
     min-width: 0;
 }
 
-.profileFieldAction {
-    justify-content: flex-end;
-}
-
 .profileFieldLabel {
     font-size: 14px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--bt-text-dim);
+}
+
+.profileFieldHint {
+    min-height: 16px;
+    font-size: 14px;
+    line-height: 16px;
+    color: var(--bt-text-dim);
+}
+
+.profileFieldHint.error {
+    color: var(--bt-bad);
+}
+
+.profileFieldHint.need {
+    color: var(--bt-yellow);
+}
+
+.profileInputWrap {
+    position: relative;
+}
+
+.profileInputWrap .profileInput {
+    padding-right: 84px;
+}
+
+.profileReveal {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    height: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--bt-text-dim);
+}
+
+.profileReveal:hover,
+.profileReveal:focus {
+    outline: none;
+    color: var(--bt-text);
 }
 
 .profileInput {
@@ -3980,8 +4012,21 @@ body {
     border-color: var(--bt-bad);
 }
 
-#profileAccountStatus {
-    margin-top: 10px;
+#profileFooter {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+#profileFooter #profileAccountStatus {
+    flex: 1;
+    min-width: 0;
+}
+
+#profileSave {
+    flex: none;
+    min-width: 170px;
 }
 
 .profileButton {

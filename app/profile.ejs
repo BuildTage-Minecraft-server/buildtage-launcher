@@ -53,34 +53,51 @@
                     </div>
                 </div>
                 <form id="profileAccountForm" autocomplete="off" novalidate>
-                    <div class="profileSectionHead">
-                        <span class="profileSectionTitle"><%- lang('profile.accountTitle') %></span>
-                        <button id="profilePasswordToggle" type="button" class="profileLink" data-show="<%- lang('profile.showPasswords') %>" data-hide="<%- lang('profile.hidePasswords') %>"><%- lang('profile.showPasswords') %></button>
-                    </div>
                     <div class="profileSectionDesc"><%- lang('profile.accountDesc') %></div>
                     <div id="profileFields">
-                        <label class="profileField">
-                            <span class="profileFieldLabel"><%- lang('profile.nameLabel') %></span>
-                            <input type="text" id="profileName" class="profileInput" autocomplete="off" spellcheck="false" maxlength="16" placeholder="<%- lang('profile.namePlaceholder') %>">
-                        </label>
-                        <label class="profileField">
-                            <span class="profileFieldLabel"><%- lang('profile.newPasswordLabel') %></span>
-                            <input type="password" id="profileNewPassword" class="profileInput" autocomplete="new-password" placeholder="<%- lang('profile.newPasswordPlaceholder') %>">
-                        </label>
-                        <div class="profileField profileFieldSpacer"></div>
-                        <label class="profileField">
-                            <span class="profileFieldLabel"><%- lang('profile.repeatPasswordLabel') %></span>
-                            <input type="password" id="profileRepeatPassword" class="profileInput" autocomplete="new-password" placeholder="<%- lang('profile.repeatPasswordPlaceholder') %>">
-                        </label>
-                        <label class="profileField">
-                            <span class="profileFieldLabel"><%- lang('profile.currentPasswordLabel') %></span>
-                            <input type="password" id="profileCurrentPassword" class="profileInput" autocomplete="current-password" placeholder="<%- lang('profile.currentPasswordPlaceholder') %>">
-                        </label>
-                        <div class="profileField profileFieldAction">
-                            <button id="profileSave" type="submit" class="profileButton primary" disabled><%- lang('profile.save') %></button>
+                        <div class="profileGroup">
+                            <div class="profileGroupTitle"><%- lang('profile.nameGroupTitle') %></div>
+                            <div class="profileField">
+                                <label class="profileFieldLabel" for="profileName"><%- lang('profile.nameLabel') %></label>
+                                <input type="text" id="profileName" class="profileInput" autocomplete="off" spellcheck="false" maxlength="16" placeholder="<%- lang('profile.namePlaceholder') %>">
+                                <span id="profileNameHint" class="profileFieldHint" data-idle="<%- lang('profile.nameHint') %>"><%- lang('profile.nameHint') %></span>
+                            </div>
+                        </div>
+                        <div class="profileGroup profileGroupPassword">
+                            <div class="profileGroupTitle"><%- lang('profile.passwordGroupTitle') %></div>
+                            <div class="profileField">
+                                <label class="profileFieldLabel" for="profileNewPassword"><%- lang('profile.newPasswordLabel') %></label>
+                                <div class="profileInputWrap">
+                                    <input type="password" id="profileNewPassword" class="profileInput" autocomplete="new-password" placeholder="<%- lang('profile.newPasswordPlaceholder') %>">
+                                    <button type="button" class="profileReveal" tabindex="-1" data-show="<%- lang('profile.reveal') %>" data-hide="<%- lang('profile.hide') %>"><%- lang('profile.reveal') %></button>
+                                </div>
+                                <span id="profileNewPasswordHint" class="profileFieldHint" data-idle="<%- lang('profile.newPasswordHint') %>"><%- lang('profile.newPasswordHint') %></span>
+                            </div>
+                            <div class="profileField">
+                                <label class="profileFieldLabel" for="profileRepeatPassword"><%- lang('profile.repeatPasswordLabel') %></label>
+                                <div class="profileInputWrap">
+                                    <input type="password" id="profileRepeatPassword" class="profileInput" autocomplete="new-password" placeholder="<%- lang('profile.repeatPasswordPlaceholder') %>">
+                                    <button type="button" class="profileReveal" tabindex="-1" data-show="<%- lang('profile.reveal') %>" data-hide="<%- lang('profile.hide') %>"><%- lang('profile.reveal') %></button>
+                                </div>
+                                <span id="profileRepeatPasswordHint" class="profileFieldHint" data-idle=""></span>
+                            </div>
+                        </div>
+                        <div class="profileGroup">
+                            <div class="profileGroupTitle"><%- lang('profile.confirmGroupTitle') %></div>
+                            <div class="profileField">
+                                <label class="profileFieldLabel" for="profileCurrentPassword"><%- lang('profile.currentPasswordLabel') %></label>
+                                <div class="profileInputWrap">
+                                    <input type="password" id="profileCurrentPassword" class="profileInput" autocomplete="current-password" placeholder="<%- lang('profile.currentPasswordPlaceholder') %>">
+                                    <button type="button" class="profileReveal" tabindex="-1" data-show="<%- lang('profile.reveal') %>" data-hide="<%- lang('profile.hide') %>"><%- lang('profile.reveal') %></button>
+                                </div>
+                                <span id="profileCurrentPasswordHint" class="profileFieldHint" data-idle="<%- lang('profile.currentPasswordHint') %>"><%- lang('profile.currentPasswordHint') %></span>
+                            </div>
                         </div>
                     </div>
-                    <div id="profileAccountStatus" role="status"></div>
+                    <div id="profileFooter">
+                        <div id="profileAccountStatus" role="status"></div>
+                        <button id="profileSave" type="submit" class="profileButton primary" disabled><%- lang('profile.save') %></button>
+                    </div>
                 </form>
             </div>
         </div>

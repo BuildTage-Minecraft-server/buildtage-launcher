@@ -40,7 +40,11 @@ const profileName          = document.getElementById('profileName')
 const profileNewPassword   = document.getElementById('profileNewPassword')
 const profileRepeatPassword = document.getElementById('profileRepeatPassword')
 const profileCurrentPassword = document.getElementById('profileCurrentPassword')
-const profilePasswordToggle = document.getElementById('profilePasswordToggle')
+const profileNameHint      = document.getElementById('profileNameHint')
+const profileNewPasswordHint = document.getElementById('profileNewPasswordHint')
+const profileRepeatPasswordHint = document.getElementById('profileRepeatPasswordHint')
+const profileCurrentPasswordHint = document.getElementById('profileCurrentPasswordHint')
+const profileRevealButtons = document.querySelectorAll('.profileReveal')
 const profileSave          = document.getElementById('profileSave')
 const profileAccountStatus = document.getElementById('profileAccountStatus')
 
@@ -177,25 +181,31 @@ function profileFormProblem(form) {
     return null
 }
 
+function setProfileFieldHint(hint, input, problem, active, kind) {
+    hint.textContent = active ? Lang.queryJS(`profile.account.hint.${problem}`) : hint.dataset.idle
+    hint.classList.toggle('error', active && kind === 'error')
+    hint.classList.toggle('need', active && kind === 'need')
+    input.classList.toggle('invalid', active && kind === 'error')
+}
+
 function refreshProfileForm() {
     const form = readProfileForm()
     const problem = profileFormProblem(form)
+    const nameInvalid = form.rawName.length > 0 && !PROFILE_NAME_PATTERN.test(form.rawName)
+    const passwordShort = form.newPassword.length > 0 && form.newPassword.length < PROFILE_MIN_PASSWORD
+    const mismatch = form.repeatPassword.length > 0 && form.repeatPassword !== form.newPassword
     profileSave.disabled = profileBusy || form.account == null || problem != null
-    profileName.classList.toggle('invalid', form.rawName.length > 0 && !PROFILE_NAME_PATTERN.test(form.rawName))
-    profileNewPassword.classList.toggle('invalid', form.newPassword.length > 0 && form.newPassword.length < PROFILE_MIN_PASSWORD)
-    profileRepeatPassword.classList.toggle('invalid', form.repeatPassword.length > 0 && form.repeatPassword !== form.newPassword)
+    setProfileFieldHint(profileNameHint, profileName, 'invalidName', nameInvalid, 'error')
+    setProfileFieldHint(profileNewPasswordHint, profileNewPassword, 'passwordShort', passwordShort, 'error')
+    setProfileFieldHint(profileRepeatPasswordHint, profileRepeatPassword, 'mismatch', mismatch, 'error')
+    setProfileFieldHint(profileCurrentPasswordHint, profileCurrentPassword, 'needCurrent', problem === 'needCurrent', 'need')
 }
 
 function onProfileFormInput() {
     refreshProfileForm()
     const form = readProfileForm()
-    const touched = form.rawName || form.newPassword || form.repeatPassword || form.password
-    if(!touched) {
-        setProfileStatus(profileAccountStatus, '', null)
-        return
-    }
-    const problem = profileFormProblem(form)
-    setProfileStatus(profileAccountStatus, problem == null ? '' : Lang.queryJS(`profile.account.hint.${problem}`), null)
+    const nothing = form.password.length > 0 && profileFormProblem(form) === 'nothing'
+    setProfileStatus(profileAccountStatus, nothing ? Lang.queryJS('profile.account.hint.nothing') : '', null)
 }
 
 function clearProfileForm() {
@@ -236,12 +246,10 @@ async function saveProfileAccount() {
     }
 }
 
-function setProfilePasswordsVisible(visible) {
-    const type = visible ? 'text' : 'password'
-    profileNewPassword.type = type
-    profileRepeatPassword.type = type
-    profileCurrentPassword.type = type
-    profilePasswordToggle.textContent = visible ? profilePasswordToggle.dataset.hide : profilePasswordToggle.dataset.show
+function setProfileRevealed(button, visible) {
+    const input = button.parentElement.querySelector('input')
+    input.type = visible ? 'text' : 'password'
+    button.textContent = visible ? button.dataset.hide : button.dataset.show
 }
 
 function processProfileLogOut() {
@@ -279,7 +287,9 @@ function confirmProfileLogOut() {
 
 function prepareProfile() {
     clearProfileForm()
-    setProfilePasswordsVisible(false)
+    for(const button of profileRevealButtons) {
+        setProfileRevealed(button, false)
+    }
     setProfileStatus(profileSkinStatus, '', null)
     setProfileStatus(profileAccountStatus, '', null)
     refreshProfileIdentity()
@@ -319,8 +329,10 @@ profileAccountForm.addEventListener('submit', e => {
 for(const input of [profileName, profileNewPassword, profileRepeatPassword, profileCurrentPassword]) {
     input.addEventListener('input', onProfileFormInput)
 }
-profilePasswordToggle.onclick = () => {
-    setProfilePasswordsVisible(profileNewPassword.type === 'password')
+for(const button of profileRevealButtons) {
+    button.onclick = () => {
+        setProfileRevealed(button, button.parentElement.querySelector('input').type === 'password')
+    }
 }
 document.getElementById('profileLogout').onclick = confirmProfileLogOut
 document.getElementById('profileDone').onclick = closeProfile
