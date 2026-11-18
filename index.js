@@ -507,7 +507,7 @@ function createWindow() {
     win = new BrowserWindow({
         width: 980,
         height: 552,
-        icon: getPlatformIcon('vis-icon'),
+        icon: getPlatformIcon('icon'),
         frame: false,
         show: false,
         webPreferences: {
@@ -603,7 +603,7 @@ function createModStoreWindow() {
         minHeight: 600,
         parent: win,
         modal: false,
-        icon: getPlatformIcon('vis-icon'),
+        icon: getPlatformIcon('icon'),
         frame: false,
         show: false,
         backgroundColor: '#1a1a2e',
@@ -783,7 +783,7 @@ if (!gotTheLock) {
                     modal: !!(win || splashWin),
                     parent: win || splashWin || null,
                     show: false,
-                    icon: getPlatformIcon('vis-icon'),
+                    icon: getPlatformIcon('icon'),
                     webPreferences: {
                         nodeIntegration: true,
                         contextIsolation: false
@@ -988,7 +988,7 @@ if (!gotTheLock) {
                     modal: !!(win || splashWin),
                     parent: win || splashWin || null,
                     show: false,
-                    icon: getPlatformIcon('vis-icon'),
+                    icon: getPlatformIcon('icon'),
                     webPreferences: {
                         nodeIntegration: true,
                         contextIsolation: false
