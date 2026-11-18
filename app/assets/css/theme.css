@@ -2384,29 +2384,12 @@ input:checked + .toggleSwitchSlider:before {
     display: none;
 }
 
-.skinStage {
-    position: relative;
-    width: 0;
-    height: 0;
-    transform-style: preserve-3d;
-}
-
-.skinPlayer,
-.skinCube {
+.skinCanvas {
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    height: 0;
-    transform-style: preserve-3d;
-}
-
-.skinFace {
-    position: absolute;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    image-rendering: pixelated;
-    backface-visibility: hidden;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
 }
 
 #settingsSkinInfo {
