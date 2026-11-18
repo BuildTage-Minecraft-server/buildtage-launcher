@@ -35,7 +35,8 @@ const { HeliosDistribution } = require('@visoftware/vis-launcher-core/common')
 
 const logger = LoggerUtil.getLogger('Preloader')
 
-logger.info('BuildTage Launcher')
+logger.info('CBO')
+logger.info('Project by BuildTage Team')
 logger.info('Based on VIS Launcher, © 2023-2026 VI Software and contributors.')
 logger.info('License: AGPL-3.0 https://www.gnu.org/licenses/agpl-3.0.en.html')
 

@@ -225,7 +225,7 @@ accountNamePlaceholder = "Novo nome de jogador"
 accountPasswordPlaceholder = "Nova palavra-passe"
 accountCurrentPlaceholder = "Palavra-passe atual"
 accountSave = "Guardar"
-aboutCopyright = '&copy; 2026 Asesu23. O BuildTage Launcher baseia-se no <a href="https://github.com/VI-Software/vis-launcher" style="color: purple;">VIS Launcher</a> da VI Software e é um <a style="color: purple;" href="https://github.com/Asesu23/buildtage-launcher">projeto de código aberto</a> distribuído sob a <a style="color: purple;" href="https://choosealicense.com/licenses/agpl-3.0">licença AGPL</a>.'
+aboutCopyright = '&copy; 2026 Asesu23. O CBO baseia-se no <a href="https://github.com/VI-Software/vis-launcher" style="color: purple;">VIS Launcher</a> da VI Software e é um <a style="color: purple;" href="https://github.com/Asesu23/buildtage-launcher">projeto de código aberto</a> distribuído sob a <a style="color: purple;" href="https://choosealicense.com/licenses/agpl-3.0">licença AGPL</a>.<br>Project by BuildTage Team'
 
 [ejs.waiting]
 waitingText = "A aguardar VI Software..."

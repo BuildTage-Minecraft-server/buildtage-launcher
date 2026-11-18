@@ -237,20 +237,20 @@ exportSettingsTitle = "Export / Import Settings"
 exportSettingsDesc = "Export your launcher configuration to share or backup your settings, <br> or import settings from a configuration file."
 exportSettingsButton = "Export Settings"
 importSettingsButton = "Import Settings"
-aboutCopyright = '&copy; 2026 Asesu23. BuildTage Launcher is based on <a href="https://github.com/VI-Software/vis-launcher" style="color: purple;">VIS Launcher</a> by VI Software, an <a style="color: purple;" href="https://github.com/Asesu23/buildtage-launcher">open-source project</a> distributed under the <a style="color: purple;" href="https://choosealicense.com/licenses/agpl-3.0">AGPL license</a>.'
+aboutCopyright = '&copy; 2026 Asesu23. CBO is based on <a href="https://github.com/VI-Software/vis-launcher" style="color: purple;">VIS Launcher</a> by VI Software, an <a style="color: purple;" href="https://github.com/Asesu23/buildtage-launcher">open-source project</a> distributed under the <a style="color: purple;" href="https://choosealicense.com/licenses/agpl-3.0">AGPL license</a>.<br>Project by BuildTage Team'
 
 [ejs.waiting]
 waitingText = "Waiting for the account server..."
 
 [ejs.welcome]
 continueButton = "CONTINUE"
-welcomeHeader = "Welcome to BuildTage Launcher"
+welcomeHeader = "Welcome to CBO"
 welcomeDescription = 'This launcher was built for the BuildTage servers and is based on <a href="https://github.com/VI-Software/vis-launcher" style="color: purple;">VIS Launcher</a> by VI Software, an open-source project licensed under AGPL-3.0. It keeps the game and its mods up to date and signs you in with your BuildTage account.'
 welcomeDescCTA = "Fun is just around the corner!"
 
 [ejs.app]
 canary_warning_title = "Canary Build Warning - v{version}"
-canary_warning_text = "You're running a canary (pre-release) version of the launcher <strong style='color:#b33838'>which may be unstable and may break or brick your BuildTage Launcher installation.</strong> If you are not familiar with performing a clean reinstall, do not proceed: close the application and download a stable release from {websiteURL}."
+canary_warning_text = "You're running a canary (pre-release) version of the launcher <strong style='color:#b33838'>which may be unstable and may break or brick your CBO installation.</strong> If you are not familiar with performing a clean reinstall, do not proceed: close the application and download a stable release from {websiteURL}."
 canary_warning_dontask = "Don't show this warning again"
 canary_warning_close = "Close launcher"
 canary_warning_accept = "Accept"

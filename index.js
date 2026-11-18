@@ -649,14 +649,14 @@ function createMenu() {
 
         // Extend default included application menu to continue support for quit keyboard shortcut
         let applicationSubMenu = {
-            label: 'BuildTage Launcher',
+            label: 'CBO',
             submenu: [{
-                label: 'About BuildTage Launcher',
+                label: 'About CBO',
                 selector: 'orderFrontStandardAboutPanel:'
             }, {
                 type: 'separator'
             }, {
-                label: 'Quit BuildTage Launcher',
+                label: 'Quit CBO',
                 accelerator: 'Command+Q',
                 click: () => {
                     app.quit()

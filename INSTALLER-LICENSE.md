@@ -1,4 +1,4 @@
-BuildTage Launcher
+CBO
 ==================
 
 This program is a modified version of VIS Launcher

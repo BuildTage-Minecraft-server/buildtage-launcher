@@ -1,5 +1,5 @@
 appId: 'space.nekrasovdev.buildtage-launcher'
-productName: 'BuildTage Launcher'
+productName: 'CBO'
 # Include architecture in artifact filenames is not here by default, we add them on each platform config if necessary for clarity
 artifactName: '${name}-setup-${version}.${ext}'
 

@@ -1,6 +1,8 @@
 <p align="center"><img src="./app/assets/images/icon.png" width="150px" height="150px" alt="vi software"></p>
 
-<h1 align="center">VI Software Launcher</h1>
+<h1 align="center">CBO</h1>
+
+<p align="center">Project by BuildTage Team</p>
 
 <p align="center">
   <a href="https://github.com/VI-Software/vis-launcher/actions">

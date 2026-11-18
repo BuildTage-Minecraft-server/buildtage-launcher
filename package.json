@@ -1,7 +1,7 @@
 {
   "name": "buildtage-launcher",
   "version": "0.1.12",
-  "productName": "BuildTage Launcher",
+  "productName": "CBO",
   "description": "Minecraft launcher for the BuildTage servers",
   "author": "Asesu23",
   "license": "AGPL-3.0-or-later",
