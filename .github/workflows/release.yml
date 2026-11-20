@@ -95,7 +95,7 @@ jobs:
       - name: Upload build output
         uses: actions/upload-artifact@v7
         with:
-          name: dist-${{ matrix.os }}
+          name: ${{ matrix.os == 'windows-latest' && 'unsigned-windows' || format('dist-{0}', matrix.os) }}
           path: |
             dist/*.exe
             dist/*.dmg
@@ -106,9 +106,99 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  sign-windows:
+    name: Sign Windows installer
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    env:
+      SIGNPATH_ORGANIZATION_ID: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+      SIGNPATH_PROJECT_SLUG: ${{ vars.SIGNPATH_PROJECT_SLUG || 'buildtage-launcher' }}
+      SIGNPATH_POLICY_SLUG: ${{ vars.SIGNPATH_POLICY_SLUG || 'release-signing' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Download build output
+        uses: actions/download-artifact@v8
+        with:
+          name: unsigned-windows
+          path: windows
+
+      - name: Detect SignPath configuration
+        id: signpath
+        env:
+          SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
+        run: |
+          if [ -n "$SIGNPATH_API_TOKEN" ] && [ -n "$SIGNPATH_ORGANIZATION_ID" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::SignPath is not configured, the Windows installer is published unsigned"
+          fi
+
+      - name: Set up Node.js
+        if: steps.signpath.outputs.enabled == 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.signpath.outputs.enabled == 'true'
+        run: |
+          for attempt in 1 2 3; do
+            npm ci --ignore-scripts && break
+            [ "$attempt" -lt 3 ] || exit 1
+            sleep $((attempt * 15))
+          done
+
+      - name: Upload build output
+        id: unsigned
+        if: steps.signpath.outputs.enabled == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-unsigned-installer
+          path: windows/*.exe
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Sign installer
+        if: steps.signpath.outputs.enabled == 'true'
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ env.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ env.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ env.SIGNPATH_POLICY_SLUG }}
+          github-artifact-id: ${{ steps.unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: signed
+
+      - name: Refresh update metadata
+        if: steps.signpath.outputs.enabled == 'true'
+        run: |
+          set -euo pipefail
+          cp signed/*.exe windows/
+          node scripts/finalize-signed-installer.js windows
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-windows
+          path: |
+            windows/*.exe
+            windows/*.blockmap
+            windows/latest*.yml
+          if-no-files-found: error
+          retention-days: 7
+
   publish-r2:
     name: Publish to R2
-    needs: [prepare, build]
+    needs: [prepare, build, sign-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Download build output
@@ -150,7 +240,7 @@ jobs:
 
   publish-github:
     name: Publish GitHub release
-    needs: [prepare, build]
+    needs: [prepare, build, sign-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Download build output

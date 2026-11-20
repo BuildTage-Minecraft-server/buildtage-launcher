@@ -51,6 +51,10 @@ You can download the launcher from:
 - [VI Software Website](https://visoftware.dev/launcher) - Latest stable version
 - [GitHub Releases](https://github.com/VI-Software/vis-launcher/releases) - All versions
 
+## Code signing
+
+Windows installers are built by GitHub Actions and signed through SignPath. See the [code signing policy](./CODE_SIGNING.md).
+
 ## Releases
 
 Every release is cut with a single command. The version lives in `package.json` and is bumped automatically (patch by default).

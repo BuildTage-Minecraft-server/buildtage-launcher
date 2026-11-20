@@ -20,7 +20,7 @@ The script in `scripts/release.js` stops if the branch is behind its upstream or
 
 Use `--dry-run` to print the plan without changing anything. A release can also be cut by hand: set the version, commit, and push a matching tag.
 
-The tag starts the Release workflow. It first checks that the tag equals `v<version>` from `package.json`. Then it builds the installers for Windows, macOS and Linux in parallel. If any build fails, nothing is published and the failed jobs can be re-run from the Actions tab. When all builds pass, two independent jobs publish the result:
+The tag starts the Release workflow. It first checks that the tag equals `v<version>` from `package.json`. Then it builds the installers for Windows, macOS and Linux in parallel. If any build fails, nothing is published and the failed jobs can be re-run from the Actions tab. When all builds pass, the Windows installer is signed (see [Windows code signing](#windows-code-signing)) and two independent jobs publish the result:
 
 - **GitHub release.** The installers are attached to a release with generated notes. A version with a prerelease suffix, for example `1.3.0-canary.1`, is marked as a pre-release.
 - **Cloudflare R2.** The installers and the update manifests are uploaded to the `launcher/` folder of the bucket. The manifests go last, so a client never sees an update whose files are not there yet.
@@ -60,7 +60,21 @@ The bucket is shared with the BuildTage distribution repository. Its publish ste
 aws s3 sync site "s3://${R2_BUCKET}" --delete --exclude "distribution.json" --exclude "launcher/*"
 ```
 
+## Windows code signing
+
+The Windows installer is signed with [SignPath](https://signpath.io) through the free [SignPath Foundation](https://signpath.org) open source program. The `Sign Windows installer` job uploads the unsigned installer, waits for SignPath to sign it, then recalculates the checksum, size and block map of the installer in `latest.yml` and `*.blockmap`. Without this step auto-update would reject the signed file. The job fails if the returned installer has no signature, so an unsigned file is never published by accident while signing is enabled.
+
+The job is skipped when SignPath is not configured, and the installer is then published unsigned. To enable signing:
+
+1. Apply at [signpath.org](https://signpath.org/apply) and link the GitHub repository. The signing policy is described in [CODE_SIGNING.md](../CODE_SIGNING.md).
+2. In SignPath, add the GitHub.com trusted build system, create a project and a `release-signing` policy, and paste [`.signpath/artifact-configuration.xml`](../.signpath/artifact-configuration.xml) as the artifact configuration.
+3. In the repository settings add the secret `SIGNPATH_API_TOKEN` and the variable `SIGNPATH_ORGANIZATION_ID`. The variables `SIGNPATH_PROJECT_SLUG` (default `buildtage-launcher`) and `SIGNPATH_POLICY_SLUG` (default `release-signing`) are optional.
+
+Every signing request of the Foundation program is approved by hand in the SignPath portal. The job waits up to an hour for the decision.
+
+A signature removes the "unknown publisher" state, but Microsoft SmartScreen and Chrome download protection still build reputation per certificate and per file, so a brand new release can show a notice for a short time.
+
 ## Known limits
 
-- The installers are not code signed. Windows shows a SmartScreen warning on the first run.
+- The Windows installer is only signed while SignPath is configured. The application files inside the installer are not signed separately.
 - The macOS build only has a `dmg` target, and Squirrel.Mac needs a signed app and a zip, so macOS does not update itself. The launcher links to the GitHub release page there.
