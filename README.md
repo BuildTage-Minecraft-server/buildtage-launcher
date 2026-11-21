@@ -150,9 +150,15 @@ Bug reports and feature requests are welcome in the [issue tracker](https://gith
 
 ## License
 
-The project is licensed under the GNU Affero General Public License v3.0 or later, see [LICENSE](./LICENSE). Parts of the code come from HeliosLauncher by Daniel D. Scalzi under the MIT License. Installers ship with the notice in [INSTALLER-LICENSE.md](./INSTALLER-LICENSE.md).
+This program is a modified version of [VIS Launcher](https://github.com/VI-Software/vis-launcher), which is based on [HeliosLauncher](https://github.com/dscalzi/helioslauncher).
 
-The software is provided "as is", without warranty of any kind. Minecraft is a trademark of Mojang AB. This project is not affiliated with Mojang or Microsoft.
+- Modifications: Copyright (c) 2026 Asesu23
+- VIS Launcher: Copyright (c) 2023-2026 VI Software and contributors
+- HeliosLauncher portions: Copyright (c) 2017-2026 Daniel D. Scalzi, licensed under the MIT License
+
+The program is free software: you can redistribute it and modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. See [LICENSE](./LICENSE) for the full text. The original copyright notices are kept in the source file headers, and the installer shows the notice from [INSTALLER-LICENSE.md](./INSTALLER-LICENSE.md).
+
+The software is provided "as is", without warranty of any kind. Minecraft is a trademark of Mojang AB. This project is not affiliated with Mojang, Microsoft or VI Software.
 
 ## Credits
 
