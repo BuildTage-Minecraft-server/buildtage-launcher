@@ -217,7 +217,7 @@ importSettingsButton = "Импортировать настройки"
 tabAccountHeaderDesc = "Добавляйте новые аккаунты или управляйте существующими."
 VISAccount = "BuildTage"
 addVISAccount = "+ Добавить аккаунт BuildTage"
-aboutCopyright = '&copy; 2026 Asesu23. CBO основан на <a href="https://github.com/VI-Software/vis-launcher" style="color: purple;">VIS Launcher</a> от VI Software, это <a style="color: purple;" href="https://github.com/Asesu23/buildtage-launcher">проект с открытым исходным кодом</a>, распространяемый под лицензией <a style="color: purple;" href="https://choosealicense.com/licenses/agpl-3.0">AGPL</a>.<br>Project by BuildTage Team'
+aboutCopyright = '&copy; 2026 Asesu23. CBO основан на <a href="https://github.com/VI-Software/vis-launcher" style="color: purple;">VIS Launcher</a> от VI Software, это <a style="color: purple;" href="https://github.com/BuildTage-Minecraft-server/buildtage-launcher">проект с открытым исходным кодом</a>, распространяемый под лицензией <a style="color: purple;" href="https://choosealicense.com/licenses/agpl-3.0">AGPL</a>.<br>Project by BuildTage Team'
 
 [ejs.waiting]
 waitingText = "Подключение к серверу аккаунтов..."

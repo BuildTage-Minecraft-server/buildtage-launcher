@@ -6,7 +6,7 @@
   "author": "Asesu23",
   "license": "AGPL-3.0-or-later",
   "private": true,
-  "homepage": "https://github.com/Asesu23/buildtage-launcher",
+  "homepage": "https://github.com/BuildTage-Minecraft-server/buildtage-launcher",
   "main": "index.js",
   "scripts": {
     "start": "electron . --no-sandbox --ozone-platform=x11",
@@ -54,7 +54,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Asesu23/buildtage-launcher.git"
+    "url": "git+https://github.com/BuildTage-Minecraft-server/buildtage-launcher.git"
   },
   "allowScripts": {
     "electron@41.10.7": true,

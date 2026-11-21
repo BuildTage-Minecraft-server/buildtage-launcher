@@ -80,7 +80,7 @@ if(!isDev){
                 loggerAutoUpdater.info('New update available', info.version)
                 
                 if(process.platform === 'darwin'){
-                    info.darwindownload = `https://github.com/Asesu23/buildtage-launcher/releases/tag/v${info.version}`
+                    info.darwindownload = `https://github.com/BuildTage-Minecraft-server/buildtage-launcher/releases/tag/v${info.version}`
                     showUpdateUI(info)
                 }
                 

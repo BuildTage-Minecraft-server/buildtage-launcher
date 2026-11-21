@@ -1,20 +1,20 @@
-<p align="center"><img src="./app/assets/images/icon.png" width="140" height="140" alt="BuildTage Launcher"></p>
+<p align="center"><img src="./app/assets/images/icon.png" width="140" height="140" alt="CBO Launcher"></p>
 
-<h1 align="center">BuildTage Launcher</h1>
+<h1 align="center">CBO Launcher</h1>
 
-<p align="center">A cross-platform Minecraft launcher that keeps the game, Java and the mod set of the BuildTage servers up to date.</p>
+<p align="center">The desktop launcher for the cbo Minecraft PvP server. It keeps the game, Java and the mods up to date.</p>
 
 <p align="center">
-  <a href="https://github.com/Asesu23/buildtage-launcher/releases/latest"><img src="https://img.shields.io/github/v/release/Asesu23/buildtage-launcher?style=for-the-badge" alt="Latest release"></a>
-  <a href="https://github.com/Asesu23/buildtage-launcher/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/Asesu23/buildtage-launcher/release.yml?style=for-the-badge&label=release" alt="Release workflow"></a>
+  <a href="https://github.com/BuildTage-Minecraft-server/buildtage-launcher/releases/latest"><img src="https://img.shields.io/github/v/release/BuildTage-Minecraft-server/buildtage-launcher?style=for-the-badge" alt="Latest release"></a>
+  <a href="https://github.com/BuildTage-Minecraft-server/buildtage-launcher/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/BuildTage-Minecraft-server/buildtage-launcher/release.yml?style=for-the-badge&label=release" alt="Release workflow"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0--or--later-blue?style=for-the-badge" alt="License"></a>
 </p>
 
 ## Overview
 
-BuildTage Launcher (the application is called CBO) is a desktop client for a community Minecraft server network. A player installs it once and gets the correct game files, the correct Java runtime and the correct mods without touching a single folder. The launcher validates everything before each start and updates itself.
+CBO Launcher is the desktop client for [cbo](https://cbo.nekrasovdev.space), a tactical PvP shooter server for Minecraft 1.20.1 (Forge). A player installs it once and gets the correct game files, the correct Java runtime and the correct mods without touching a single folder. The launcher validates everything before each start and updates itself.
 
-It is built with Electron and is a heavily modified fork of [VIS Launcher](https://github.com/VI-Software/vis-launcher), which is based on [HeliosLauncher](https://github.com/dscalzi/helioslauncher). This repository also contains the small backend piece that makes account registration safe, see [Architecture](#architecture).
+It is built with Electron and is a heavily modified fork of [VIS Launcher](https://github.com/VI-Software/vis-launcher), which is based on [HeliosLauncher](https://github.com/dscalzi/helioslauncher). This repository also contains the small backend piece that makes account registration safe, see [Architecture](#architecture). The repository is maintained by the BuildTage team.
 
 ## Features
 
@@ -42,7 +42,7 @@ It is built with Electron and is a heavily modified fork of [VIS Launcher](https
 
 ## Download
 
-Installers for every release are published on the [Releases page](https://github.com/Asesu23/buildtage-launcher/releases).
+Installers for every release are published on the [Releases page](https://github.com/BuildTage-Minecraft-server/buildtage-launcher/releases) and on the [project website](https://cbo.nekrasovdev.space/#download).
 
 | Platform | Package | Architectures |
 | --- | --- | --- |
@@ -146,7 +146,7 @@ The tag starts the Release workflow. It builds installers for Windows, macOS and
 
 ## Contributing
 
-Bug reports and feature requests are welcome in the [issue tracker](https://github.com/Asesu23/buildtage-launcher/issues). For code changes run `npm run lint` before opening a pull request and write commit messages in the Conventional Commits format.
+Bug reports and feature requests are welcome in the [issue tracker](https://github.com/BuildTage-Minecraft-server/buildtage-launcher/issues). For code changes run `npm run lint` before opening a pull request and write commit messages in the Conventional Commits format.
 
 ## License
 

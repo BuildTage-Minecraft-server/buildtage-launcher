@@ -226,7 +226,7 @@ accountNamePlaceholder = "Nou nom de jugador"
 accountPasswordPlaceholder = "Nova contrasenya"
 accountCurrentPlaceholder = "Contrasenya actual"
 accountSave = "Desa"
-aboutCopyright = '&copy; 2026 Asesu23. El CBO es basa en el <a href="https://github.com/VI-Software/vis-launcher" style="color: purple;">VIS Launcher</a> de VI Software i és un <a style="color: purple;" href="https://github.com/Asesu23/buildtage-launcher">projecte de codi obert</a> distribuït sota la <a style="color: purple;" href="https://choosealicense.com/licenses/agpl-3.0">llicència AGPL</a>.<br>Project by BuildTage Team'
+aboutCopyright = '&copy; 2026 Asesu23. El CBO es basa en el <a href="https://github.com/VI-Software/vis-launcher" style="color: purple;">VIS Launcher</a> de VI Software i és un <a style="color: purple;" href="https://github.com/BuildTage-Minecraft-server/buildtage-launcher">projecte de codi obert</a> distribuït sota la <a style="color: purple;" href="https://choosealicense.com/licenses/agpl-3.0">llicència AGPL</a>.<br>Project by BuildTage Team'
 
 [ejs.waiting]
 waitingText = "Esperant a VI Software..."

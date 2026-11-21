@@ -24,12 +24,12 @@ title_nightly = "CBO Nightly"
 title_canary = "CBO Canary"
 [ejs.landing]
 websiteURL = "https://nekrasovdev.space"
-mediaGitHubURL = "https://github.com/Asesu23/buildtage-launcher"
+mediaGitHubURL = "https://github.com/BuildTage-Minecraft-server/buildtage-launcher"
 mediaDiscordURL = "https://discord.com"
 canaryWebsiteURL = "https://nekrasovdev.space"
 
 [ejs.settings]
-supportLink = "https://github.com/Asesu23/buildtage-launcher/issues"
+supportLink = "https://github.com/BuildTage-Minecraft-server/buildtage-launcher/issues"
 
 [launcher]
 guestModeEnabled = false

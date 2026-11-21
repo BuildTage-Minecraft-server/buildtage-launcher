@@ -20,7 +20,7 @@ The full license text is available at https://www.gnu.org/licenses/agpl-3.0.html
 and in the LICENSE file shipped with this program.
 
 The source code of this version is available at
-https://github.com/Asesu23/buildtage-launcher
+https://github.com/BuildTage-Minecraft-server/buildtage-launcher
 
 This launcher is not affiliated with, endorsed by, or associated with Mojang AB
 or Microsoft. Minecraft is a trademark of Mojang AB.
