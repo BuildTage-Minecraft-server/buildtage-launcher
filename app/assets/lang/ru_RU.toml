@@ -325,6 +325,7 @@ findJdkFailure = "Не удалось найти дистрибутив OpenJDK.
 javaDownloadCorruptedError = "У загруженного JDK неверный хеш, файл может быть повреждён."
 
 [js.landing.dlAsync]
+waitingForServer = "Ожидание запуска сервера: {countdown} (старт {time} МСК)"
 loadingServerInfo = "Загрузка..."
 fatalError = "Критическая ошибка"
 pleaseWait = "Загрузка..."

@@ -2,16 +2,22 @@ const MAX_BODY_BYTES = 2048
 const UPSTREAM_TIMEOUT_MS = 10000
 const USERNAME_PATTERN = /^[a-zA-Z0-9_]{3,16}$/
 const MIN_PASSWORD_LENGTH = 8
+const MSK_OFFSET = '+03:00'
+const OPENS_AT_PATTERN = /^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})$/
+
+function respond(status, body) {
+    return new Response(JSON.stringify(body), {
+        status,
+        headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }
+    })
+}
 
 function reply(status, code, message) {
     const body = { code }
     if(message) {
         body.message = message
     }
-    return new Response(JSON.stringify(body), {
-        status,
-        headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }
-    })
+    return respond(status, body)
 }
 
 function upstream(env, path, init) {
@@ -79,7 +85,7 @@ async function verifyPassword(env, username, password) {
     return null
 }
 
-async function findUserUuid(env, username) {
+async function findUser(env, username) {
     const res = await upstream(env, '/drasl/api/v3/users', {
         headers: { Authorization: `Bearer ${env.DRASL_ADMIN_TOKEN}` }
     })
@@ -87,7 +93,11 @@ async function findUserUuid(env, username) {
         return null
     }
     const needle = username.toLowerCase()
-    const user = (await res.json()).find(entry => typeof entry.username === 'string' && entry.username.toLowerCase() === needle)
+    return (await res.json()).find(entry => typeof entry.username === 'string' && entry.username.toLowerCase() === needle) || null
+}
+
+async function findUserUuid(env, username) {
+    const user = await findUser(env, username)
     return user != null && typeof user.uuid === 'string' ? user.uuid : null
 }
 
@@ -177,9 +187,70 @@ async function updateAccount(request, env) {
     return classifyFailure(res.status, await readFailureMessage(res))
 }
 
+function parseOpensAt(value) {
+    if(typeof value !== 'string') {
+        return null
+    }
+    const match = OPENS_AT_PATTERN.exec(value.trim())
+    if(match == null) {
+        return null
+    }
+    const time = Date.parse(`${match[1]}T${match[2]}:00${MSK_OFFSET}`)
+    return Number.isNaN(time) ? null : time
+}
+
+function parseLaunchRequest(raw) {
+    if(raw.trim().length === 0) {
+        return { credentials: null }
+    }
+    let data
+    try {
+        data = JSON.parse(raw)
+    } catch {
+        return null
+    }
+    if(data == null || typeof data !== 'object') {
+        return null
+    }
+    if(!isText(data.username, 128) || !isText(data.accessToken, 2048) || !isText(data.clientToken, 256)) {
+        return { credentials: null }
+    }
+    return { credentials: { username: data.username, accessToken: data.accessToken, clientToken: data.clientToken } }
+}
+
+async function isLaunchAdmin(env, credentials) {
+    const res = await upstream(env, '/authlib-injector/authserver/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accessToken: credentials.accessToken, clientToken: credentials.clientToken })
+    })
+    if(res.status !== 204 && res.status !== 200) {
+        return false
+    }
+    const user = await findUser(env, credentials.username)
+    return user != null && user.isAdmin === true
+}
+
+async function launchStatus(request, env) {
+    const raw = await request.text()
+    if(raw.length > MAX_BODY_BYTES) {
+        return reply(413, 'rejected')
+    }
+    const parsed = parseLaunchRequest(raw)
+    if(parsed == null) {
+        return reply(400, 'rejected')
+    }
+    const opensAt = parseOpensAt(env.LAUNCH_OPENS_AT)
+    const now = Date.now()
+    const open = opensAt == null || now >= opensAt
+    const admin = !open && parsed.credentials != null && await isLaunchAdmin(env, parsed.credentials)
+    return respond(200, { code: 'ok', now, opensAt, open, admin })
+}
+
 const ROUTES = {
     '/account/update': updateAccount,
-    '/account/register': registerAccount
+    '/account/register': registerAccount,
+    '/launch/status': launchStatus
 }
 
 export default {

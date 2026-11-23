@@ -31,6 +31,7 @@ It is built with Electron and is a heavily modified fork of [VIS Launcher](https
 - Drop-in mods and shader packs management per server
 - Fabric, NeoForge and Forge support, see the [loader support list](./LoaderSupportList.md)
 - Per server memory settings, auto connect and detached launch options
+- Scheduled launch window: files can be pre-installed at any time, the game starts at the opening time set in Moscow time (MSK), and server admins can start it earlier
 
 **Launcher**
 - Automatic launcher updates with differential downloads
@@ -78,7 +79,7 @@ The Windows installer is built by GitHub Actions and submitted for signing from 
 - **Launcher.** The Electron application in this repository. It reads the distribution manifest, validates and downloads files, signs the player in and starts the game.
 - **Distribution and update feed.** Static files on a CDN. The manifest lists servers, game versions and mods. The update feed serves installers, `latest.yml` and block maps for electron-updater.
 - **Authentication.** A Drasl server that speaks the Yggdrasil protocol. The launcher injects Authlib Injector into the game process.
-- **[Account proxy](./server/account-proxy).** A Cloudflare Worker that registers accounts and changes names or passwords. It checks the player's credentials first and only then calls the Drasl admin API with a token that exists only as a Worker secret, so no admin credentials are shipped in the client.
+- **[Account proxy](./server/account-proxy).** A Cloudflare Worker that registers accounts, changes names or passwords and serves the launch schedule. It checks the player's credentials first and only then calls the Drasl admin API with a token that exists only as a Worker secret, so no admin credentials are shipped in the client.
 
 ## Tech stack
 

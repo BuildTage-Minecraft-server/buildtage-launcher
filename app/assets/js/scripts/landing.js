@@ -52,6 +52,7 @@ const {
 const DiscordWrapper          = require('./assets/js/discordwrapper')
 const SkinHead                = require('./assets/js/skinhead')
 const ProcessBuilder          = require('./assets/js/processbuilder')
+const LaunchSchedule          = require('./assets/js/launchschedule')
 const { features } = require('process')
 
 // Launch Elements
@@ -969,6 +970,45 @@ let hasRPC = false
 const GAME_JOINED_REGEX = /\[.+\]: Sound engine started/
 const GAME_LAUNCH_REGEX = /^\[.+\]: (?:MinecraftForge .+ Initialized|ModLauncher .+ starting: .+|Loading Minecraft .+ with Fabric Loader .+)$/
 const MIN_LINGER = 5000
+const LAUNCH_POLL_INTERVAL = 30000
+
+async function waitForLaunchWindow(logger) {
+    let status
+    try {
+        status = await LaunchSchedule.fetchStatus(ConfigManager.getSelectedAccount())
+    } catch(err) {
+        logger.warn('Unable to read the launch schedule, continuing.', err)
+        return
+    }
+    if(status.open || status.admin) {
+        return
+    }
+
+    logger.info('Server is not open yet, waiting for the launch window.')
+    setLaunchPercentage(100)
+    let nextPoll = Date.now() + LAUNCH_POLL_INTERVAL
+
+    while(!status.open) {
+        const remaining = status.opensAt - (Date.now() + status.clockOffset)
+        if(remaining > 0 && Date.now() < nextPoll) {
+            setLaunchDetails(Lang.queryJS('landing.dlAsync.waitingForServer', {
+                time: LaunchSchedule.formatOpensAt(status.opensAt),
+                countdown: LaunchSchedule.formatCountdown(remaining)
+            }))
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            continue
+        }
+        nextPoll = Date.now() + LAUNCH_POLL_INTERVAL
+        try {
+            status = await LaunchSchedule.fetchStatus(null)
+        } catch(err) {
+            logger.warn('Unable to refresh the launch schedule.', err)
+            if(remaining <= 0) {
+                return
+            }
+        }
+    }
+}
 
 async function dlAsync(login = true) {
 
@@ -1063,6 +1103,10 @@ async function dlAsync(login = true) {
     remote.getCurrentWindow().setProgressBar(-1)
 
     fullRepairModule.destroyReceiver()
+
+    if(login) {
+        await waitForLaunchWindow(loggerLaunchSuite)
+    }
 
     setLaunchDetails(Lang.queryJS('landing.dlAsync.preparingToLaunch'))
 

@@ -369,6 +369,7 @@ extractingJava = "Extracting Java"
 javaInstalled = "Java Installed!"
 
 [js.landing.dlAsync]
+waitingForServer = "Waiting for the server launch: {countdown} (opens {time} MSK)"
 loadingServerInfo = "Loading information..."
 fatalError = "Fatal error"
 unableToLoadDistributionIndex = "Could not load a copy of the distribution index. Check the console (CTRL + Shift + i) for more details."
