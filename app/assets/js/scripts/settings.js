@@ -1426,7 +1426,7 @@ function applyGuestModeSettingsRestrictions() {
     document.getElementById('settingsContainer').classList.add('guest-mode-settings')
     
     const settingsContainer = document.getElementById('settingsContainer')
-    const inputs = settingsContainer.querySelectorAll('input, button:not(#settingsNavDone):not(.guestModeLoginBtn):not(.guestModeSignUpBtn), select, .settingsFileSelButton, .rangeSlider')
+    const inputs = settingsContainer.querySelectorAll('input, button:not(#settingsNavDone):not(.guestModeLoginBtn):not(.guestModeSignUpBtn):not(.sendLogsButton), select, .settingsFileSelButton, .rangeSlider')
     
     inputs.forEach(el => {
         if (!el.classList.contains('settingsNavItem') && el.id !== 'settingsNavDone') {

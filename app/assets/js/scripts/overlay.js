@@ -174,6 +174,16 @@ function setOverlayContent(title, description, acknowledge, dismiss = Lang.query
     document.getElementById('overlayDesc').innerHTML = description
     document.getElementById('overlayAcknowledge').innerHTML = acknowledge
     document.getElementById('overlayDismiss').innerHTML = dismiss
+    setOverlayLogsButton(false)
+}
+
+/**
+ * Show or hide the send logs button of the overlay.
+ * 
+ * @param {boolean} visible True to show the button, false to hide it.
+ */
+function setOverlayLogsButton(visible){
+    document.getElementById('overlayReportLogs').style.display = visible ? 'block' : 'none'
 }
 
 /**

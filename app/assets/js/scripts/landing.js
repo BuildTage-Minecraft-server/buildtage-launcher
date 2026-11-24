@@ -822,6 +822,7 @@ function showLaunchFailure(title, desc){
         desc,
         Lang.queryJS('landing.launch.okay')
     )
+    setOverlayLogsButton(true)
     setOverlayHandler(null)
     toggleOverlay(true)
     toggleLaunchArea(false)

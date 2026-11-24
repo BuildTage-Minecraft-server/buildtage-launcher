@@ -2,6 +2,8 @@ const MAX_BODY_BYTES = 2048
 const UPSTREAM_TIMEOUT_MS = 10000
 const USERNAME_PATTERN = /^[a-zA-Z0-9_]{3,16}$/
 const MIN_PASSWORD_LENGTH = 8
+const MAX_LOG_UPLOAD_BYTES = 2 * 1024 * 1024
+const MAX_VERSION_LENGTH = 32
 const MSK_OFFSET = '+03:00'
 const OPENS_AT_PATTERN = /^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})$/
 
@@ -12,8 +14,8 @@ function respond(status, body) {
     })
 }
 
-function reply(status, code, message) {
-    const body = { code }
+function reply(status, code, message, extra) {
+    const body = { code, ...extra }
     if(message) {
         body.message = message
     }
@@ -187,6 +189,31 @@ async function updateAccount(request, env) {
     return classifyFailure(res.status, await readFailureMessage(res))
 }
 
+async function uploadLogs(request, env) {
+    if(!env.LOGS) {
+        return reply(503, 'unavailable')
+    }
+    const length = Number(request.headers.get('Content-Length'))
+    if(!Number.isInteger(length) || length <= 0) {
+        return reply(411, 'rejected')
+    }
+    if(length > MAX_LOG_UPLOAD_BYTES) {
+        return reply(413, 'rejected')
+    }
+    const body = await request.arrayBuffer()
+    const magic = new Uint8Array(body.slice(0, 2))
+    if(body.byteLength !== length || magic[0] !== 0x1f || magic[1] !== 0x8b) {
+        return reply(400, 'rejected')
+    }
+    const id = crypto.randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase()
+    const version = (request.headers.get('X-Launcher-Version') || 'unknown').slice(0, MAX_VERSION_LENGTH)
+    await env.LOGS.put(`reports/${id}.log.gz`, body, {
+        httpMetadata: { contentType: 'application/gzip' },
+        customMetadata: { launcherVersion: version, uploadedAt: new Date().toISOString() }
+    })
+    return reply(201, 'ok', null, { id })
+}
+
 function parseOpensAt(value) {
     if(typeof value !== 'string') {
         return null
@@ -247,10 +274,15 @@ async function launchStatus(request, env) {
     return respond(200, { code: 'ok', now, opensAt, open, admin })
 }
 
-const ROUTES = {
+const UPSTREAM_ROUTES = {
     '/account/update': updateAccount,
     '/account/register': registerAccount,
     '/launch/status': launchStatus
+}
+
+const ROUTES = {
+    ...UPSTREAM_ROUTES,
+    '/logs/upload': uploadLogs
 }
 
 export default {
@@ -263,7 +295,7 @@ export default {
         if(request.method !== 'POST') {
             return reply(405, 'rejected')
         }
-        if(!env.DRASL_ADMIN_TOKEN || !env.DRASL_URL) {
+        if(url.pathname in UPSTREAM_ROUTES && (!env.DRASL_ADMIN_TOKEN || !env.DRASL_URL)) {
             return reply(503, 'unavailable')
         }
         try {

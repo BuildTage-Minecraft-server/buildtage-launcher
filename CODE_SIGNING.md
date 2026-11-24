@@ -25,3 +25,5 @@ Everyone with access to the repository or to the signing service must use multi-
 ## Privacy
 
 The launcher does not collect telemetry. It only connects to other systems when the user asks for it or when the launcher needs them to work: the authentication service when signing in, the update server when checking for launcher updates, and the game file and mod servers when preparing a game launch.
+
+The launcher keeps its own log files on the user's computer. They are uploaded only when the user presses "Send logs" or uses `Ctrl+Shift+L` and then confirms the dialog. The report contains the launcher and game logs, the player nickname and basic system information such as the OS version and the amount of memory. Passwords, access tokens and the user home directory path are removed before the report is written and sent.

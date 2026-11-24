@@ -25,6 +25,8 @@ const fs             = require('fs-extra')
 const os             = require('os')
 const path           = require('path')
 
+require('./logforwarder')
+
 const ConfigManager  = require('./configmanager')
 const { DistroAPI }  = require('./distromanager')
 const LangLoader     = require('./langloader')

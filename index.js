@@ -39,6 +39,7 @@ const { DistroAPI } = require('./app/assets/js/distromanager')
 const ModStoreManager = require('./app/assets/js/modstoremanager')
 const pjson = require('./package.json')
 const { Client: DiscordRPCClient } = require('@visoftware/discord-rpc')
+const LogReporter = require('./app/assets/js/logreporter')
 
 if(!isDev && process.argv.some(arg => /^--(?:remote-debugging|inspect|debug|js-flags)/.test(arg))) {
     app.exit(1)
@@ -380,6 +381,14 @@ ipcMain.handle('modstore-get-server-by-id', async (event, id) => {
     return distro.getServerById(id)
 })
 
+ipcMain.on('logs-entries', (_event, entries) => {
+    LogReporter.recordBatch(entries)
+})
+
+ipcMain.on('logs-report-request', (event) => {
+    LogReporter.promptAndSend(BrowserWindow.fromWebContents(event.sender))
+})
+
 ipcMain.on('modstore-log', (event, level, message) => {
     const { LoggerUtil } = require('@visoftware/vis-launcher-core')
     const logger = LoggerUtil.getLogger('ModStore')
@@ -519,6 +528,7 @@ function createWindow() {
         backgroundColor: '#08090f'
     })
     remoteMain.enable(win.webContents)
+    LogReporter.watch(win)
 
     if(!isDev) {
         win.webContents.on('devtools-opened', () => win.webContents.closeDevTools())
@@ -578,6 +588,7 @@ function createSplashWindow() {
         }
     })
     remoteMain.enable(splashWin.webContents)
+    LogReporter.watch(splashWin)
     splashWin.removeMenu()
     splashWin.loadURL(pathToFileURL(path.join(__dirname, 'app', 'splash.ejs')).toString())
     // record shown time now as a fallback in case 'ready-to-show' fires later
@@ -728,6 +739,8 @@ const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {
     app.quit()
 } else {
+    LogReporter.init()
+
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         // Someone or something tried to run a second instance of our APP, we should focus our window.
         if (win) {

@@ -276,6 +276,7 @@ class ProcessBuilder {
                     Lang.queryJS('processbuilder.exit.message') + code + Lang.queryJS('processbuilder.exit.visnosupport'),
                     Lang.queryJS('processbuilder.exit.copyCode'),
                 )
+                setOverlayLogsButton(true)
                 setOverlayHandler(() => {
                     copy(Lang.queryJS('processbuilder.exit.copyCodeText') + code)
                     toggleOverlay(false)

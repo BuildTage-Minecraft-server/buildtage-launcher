@@ -39,6 +39,7 @@ It is built with Electron and is a heavily modified fork of [VIS Launcher](https
 - Discord Rich Presence
 - Interface languages: English, Russian, Spanish, Portuguese and Catalan
 - Runtime guard that watches the game process for unexpected injected modules
+- Opt-in log reports: a player can send a redacted diagnostic report from the error dialog, from Settings, or with `Ctrl+Shift+L`, and gets a report ID to share with the administrators
 - Hardened Electron build: restricted fuses and ASAR integrity validation
 
 ## Download
@@ -79,7 +80,7 @@ The Windows installer is built by GitHub Actions and submitted for signing from 
 - **Launcher.** The Electron application in this repository. It reads the distribution manifest, validates and downloads files, signs the player in and starts the game.
 - **Distribution and update feed.** Static files on a CDN. The manifest lists servers, game versions and mods. The update feed serves installers, `latest.yml` and block maps for electron-updater.
 - **Authentication.** A Drasl server that speaks the Yggdrasil protocol. The launcher injects Authlib Injector into the game process.
-- **[Account proxy](./server/account-proxy).** A Cloudflare Worker that registers accounts, changes names or passwords and serves the launch schedule. It checks the player's credentials first and only then calls the Drasl admin API with a token that exists only as a Worker secret, so no admin credentials are shipped in the client.
+- **[Account proxy](./server/account-proxy).** A Cloudflare Worker that registers accounts, changes names or passwords and serves the launch schedule. It checks the player's credentials first and only then calls the Drasl admin API with a token that exists only as a Worker secret, so no admin credentials are shipped in the client. The same worker stores the log reports that players send, in a private R2 bucket.
 
 ## Tech stack
 
@@ -98,7 +99,7 @@ The Windows installer is built by GitHub Actions and submitted for signing from 
 ```text
 index.js                   Electron main process
 app/                       Views (EJS), renderer scripts, styles, language files
-app/assets/js/             Account, config, distribution, mod store and process builder modules
+app/assets/js/             Account, config, distribution, mod store, process builder and log reporting modules
 app/assets/lang/           Interface translations
 scripts/                   Release automation and build helpers
 server/account-proxy/      Cloudflare Worker for account registration and updates

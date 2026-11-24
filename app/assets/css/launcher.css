@@ -2662,6 +2662,7 @@ input:checked + .toggleSwitchSlider:before {
     transition: 0.25s ease;
     outline: none;
     text-decoration: none;
+    cursor: pointer;
 }
 .settingsAboutButton:hover,
 .settingsAboutButton:focus {
@@ -4273,6 +4274,26 @@ input:checked + .toggleSwitchSlider:before {
     color: rgba(255, 255, 255, 0.75);
 }
 #overlayDismiss:active {
+    color: rgba(165, 165, 165, 0.75);
+}
+
+/* Overlay send logs option styles. */
+#overlayReportLogs {
+    margin-top: 6px;
+    font-weight: bold;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.55);
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+#overlayReportLogs:hover,
+#overlayReportLogs:focus {
+    color: rgba(255, 255, 255, 0.85);
+}
+#overlayReportLogs:active {
     color: rgba(165, 165, 165, 0.75);
 }
 

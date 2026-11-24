@@ -203,6 +203,14 @@ document.addEventListener('readystatechange', function () {
             })
         })
 
+        // Bind send logs buttons.
+        Array.from(document.getElementsByClassName('sendLogsButton')).map((val) => {
+            val.addEventListener('click', e => {
+                ipcRenderer.send('logs-report-request')
+                document.activeElement.blur()
+            })
+        })
+
         // Remove focus from social media buttons once they're clicked.
         Array.from(document.getElementsByClassName('mediaURL')).map(val => {
             val.addEventListener('click', e => {
