@@ -667,7 +667,6 @@ sendButton = "Enviar registos"
 
 [js.logs]
 title = "Enviar registos"
-confirmMessage = "Enviar os registos à equipa do CBO?"
 crashMessage = "O CBO encontrou um problema. Enviar os registos à equipa do CBO para o podermos corrigir?"
 confirmDetail = "O relatório inclui o registo do launcher, o último registo do jogo, o seu nome de jogador e informação básica do sistema, como a versão do sistema operativo e a memória. As palavras-passe e os tokens de acesso são removidos antes do envio."
 send = "Enviar"

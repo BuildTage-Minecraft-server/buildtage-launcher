@@ -30,7 +30,7 @@ const REDACTIONS = [
 
 let logPath = null
 let previousLogPath = null
-let promptOpen = false
+let activeFlow = null
 let crashPrompted = false
 let lastReport = null
 
@@ -149,6 +149,12 @@ function init() {
     hookStream(process.stdout, 'info')
     hookStream(process.stderr, 'error')
     process.on('uncaughtException', handleUncaughtException)
+    app.on('before-quit', event => {
+        if(activeFlow != null) {
+            event.preventDefault()
+            activeFlow.then(() => app.quit())
+        }
+    })
     record('main', 'info', `Session started, CBO ${pjson.version}`)
 }
 
@@ -240,7 +246,11 @@ function readCredentials() {
     if(account == null || !account.accessToken || !clientToken) {
         return null
     }
-    return { accessToken: account.accessToken, clientToken }
+    return {
+        accessToken: account.accessToken,
+        clientToken,
+        playerName: String(account.displayName || account.username || '')
+    }
 }
 
 function failure(code, message) {
@@ -257,6 +267,7 @@ async function upload(credentials) {
             'Content-Type': 'application/gzip',
             'Authorization': `Bearer ${credentials.accessToken}`,
             'X-Client-Token': credentials.clientToken,
+            'X-Player-Name': encodeURIComponent(credentials.playerName),
             'X-Launcher-Version': pjson.version
         },
         body,
@@ -295,13 +306,14 @@ function usableWindow(window) {
 
 function showBox(window, options) {
     const base = { title: t('title'), noLink: true, ...options }
-    return window ? dialog.showMessageBox(window, base) : dialog.showMessageBox(base)
+    const target = usableWindow(window)
+    return target ? dialog.showMessageBox(target, base) : dialog.showMessageBox(base)
 }
 
-async function confirmSend(window, crashed) {
+async function confirmCrashReport(window) {
     const { response } = await showBox(window, {
-        type: crashed ? 'error' : 'question',
-        message: t(crashed ? 'crashMessage' : 'confirmMessage'),
+        type: 'error',
+        message: t('crashMessage'),
         detail: t('confirmDetail'),
         buttons: [t('send'), t('cancel')],
         defaultId: 0,
@@ -338,12 +350,7 @@ async function showFailure(window, err) {
     }
 }
 
-async function promptAndSend(parent, { crashed = false } = {}) {
-    if(promptOpen) {
-        return
-    }
-    promptOpen = true
-    const window = usableWindow(parent)
+async function runSend(window, crashed) {
     try {
         if(lastReport != null && Date.now() - lastReport.time < SEND_COOLDOWN_MS) {
             await showBox(window, {
@@ -358,7 +365,7 @@ async function promptAndSend(parent, { crashed = false } = {}) {
             await showFailure(window, failure('unauthorized'))
             return
         }
-        if(!await confirmSend(window, crashed)) {
+        if(crashed && !await confirmCrashReport(window)) {
             return
         }
         let id
@@ -374,9 +381,17 @@ async function promptAndSend(parent, { crashed = false } = {}) {
         await showSent(window, id)
     } catch(err) {
         record('main', 'error', `Log report dialog failed: ${err.message}`)
-    } finally {
-        promptOpen = false
     }
+}
+
+function sendReport(window, { crashed = false } = {}) {
+    if(activeFlow != null) {
+        return activeFlow
+    }
+    activeFlow = runSend(window, crashed).finally(() => {
+        activeFlow = null
+    })
+    return activeFlow
 }
 
 function reportCrash(window) {
@@ -384,7 +399,7 @@ function reportCrash(window) {
         return
     }
     crashPrompted = true
-    promptAndSend(window, { crashed: true })
+    sendReport(window, { crashed: true })
 }
 
 function watch(window) {
@@ -392,7 +407,7 @@ function watch(window) {
     contents.on('before-input-event', (event, input) => {
         if(input.type === 'keyDown' && input.shift && (input.control || input.meta) && input.code === 'KeyL') {
             event.preventDefault()
-            promptAndSend(window)
+            sendReport(window)
         }
     })
     contents.on('render-process-gone', (event, details) => {
@@ -413,4 +428,4 @@ function watch(window) {
     })
 }
 
-module.exports = { init, record, recordBatch, watch, promptAndSend }
+module.exports = { init, record, recordBatch, watch, sendReport }

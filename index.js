@@ -386,7 +386,7 @@ ipcMain.on('logs-entries', (_event, entries) => {
 })
 
 ipcMain.on('logs-report-request', (event) => {
-    LogReporter.promptAndSend(BrowserWindow.fromWebContents(event.sender))
+    LogReporter.sendReport(BrowserWindow.fromWebContents(event.sender))
 })
 
 ipcMain.on('modstore-log', (event, level, message) => {

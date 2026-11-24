@@ -668,7 +668,6 @@ sendButton = "Envia els registres"
 
 [js.logs]
 title = "Envia els registres"
-confirmMessage = "Vols enviar els registres a l'equip de CBO?"
 crashMessage = "CBO ha trobat un problema. Vols enviar els registres a l'equip de CBO perquè puguem solucionar-ho?"
 confirmDetail = "L'informe inclou el registre del llançador, l'últim registre del joc, el teu nom de jugador i informació bàsica del sistema, com la versió del sistema operatiu i la memòria. Les contrasenyes i els tokens d'accés s'eliminen abans de l'enviament."
 send = "Envia"

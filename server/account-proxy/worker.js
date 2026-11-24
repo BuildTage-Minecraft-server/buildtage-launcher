@@ -6,6 +6,7 @@ const USERNAME_PATTERN = /^[a-zA-Z0-9_]{3,16}$/
 const MIN_PASSWORD_LENGTH = 8
 const MAX_LOG_UPLOAD_BYTES = 2 * 1024 * 1024
 const MAX_VERSION_LENGTH = 32
+const MAX_PLAYER_NAME_LENGTH = 32
 const MSK_OFFSET = '+03:00'
 const OPENS_AT_PATTERN = /^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})$/
 
@@ -195,10 +196,21 @@ function readSessionHeaders(request) {
     const authorization = request.headers.get('Authorization') || ''
     const accessToken = authorization.startsWith('Bearer ') ? authorization.slice(7).trim() : ''
     const clientToken = (request.headers.get('X-Client-Token') || '').trim()
-    if(!isText(accessToken, 2048) || !isText(clientToken, 256)) {
+    if(!isText(accessToken, 4096) || !isText(clientToken, 256)) {
         return null
     }
     return { accessToken, clientToken }
+}
+
+function readPlayerName(request) {
+    let name = ''
+    try {
+        name = decodeURIComponent(request.headers.get('X-Player-Name') || '')
+    } catch {
+        name = ''
+    }
+    const safe = name.replace(/[^\p{L}\p{N}_-]/gu, '_').slice(0, MAX_PLAYER_NAME_LENGTH)
+    return safe.length > 0 ? safe : 'unknown'
 }
 
 async function validateSession(env, session) {
@@ -241,9 +253,12 @@ async function uploadLogs(request, env) {
     }
     const id = crypto.randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase()
     const version = (request.headers.get('X-Launcher-Version') || 'unknown').slice(0, MAX_VERSION_LENGTH)
-    await env.LOGS.put(`reports/${id}.log.gz`, body, {
+    const player = readPlayerName(request)
+    const now = new Date()
+    const stamp = now.toISOString().replace(/[-:]/g, '').replace(/\.\d+Z$/, 'Z')
+    await env.LOGS.put(`reports/${player}/${player}_${stamp}_${id}.log.gz`, body, {
         httpMetadata: { contentType: 'application/gzip' },
-        customMetadata: { launcherVersion: version, uploadedAt: new Date().toISOString() }
+        customMetadata: { playerName: player, launcherVersion: version, uploadedAt: now.toISOString() }
     })
     return reply(201, 'ok', null, { id })
 }

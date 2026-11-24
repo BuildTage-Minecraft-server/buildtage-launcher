@@ -59,23 +59,26 @@ POST /logs/upload
 Content-Type: application/gzip
 Authorization: Bearer <accessToken>
 X-Client-Token: <clientToken>
+X-Player-Name: <url encoded nickname>
 X-Launcher-Version: 0.1.15
 ```
 
 The endpoint requires a signed in player. The worker validates the access token and client token with the Drasl Yggdrasil API before it reads the body, and answers `401` with `{ "code": "unauthorized" }` when they are missing or no longer valid. The tokens are only used for this check and are never stored.
 
-The body is a gzip compressed plain text report. The launcher builds it only after the player confirms the dialog. It contains the launcher log of the current and the previous session, the tail of the game `latest.log`, the newest crash report from the last 7 days, the player nickname and basic system information (OS, memory, launcher version). Passwords, access tokens and the user home directory path are removed on the client before the report is written or sent.
+The body is a gzip compressed plain text report. The launcher builds it when the player presses "Send logs" or uses `Ctrl+Shift+L`. After a crash it asks first. It contains the launcher log of the current and the previous session, the tail of the game `latest.log`, the newest crash report from the last 7 days, the player nickname and basic system information (OS, memory, launcher version). Passwords, access tokens and the user home directory path are removed on the client before the report is written or sent.
 
-The worker requires a `Content-Length` of at most 2 MB and a gzip signature, stores the body in the `LOGS` bucket as `reports/<id>.log.gz` and answers `201` with `{ "code": "ok", "id": "<id>" }`. The player gets the id in the launcher and passes it to the administrators.
+The worker requires a `Content-Length` of at most 2 MB and a gzip signature, stores the body in the `LOGS` bucket as `reports/<nickname>/<nickname>_<UTC time>_<id>.log.gz` and answers `201` with `{ "code": "ok", "id": "<id>" }`. The player gets the id in the launcher and can pass it to the administrators. Reports are grouped by nickname, so all reports of one player are in one folder.
+
+The nickname comes from the launcher and is only sanitized, not verified against the token (a valid session proves that the player has an account, not which one). Treat it as a label for support, not as proof of identity. Anything other than letters, digits, `_` and `-` is replaced with `_`, the name is cut to 32 characters and an empty name becomes `unknown`.
 
 Read a report:
 
 ```
-npx wrangler r2 object get buildtage-launcher-logs/reports/<id>.log.gz --file report.log.gz --remote
+npx wrangler r2 object get "buildtage-launcher-logs/reports/<nickname>/<file>.log.gz" --file report.log.gz --remote
 gunzip report.log.gz
 ```
 
-Reports can also be browsed in the Cloudflare dashboard under R2.
+The easiest way to find a player's reports is the Cloudflare dashboard: R2, the bucket, then the `reports/<nickname>/` folder. The id from the launcher is part of the file name.
 
 ## Hardening
 

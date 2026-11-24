@@ -673,7 +673,6 @@ sendButton = "Send logs"
 
 [js.logs]
 title = "Send logs"
-confirmMessage = "Send logs to the CBO team?"
 crashMessage = "CBO ran into a problem. Send logs to the CBO team so we can fix it?"
 confirmDetail = "The report contains the launcher log, the latest game log, your nickname and basic system information such as the OS version and memory. Passwords and access tokens are removed before sending."
 send = "Send"
