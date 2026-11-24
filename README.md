@@ -39,7 +39,7 @@ It is built with Electron and is a heavily modified fork of [VIS Launcher](https
 - Discord Rich Presence
 - Interface languages: English, Russian, Spanish, Portuguese and Catalan
 - Runtime guard that watches the game process for unexpected injected modules
-- Opt-in log reports: a player can send a redacted diagnostic report from the error dialog, from Settings, or with `Ctrl+Shift+L`, and gets a report ID to share with the administrators
+- Opt-in log reports: a signed in player can send a redacted diagnostic report from the error dialog, from Settings, or with `Ctrl+Shift+L`, and gets a report ID to share with the administrators
 - Hardened Electron build: restricted fuses and ASAR integrity validation
 
 ## Download

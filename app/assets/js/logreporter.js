@@ -233,12 +233,30 @@ function buildReport() {
     return redact(report)
 }
 
-async function upload() {
+function readCredentials() {
+    attempt(() => ConfigManager.load())
+    const account = attempt(() => ConfigManager.getSelectedAccount())
+    const clientToken = attempt(() => ConfigManager.getClientToken())
+    if(account == null || !account.accessToken || !clientToken) {
+        return null
+    }
+    return { accessToken: account.accessToken, clientToken }
+}
+
+function failure(code, message) {
+    const err = new Error(message || code)
+    err.code = code
+    return err
+}
+
+async function upload(credentials) {
     const body = zlib.gzipSync(Buffer.from(buildReport(), 'utf8'))
     const res = await fetch(LOG_UPLOAD_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/gzip',
+            'Authorization': `Bearer ${credentials.accessToken}`,
+            'X-Client-Token': credentials.clientToken,
             'X-Launcher-Version': pjson.version
         },
         body,
@@ -251,7 +269,7 @@ async function upload() {
         void 0
     }
     if(!res.ok || typeof data.id !== 'string') {
-        throw new Error(data.code || `HTTP ${res.status}`)
+        throw failure(data.code, data.code || `HTTP ${res.status}`)
     }
     return data.id
 }
@@ -309,8 +327,8 @@ async function showSent(window, id) {
 async function showFailure(window, err) {
     const { response } = await showBox(window, {
         type: 'error',
-        message: t('failedMessage'),
-        detail: t('failedDetail', { error: err.message }),
+        message: err.code === 'unauthorized' ? t('unauthorizedMessage') : t('failedMessage'),
+        detail: err.code === 'unauthorized' ? t('unauthorizedDetail') : t('failedDetail', { error: err.message }),
         buttons: [t('openFolder'), t('ok')],
         defaultId: 1,
         cancelId: 1
@@ -335,12 +353,17 @@ async function promptAndSend(parent, { crashed = false } = {}) {
             })
             return
         }
+        const credentials = readCredentials()
+        if(credentials == null) {
+            await showFailure(window, failure('unauthorized'))
+            return
+        }
         if(!await confirmSend(window, crashed)) {
             return
         }
         let id
         try {
-            id = await upload()
+            id = await upload(credentials)
         } catch(err) {
             record('main', 'error', `Log upload failed: ${err.message}`)
             await showFailure(window, err)

@@ -57,8 +57,12 @@ The check is a launcher side gate. To keep the game itself closed, enable a whit
 ```
 POST /logs/upload
 Content-Type: application/gzip
-X-Launcher-Version: 0.1.14
+Authorization: Bearer <accessToken>
+X-Client-Token: <clientToken>
+X-Launcher-Version: 0.1.15
 ```
+
+The endpoint requires a signed in player. The worker validates the access token and client token with the Drasl Yggdrasil API before it reads the body, and answers `401` with `{ "code": "unauthorized" }` when they are missing or no longer valid. The tokens are only used for this check and are never stored.
 
 The body is a gzip compressed plain text report. The launcher builds it only after the player confirms the dialog. It contains the launcher log of the current and the previous session, the tail of the game `latest.log`, the newest crash report from the last 7 days, the player nickname and basic system information (OS, memory, launcher version). Passwords, access tokens and the user home directory path are removed on the client before the report is written or sent.
 
@@ -77,4 +81,4 @@ Reports can also be browsed in the Cloudflare dashboard under R2.
 
 Add a Cloudflare rate limiting rule for `/account/update` (for example 10 requests per minute per IP) so `/account/update` cannot be used to guess passwords faster than the Drasl login itself allows. Apply a similar rule to `/account/register` to limit account spam.
 
-`/logs/upload` is unauthenticated, so add a rate limiting rule for it as well (for example 5 requests per minute per IP) and an R2 lifecycle rule that deletes objects under `reports/` after 30 days. Reports contain player data and should not be kept longer than needed.
+`/logs/upload` only accepts valid Drasl sessions, but registration is open, so add a rate limiting rule for it as well (for example 5 requests per minute per IP) and an R2 lifecycle rule that deletes objects under `reports/` after 30 days. Reports contain player data and should not be kept longer than needed.

@@ -189,9 +189,38 @@ async function updateAccount(request, env) {
     return classifyFailure(res.status, await readFailureMessage(res))
 }
 
+function readSessionHeaders(request) {
+    const authorization = request.headers.get('Authorization') || ''
+    const accessToken = authorization.startsWith('Bearer ') ? authorization.slice(7).trim() : ''
+    const clientToken = (request.headers.get('X-Client-Token') || '').trim()
+    if(!isText(accessToken, 2048) || !isText(clientToken, 256)) {
+        return null
+    }
+    return { accessToken, clientToken }
+}
+
+async function validateSession(env, session) {
+    const res = await upstream(env, '/authlib-injector/authserver/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(session)
+    })
+    if(res.status === 204 || res.status === 200) {
+        return true
+    }
+    if(res.status === 401 || res.status === 403) {
+        return false
+    }
+    throw new Error(`validate failed with status ${res.status}`)
+}
+
 async function uploadLogs(request, env) {
     if(!env.LOGS) {
         return reply(503, 'unavailable')
+    }
+    const session = readSessionHeaders(request)
+    if(session == null) {
+        return reply(401, 'unauthorized')
     }
     const length = Number(request.headers.get('Content-Length'))
     if(!Number.isInteger(length) || length <= 0) {
@@ -199,6 +228,9 @@ async function uploadLogs(request, env) {
     }
     if(length > MAX_LOG_UPLOAD_BYTES) {
         return reply(413, 'rejected')
+    }
+    if(!await validateSession(env, session)) {
+        return reply(401, 'unauthorized')
     }
     const body = await request.arrayBuffer()
     const magic = new Uint8Array(body.slice(0, 2))
@@ -274,14 +306,10 @@ async function launchStatus(request, env) {
     return respond(200, { code: 'ok', now, opensAt, open, admin })
 }
 
-const UPSTREAM_ROUTES = {
+const ROUTES = {
     '/account/update': updateAccount,
     '/account/register': registerAccount,
-    '/launch/status': launchStatus
-}
-
-const ROUTES = {
-    ...UPSTREAM_ROUTES,
+    '/launch/status': launchStatus,
     '/logs/upload': uploadLogs
 }
 
@@ -295,7 +323,7 @@ export default {
         if(request.method !== 'POST') {
             return reply(405, 'rejected')
         }
-        if(url.pathname in UPSTREAM_ROUTES && (!env.DRASL_ADMIN_TOKEN || !env.DRASL_URL)) {
+        if(!env.DRASL_ADMIN_TOKEN || !env.DRASL_URL) {
             return reply(503, 'unavailable')
         }
         try {
