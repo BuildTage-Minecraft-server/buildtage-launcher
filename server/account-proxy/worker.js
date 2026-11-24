@@ -1,5 +1,6 @@
 const MAX_BODY_BYTES = 2048
 const MAX_LAUNCH_BODY_BYTES = 8192
+const LAUNCH_UPSTREAM_TIMEOUT_MS = 4000
 const UPSTREAM_TIMEOUT_MS = 10000
 const USERNAME_PATTERN = /^[a-zA-Z0-9_]{3,16}$/
 const MIN_PASSWORD_LENGTH = 8
@@ -23,8 +24,8 @@ function reply(status, code, message, extra) {
     return respond(status, body)
 }
 
-function upstream(env, path, init) {
-    return fetch(`${env.DRASL_URL}${path}`, { ...init, signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS) })
+function upstream(env, path, init, timeout = UPSTREAM_TIMEOUT_MS) {
+    return fetch(`${env.DRASL_URL}${path}`, { ...init, signal: AbortSignal.timeout(timeout) })
 }
 
 function isText(value, max) {
@@ -88,10 +89,10 @@ async function verifyPassword(env, username, password) {
     return null
 }
 
-async function findUser(env, username) {
+async function findUser(env, username, timeout) {
     const res = await upstream(env, '/drasl/api/v3/users', {
         headers: { Authorization: `Bearer ${env.DRASL_ADMIN_TOKEN}` }
-    })
+    }, timeout)
     if(!res.ok) {
         return null
     }
@@ -279,15 +280,17 @@ function parseLaunchRequest(raw) {
 }
 
 async function isLaunchAdmin(env, credentials) {
-    const res = await upstream(env, '/authlib-injector/authserver/validate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accessToken: credentials.accessToken, clientToken: credentials.clientToken })
-    })
-    if(res.status !== 204 && res.status !== 200) {
+    const [validation, user] = await Promise.all([
+        upstream(env, '/authlib-injector/authserver/validate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ accessToken: credentials.accessToken, clientToken: credentials.clientToken })
+        }, LAUNCH_UPSTREAM_TIMEOUT_MS),
+        findUser(env, credentials.username, LAUNCH_UPSTREAM_TIMEOUT_MS)
+    ])
+    if(validation.status !== 204 && validation.status !== 200) {
         return false
     }
-    const user = await findUser(env, credentials.username)
     return user != null && user.isAdmin === true
 }
 
@@ -303,8 +306,17 @@ async function launchStatus(request, env) {
     const opensAt = parseOpensAt(env.LAUNCH_OPENS_AT)
     const now = Date.now()
     const open = opensAt == null || now >= opensAt
-    const admin = !open && parsed.credentials != null && await isLaunchAdmin(env, parsed.credentials)
-    return respond(200, { code: 'ok', now, opensAt, open, admin })
+    let admin = false
+    let adminError = false
+    if(!open && parsed.credentials != null) {
+        try {
+            admin = await isLaunchAdmin(env, parsed.credentials)
+        } catch (err) {
+            console.error('launch admin check failed', err)
+            adminError = true
+        }
+    }
+    return respond(200, { code: 'ok', now, opensAt, open, admin, adminError })
 }
 
 const ROUTES = {

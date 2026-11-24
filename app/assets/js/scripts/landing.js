@@ -974,9 +974,10 @@ const MIN_LINGER = 5000
 const LAUNCH_POLL_INTERVAL = 30000
 
 async function waitForLaunchWindow(logger) {
+    const account = ConfigManager.getSelectedAccount()
     let status
     try {
-        status = await LaunchSchedule.fetchStatus(ConfigManager.getSelectedAccount())
+        status = await LaunchSchedule.fetchStatus(account)
     } catch(err) {
         logger.error('Unable to read the launch schedule.', err)
         const reason = err.response != null ? `HTTP ${err.response.statusCode}` : (err.code || err.message)
@@ -994,7 +995,7 @@ async function waitForLaunchWindow(logger) {
     setLaunchPercentage(100)
     let nextPoll = Date.now() + LAUNCH_POLL_INTERVAL
 
-    while(!status.open) {
+    while(!status.open && !status.admin) {
         const remaining = status.opensAt - (Date.now() + status.clockOffset)
         if(remaining > 0 && Date.now() < nextPoll) {
             setLaunchDetails(Lang.queryJS('landing.dlAsync.waitingForServer', {
@@ -1006,7 +1007,7 @@ async function waitForLaunchWindow(logger) {
         }
         nextPoll = Date.now() + LAUNCH_POLL_INTERVAL
         try {
-            status = await LaunchSchedule.fetchStatus(null)
+            status = await LaunchSchedule.fetchStatus(status.adminError ? account : null)
         } catch(err) {
             logger.warn('Unable to refresh the launch schedule.', err)
             if(remaining <= 0) {

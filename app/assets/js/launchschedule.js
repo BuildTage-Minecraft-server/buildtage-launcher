@@ -36,6 +36,7 @@ exports.fetchStatus = async function(account) {
     return {
         open: body.open === true || opensAt == null,
         admin: body.admin === true,
+        adminError: body.adminError === true,
         opensAt,
         clockOffset: body.now - Date.now()
     }
