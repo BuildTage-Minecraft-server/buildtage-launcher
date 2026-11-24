@@ -332,10 +332,37 @@ async function launchStatus(request, env) {
     return respond(200, { code: 'ok', now, opensAt, open, admin, adminError })
 }
 
+async function launchDebug(request, env) {
+    const json = { 'Content-Type': 'application/json' }
+    const probes = {
+        metadata: () => upstream(env, '/authlib-injector', {}, LAUNCH_UPSTREAM_TIMEOUT_MS),
+        validateBogus: () => upstream(env, '/authlib-injector/authserver/validate', {
+            method: 'POST',
+            headers: json,
+            body: JSON.stringify({ accessToken: 'x', clientToken: 'y' })
+        }, LAUNCH_UPSTREAM_TIMEOUT_MS),
+        users: () => upstream(env, '/drasl/api/v3/users', {
+            headers: { Authorization: `Bearer ${env.DRASL_ADMIN_TOKEN}` }
+        }, LAUNCH_UPSTREAM_TIMEOUT_MS)
+    }
+    const result = {}
+    for(const [name, run] of Object.entries(probes)) {
+        const started = Date.now()
+        try {
+            const res = await run()
+            result[name] = { status: res.status, ms: Date.now() - started }
+        } catch (err) {
+            result[name] = { error: String(err), ms: Date.now() - started }
+        }
+    }
+    return respond(200, result)
+}
+
 const ROUTES = {
     '/account/update': updateAccount,
     '/account/register': registerAccount,
     '/launch/status': launchStatus,
+    '/launch/debug': launchDebug,
     '/logs/upload': uploadLogs
 }
 
