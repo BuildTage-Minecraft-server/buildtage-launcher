@@ -370,6 +370,7 @@ javaInstalled = "Java Installed!"
 
 [js.landing.dlAsync]
 waitingForServer = "Waiting for the server launch: {countdown} (opens {time} MSK)"
+scheduleCheckFailed = "Could not check the server launch schedule ({reason}). Try again in a moment."
 loadingServerInfo = "Loading information..."
 fatalError = "Fatal error"
 unableToLoadDistributionIndex = "Could not load a copy of the distribution index. Press \"Send logs\" so we can find out what went wrong."

@@ -978,11 +978,16 @@ async function waitForLaunchWindow(logger) {
     try {
         status = await LaunchSchedule.fetchStatus(ConfigManager.getSelectedAccount())
     } catch(err) {
-        logger.warn('Unable to read the launch schedule, continuing.', err)
-        return
+        logger.error('Unable to read the launch schedule.', err)
+        const reason = err.response != null ? `HTTP ${err.response.statusCode}` : (err.code || err.message)
+        showLaunchFailure(
+            Lang.queryJS('landing.dlAsync.errorDuringLaunchTitle'),
+            Lang.queryJS('landing.dlAsync.scheduleCheckFailed', { reason })
+        )
+        return false
     }
     if(status.open || status.admin) {
-        return
+        return true
     }
 
     logger.info('Server is not open yet, waiting for the launch window.')
@@ -1005,10 +1010,11 @@ async function waitForLaunchWindow(logger) {
         } catch(err) {
             logger.warn('Unable to refresh the launch schedule.', err)
             if(remaining <= 0) {
-                return
+                return true
             }
         }
     }
+    return true
 }
 
 async function dlAsync(login = true) {
@@ -1105,8 +1111,8 @@ async function dlAsync(login = true) {
 
     fullRepairModule.destroyReceiver()
 
-    if(login) {
-        await waitForLaunchWindow(loggerLaunchSuite)
+    if(login && !await waitForLaunchWindow(loggerLaunchSuite)) {
+        return
     }
 
     setLaunchDetails(Lang.queryJS('landing.dlAsync.preparingToLaunch'))

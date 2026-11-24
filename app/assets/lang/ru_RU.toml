@@ -326,6 +326,7 @@ javaDownloadCorruptedError = "У загруженного JDK неверный �
 
 [js.landing.dlAsync]
 waitingForServer = "Ожидание запуска сервера: {countdown} (старт {time} МСК)"
+scheduleCheckFailed = "Не удалось проверить расписание запуска сервера ({reason}). Попробуйте ещё раз чуть позже."
 loadingServerInfo = "Загрузка..."
 fatalError = "Критическая ошибка"
 pleaseWait = "Загрузка..."

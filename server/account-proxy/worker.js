@@ -1,4 +1,5 @@
 const MAX_BODY_BYTES = 2048
+const MAX_LAUNCH_BODY_BYTES = 8192
 const UPSTREAM_TIMEOUT_MS = 10000
 const USERNAME_PATTERN = /^[a-zA-Z0-9_]{3,16}$/
 const MIN_PASSWORD_LENGTH = 8
@@ -271,7 +272,7 @@ function parseLaunchRequest(raw) {
     if(data == null || typeof data !== 'object') {
         return null
     }
-    if(!isText(data.username, 128) || !isText(data.accessToken, 2048) || !isText(data.clientToken, 256)) {
+    if(!isText(data.username, 128) || !isText(data.accessToken, 4096) || !isText(data.clientToken, 256)) {
         return { credentials: null }
     }
     return { credentials: { username: data.username, accessToken: data.accessToken, clientToken: data.clientToken } }
@@ -292,7 +293,7 @@ async function isLaunchAdmin(env, credentials) {
 
 async function launchStatus(request, env) {
     const raw = await request.text()
-    if(raw.length > MAX_BODY_BYTES) {
+    if(raw.length > MAX_LAUNCH_BODY_BYTES) {
         return reply(413, 'rejected')
     }
     const parsed = parseLaunchRequest(raw)
