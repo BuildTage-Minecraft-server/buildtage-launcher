@@ -46,7 +46,7 @@ POST /launch/status
 { "username": "...", "accessToken": "...", "clientToken": "..." }
 ```
 
-The body is optional. The response is `{ "code": "ok", "now": <ms>, "opensAt": <ms or null>, "open": <bool>, "admin": <bool> }`. While the server is closed, the worker validates the access token with the Drasl Yggdrasil API and reports `admin: true` for users that have the admin flag in Drasl. The launcher lets players download and verify the game files at any time, waits with a countdown before starting the game, and starts it right away for admins.
+The body is optional. The response is `{ "code": "ok", "now": <ms>, "opensAt": <ms or null>, "open": <bool>, "admin": <bool>, "adminError": <bool> }`. While the server is closed, the worker decides who may start the game early. If `LAUNCH_ADMINS` is set to a comma separated list of login names, for example `"alice,bob"`, only those names are admins and Drasl is not contacted. Otherwise the worker validates the access token with the Drasl Yggdrasil API and reports `admin: true` for users that have the admin flag in Drasl. The launcher lets players download and verify the game files at any time, waits with a countdown before starting the game, and starts it right away for admins.
 
 To change the time without a deploy, edit the variable in the Cloudflare dashboard (Workers, Settings, Variables).
 

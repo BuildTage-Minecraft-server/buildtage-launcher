@@ -291,7 +291,15 @@ async function traced(label, run) {
     }
 }
 
+function listedAdmins(env) {
+    return String(env.LAUNCH_ADMINS || '').split(',').map(name => name.trim().toLowerCase()).filter(Boolean)
+}
+
 async function isLaunchAdmin(env, credentials) {
+    const listed = listedAdmins(env)
+    if(listed.length > 0) {
+        return listed.includes(credentials.username.toLowerCase())
+    }
     const [validation, user] = await Promise.all([
         traced('validate', () => upstream(env, '/authlib-injector/authserver/validate', {
             method: 'POST',
@@ -300,7 +308,6 @@ async function isLaunchAdmin(env, credentials) {
         }, LAUNCH_UPSTREAM_TIMEOUT_MS)),
         traced('users', () => findUser(env, credentials.username, LAUNCH_UPSTREAM_TIMEOUT_MS))
     ])
-    console.log(`launch validate status ${validation.status}, user found ${user != null}, isAdmin ${user != null && user.isAdmin}`)
     if(validation.status !== 204 && validation.status !== 200) {
         return false
     }
@@ -332,37 +339,10 @@ async function launchStatus(request, env) {
     return respond(200, { code: 'ok', now, opensAt, open, admin, adminError })
 }
 
-async function launchDebug(request, env) {
-    const json = { 'Content-Type': 'application/json' }
-    const probes = {
-        metadata: () => upstream(env, '/authlib-injector', {}, LAUNCH_UPSTREAM_TIMEOUT_MS),
-        validateBogus: () => upstream(env, '/authlib-injector/authserver/validate', {
-            method: 'POST',
-            headers: json,
-            body: JSON.stringify({ accessToken: 'x', clientToken: 'y' })
-        }, LAUNCH_UPSTREAM_TIMEOUT_MS),
-        users: () => upstream(env, '/drasl/api/v3/users', {
-            headers: { Authorization: `Bearer ${env.DRASL_ADMIN_TOKEN}` }
-        }, LAUNCH_UPSTREAM_TIMEOUT_MS)
-    }
-    const result = {}
-    for(const [name, run] of Object.entries(probes)) {
-        const started = Date.now()
-        try {
-            const res = await run()
-            result[name] = { status: res.status, ms: Date.now() - started }
-        } catch (err) {
-            result[name] = { error: String(err), ms: Date.now() - started }
-        }
-    }
-    return respond(200, result)
-}
-
 const ROUTES = {
     '/account/update': updateAccount,
     '/account/register': registerAccount,
     '/launch/status': launchStatus,
-    '/launch/debug': launchDebug,
     '/logs/upload': uploadLogs
 }
 
