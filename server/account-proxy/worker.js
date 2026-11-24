@@ -279,15 +279,28 @@ function parseLaunchRequest(raw) {
     return { credentials: { username: data.username, accessToken: data.accessToken, clientToken: data.clientToken } }
 }
 
+async function traced(label, run) {
+    const started = Date.now()
+    try {
+        const result = await run()
+        console.log(`launch ${label} ok in ${Date.now() - started}ms`)
+        return result
+    } catch (err) {
+        console.error(`launch ${label} failed after ${Date.now() - started}ms`, err)
+        throw err
+    }
+}
+
 async function isLaunchAdmin(env, credentials) {
     const [validation, user] = await Promise.all([
-        upstream(env, '/authlib-injector/authserver/validate', {
+        traced('validate', () => upstream(env, '/authlib-injector/authserver/validate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ accessToken: credentials.accessToken, clientToken: credentials.clientToken })
-        }, LAUNCH_UPSTREAM_TIMEOUT_MS),
-        findUser(env, credentials.username, LAUNCH_UPSTREAM_TIMEOUT_MS)
+        }, LAUNCH_UPSTREAM_TIMEOUT_MS)),
+        traced('users', () => findUser(env, credentials.username, LAUNCH_UPSTREAM_TIMEOUT_MS))
     ])
+    console.log(`launch validate status ${validation.status}, user found ${user != null}, isAdmin ${user != null && user.isAdmin}`)
     if(validation.status !== 204 && validation.status !== 200) {
         return false
     }
