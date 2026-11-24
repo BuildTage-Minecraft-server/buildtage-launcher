@@ -5,6 +5,7 @@ compatibility_date = "2026-01-01"
 [vars]
 DRASL_URL = "https://auth.nekrasovdev.space"
 LAUNCH_OPENS_AT = "2026-12-04 17:00"
+LAUNCH_ADMINS = "Mishanaboss, my0cat, Sanyayman"
 
 [[r2_buckets]]
 binding = "LOGS"
